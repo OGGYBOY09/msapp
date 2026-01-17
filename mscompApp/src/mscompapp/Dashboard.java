@@ -50,13 +50,14 @@ timer.start();
         pNav = new javax.swing.JPanel();
         lblWelcome = new javax.swing.JLabel();
         lblTanggal = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         pSide = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        pNav.setBackground(new java.awt.Color(0, 153, 255));
+        pNav.setBackground(new java.awt.Color(102, 102, 255));
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblWelcome.setText("Welcome");
@@ -64,25 +65,33 @@ timer.start();
         lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         lblTanggal.setText("Tanggal");
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo toko.png"))); // NOI18N
+
         javax.swing.GroupLayout pNavLayout = new javax.swing.GroupLayout(pNav);
         pNav.setLayout(pNavLayout);
         pNavLayout.setHorizontalGroup(
             pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pNavLayout.createSequentialGroup()
-                .addContainerGap(1133, Short.MAX_VALUE)
-                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 634, Short.MAX_VALUE)
+                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblWelcome)
                     .addComponent(lblTanggal))
-                .addGap(67, 67, 67))
+                .addGap(113, 113, 113))
         );
         pNavLayout.setVerticalGroup(
             pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pNavLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+            .addGroup(pNavLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblWelcome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblTanggal)
-                .addGap(17, 17, 17))
+                .addGap(39, 39, 39))
+            .addGroup(pNavLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         getContentPane().add(pNav, java.awt.BorderLayout.PAGE_START);
@@ -108,7 +117,7 @@ timer.start();
             .addGroup(pSideLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
-                .addContainerGap(549, Short.MAX_VALUE))
+                .addContainerGap(566, Short.MAX_VALUE))
         );
 
         getContentPane().add(pSide, java.awt.BorderLayout.LINE_START);
@@ -121,7 +130,7 @@ timer.start();
         );
         pMainLayout.setVerticalGroup(
             pMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 611, Short.MAX_VALUE)
+            .addGap(0, 628, Short.MAX_VALUE)
         );
 
         getContentPane().add(pMain, java.awt.BorderLayout.CENTER);
@@ -156,6 +165,7 @@ timer.start();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JPanel pMain;
