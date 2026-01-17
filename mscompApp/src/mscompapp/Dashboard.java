@@ -37,6 +37,13 @@ public class Dashboard extends javax.swing.JFrame {
 });
 timer.start();
     }
+    
+    private void switchPanel(javax.swing.JPanel panel) {
+    pMain.removeAll();        // Menghapus panel lama yang ada di pMain
+    pMain.add(panel);         // Menambahkan panel baru (PKelUser)
+    pMain.repaint();          // Menggambar ulang tampilan
+    pMain.revalidate();       // Menyusun ulang layout agar pas
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +60,7 @@ timer.start();
         jLabel2 = new javax.swing.JLabel();
         pSide = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        lblKelolaUser = new javax.swing.JLabel();
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -98,10 +106,19 @@ timer.start();
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu.png"))); // NOI18N
         jLabel1.setText("Menu");
+
+        lblKelolaUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelolaUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
+        lblKelolaUser.setText("Kelola User");
+        lblKelolaUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKelolaUserMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
         pSide.setLayout(pSideLayout);
@@ -109,34 +126,33 @@ timer.start();
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblKelolaUser)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         pSideLayout.setVerticalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
-                .addContainerGap(566, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(lblKelolaUser)
+                .addContainerGap(494, Short.MAX_VALUE))
         );
 
         getContentPane().add(pSide, java.awt.BorderLayout.LINE_START);
 
-        javax.swing.GroupLayout pMainLayout = new javax.swing.GroupLayout(pMain);
-        pMain.setLayout(pMainLayout);
-        pMainLayout.setHorizontalGroup(
-            pMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1124, Short.MAX_VALUE)
-        );
-        pMainLayout.setVerticalGroup(
-            pMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 628, Short.MAX_VALUE)
-        );
-
+        pMain.setLayout(new java.awt.BorderLayout());
         getContentPane().add(pMain, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lblKelolaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaUserMouseClicked
+        // TODO add your handling code here:
+        switchPanel(new PKelUser());
+    }//GEN-LAST:event_lblKelolaUserMouseClicked
 
     /**
      * @param args the command line arguments
@@ -166,6 +182,7 @@ timer.start();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblKelolaUser;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JPanel pMain;

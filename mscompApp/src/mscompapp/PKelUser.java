@@ -4,6 +4,11 @@
  */
 package mscompapp;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ASUS
@@ -15,7 +20,48 @@ public class PKelUser extends javax.swing.JPanel {
      */
     public PKelUser() {
         initComponents();
+        load_table();
+        txtNo.setEditable(false);
     }
+    
+    private void load_table() {
+    // Membuat tampilan kolom tabel
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("No");
+    model.addColumn("Username");
+    model.addColumn("Password");
+    model.addColumn("Nama");
+    model.addColumn("Role");
+
+    // Mengambil data dari database
+    try {
+        int no = 1;
+        String sql = "SELECT * FROM tbl_user";
+        java.sql.Connection conn = (Connection)Koneksi.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        java.sql.ResultSet res = stm.executeQuery(sql);
+        
+        while(res.next()){
+            model.addRow(new Object[]{
+                no++, 
+                res.getString("username"), 
+                res.getString("password"), 
+                res.getString("nama"), 
+                res.getString("role")
+            });
+        }
+        jTable1.setModel(model); // Ganti jTable1 dengan nama variabel tabelmu
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+    private void bersihkanForm() {
+    txtNo.setText(null);
+    txtUsn.setText(null);
+    txtPass.setText(null);
+    txtNama.setText(null);
+    cbRole.setSelectedIndex(0);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,14 +90,14 @@ public class PKelUser extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -175,7 +221,7 @@ public class PKelUser extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -186,7 +232,12 @@ public class PKelUser extends javax.swing.JPanel {
                 "No", "Username", "Password", "Nama", "Role"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTable1);
 
         jPanel3.setBackground(new java.awt.Color(51, 153, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -211,9 +262,10 @@ public class PKelUser extends javax.swing.JPanel {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        jButton3.setBackground(new java.awt.Color(204, 204, 204));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton3.setText("EDIT");
+        btnEdit.setBackground(new java.awt.Color(204, 204, 204));
+        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEdit.setText("EDIT");
+        btnEdit.addActionListener(this::btnEditActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(51, 255, 51));
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -225,9 +277,10 @@ public class PKelUser extends javax.swing.JPanel {
         jButton5.setText("CARI");
         jButton5.addActionListener(this::jButton5ActionPerformed);
 
-        jButton6.setBackground(new java.awt.Color(255, 0, 0));
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton6.setText("HAPUS");
+        btnHapus.setBackground(new java.awt.Color(255, 0, 0));
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnHapus.setText("HAPUS");
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -245,9 +298,9 @@ public class PKelUser extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnEdit)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton6)))
+                        .addComponent(btnHapus)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -259,9 +312,9 @@ public class PKelUser extends javax.swing.JPanel {
                     .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
                 .addContainerGap())
@@ -303,6 +356,42 @@ public class PKelUser extends javax.swing.JPanel {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
+        try {
+        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+        String sql;
+
+        // CEK APAKAH KOLOM NO KOSONG?
+        if (txtNo.getText().equals("")) {
+            // Jika kosong, berarti Admin ingin TAMBAH DATA BARU
+            sql = "INSERT INTO tbl_user (username, password, nama, role) VALUES ('"
+                    + txtUsn.getText() + "','"
+                    + txtPass.getText() + "','"
+                    + txtNama.getText() + "','"
+                    + cbRole.getSelectedItem() + "')";
+            
+            System.out.println("Menjalankan perintah INSERT...");
+        } else {
+            // Jika ada isinya, berarti Admin sedang MENGEDIT DATA LAMA
+            sql = "UPDATE tbl_user SET username = '" + txtUsn.getText()
+                    + "', password = '" + txtPass.getText()
+                    + "', nama = '" + txtNama.getText()
+                    + "', role = '" + cbRole.getSelectedItem()
+                    + "' WHERE id_user = '" + txtNo.getText() + "'";
+            
+            System.out.println("Menjalankan perintah UPDATE...");
+        }
+
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        pst.execute();
+        
+        javax.swing.JOptionPane.showMessageDialog(null, "Data Berhasil Diproses!");
+        
+        load_table();    // Refresh tabel agar data baru/update muncul
+        bersihkanForm(); // Kosongkan form kembali (biar kolom No jadi kosong lagi)
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Gagal memproses data: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -313,15 +402,80 @@ public class PKelUser extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        String idDicari = javax.swing.JOptionPane.showInputDialog(this, "Masukkan No/ID User yang ingin diedit:");
+    
+    // Cek jika user menekan 'Cancel' atau input kosong
+    if (idDicari == null || idDicari.equals("")) {
+        return; 
+    }
+
+    try {
+        // 2. Cari data tersebut di database
+        String sql = "SELECT * FROM tbl_user WHERE id_user = '" + idDicari + "'";
+        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        java.sql.ResultSet res = stm.executeQuery(sql);
+
+        if (res.next()) {
+            // 3. Jika ketemu, isi form secara otomatis
+            txtNo.setText(res.getString("id_user"));
+            txtUsn.setText(res.getString("username"));
+            txtPass.setText(res.getString("password"));
+            txtNama.setText(res.getString("nama"));
+            cbRole.setSelectedItem(res.getString("role"));
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Data ditemukan! Silakan ubah di form lalu tekan Simpan.");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Data dengan ID " + idDicari + " tidak ditemukan.");
+        }
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        if (txtNo.getText().equals("")) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus terlebih dahulu melalui tombol EDIT!");
+    } else {
+        // 2. Konfirmasi penghapusan agar tidak tidak sengaja terhapus
+        int jawab = javax.swing.JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if (jawab == javax.swing.JOptionPane.YES_OPTION) {
+            try {
+                // 3. Eksekusi perintah SQL Delete
+                String sql = "DELETE FROM tbl_user WHERE id_user = '" + txtNo.getText() + "'";
+                java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.execute();
+                
+                javax.swing.JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
+                
+                // 4. Refresh tampilan
+                load_table();
+                bersihkanForm();
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Gagal Menghapus: " + e.getMessage());
+            }
+        }
+    }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JComboBox<String> cbRole;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -335,7 +489,7 @@ public class PKelUser extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNo;
