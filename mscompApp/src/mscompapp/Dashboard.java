@@ -110,6 +110,11 @@ timer.start();
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu.png"))); // NOI18N
         jLabel1.setText("Menu");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
 
         lblKelolaUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         lblKelolaUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
@@ -153,6 +158,11 @@ timer.start();
         // TODO add your handling code here:
         switchPanel(new PKelUser());
     }//GEN-LAST:event_lblKelolaUserMouseClicked
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        // TODO add your handling code here:
+        switchPanel(new beranda());
+    }//GEN-LAST:event_jLabel1MouseClicked
 
     /**
      * @param args the command line arguments
