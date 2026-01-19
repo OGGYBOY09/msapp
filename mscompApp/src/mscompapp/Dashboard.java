@@ -72,48 +72,27 @@ public class Dashboard extends javax.swing.JFrame {
         lblKelolaUser = new javax.swing.JLabel();
         lblKelolaBarang = new javax.swing.JLabel();
         btLogout = new javax.swing.JButton();
+        lblKelolaKategori = new javax.swing.JLabel();
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(102, 102, 255));
+        pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblWelcome.setText("Welcome");
+        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1620, 20, -1, -1));
 
         lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         lblTanggal.setText("Tanggal");
+        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1620, 60, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo toko.png"))); // NOI18N
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 421, 100));
 
-        javax.swing.GroupLayout pNavLayout = new javax.swing.GroupLayout(pNav);
-        pNav.setLayout(pNavLayout);
-        pNavLayout.setHorizontalGroup(
-            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pNavLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 634, Short.MAX_VALUE)
-                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblWelcome)
-                    .addComponent(lblTanggal))
-                .addGap(113, 113, 113))
-        );
-        pNavLayout.setVerticalGroup(
-            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pNavLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblWelcome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblTanggal)
-                .addGap(39, 39, 39))
-            .addGroup(pNavLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(pNav, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 120));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -150,46 +129,56 @@ public class Dashboard extends javax.swing.JFrame {
         btLogout.setText("LOGOUT");
         btLogout.addActionListener(this::btLogoutActionPerformed);
 
+        lblKelolaKategori.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblKelolaKategori.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/list.png"))); // NOI18N
+        lblKelolaKategori.setText("Kategori");
+        lblKelolaKategori.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKelolaKategoriMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
         pSide.setLayout(pSideLayout);
         pSideLayout.setHorizontalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
                 .addGroup(pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblKelolaBarang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pSideLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSideLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pSideLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(btLogout))
+                    .addGroup(pSideLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pSideLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pSideLayout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(btLogout)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(pSideLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(19, 19, 19))
         );
         pSideLayout.setVerticalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGap(31, 31, 31)
+                .addGap(38, 38, 38)
                 .addComponent(lblKelolaUser)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(lblKelolaBarang)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 383, Short.MAX_VALUE)
-                .addComponent(btLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+                .addGap(18, 18, 18)
+                .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(627, 627, 627)
+                .addComponent(btLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        getContentPane().add(pSide, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 200, 980));
 
         pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, java.awt.BorderLayout.CENTER);
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 1720, 960));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -229,6 +218,11 @@ public class Dashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btLogoutActionPerformed
 
+    private void lblKelolaKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaKategoriMouseClicked
+        // TODO add your handling code here:
+        switchPanel(new PKelKategori());
+    }//GEN-LAST:event_lblKelolaKategoriMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -259,6 +253,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblKelolaBarang;
+    private javax.swing.JLabel lblKelolaKategori;
     private javax.swing.JLabel lblKelolaUser;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;

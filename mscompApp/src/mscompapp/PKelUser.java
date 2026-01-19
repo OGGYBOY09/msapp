@@ -37,7 +37,7 @@ public class PKelUser extends javax.swing.JPanel {
             model.addRow(new Object[]{res.getString(1), res.getString(2), 
                 res.getString(3), res.getString(4), res.getString(5)});
         }
-        jTable1.setModel(model);
+        tblUser.setModel(model);
     } catch (Exception e) { System.out.println(e.getMessage()); }
 }
 
@@ -47,20 +47,20 @@ private void auto_number() {
         java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
         java.sql.ResultSet res = conn.createStatement().executeQuery("SELECT MAX(id_user) FROM tbl_user");
         if (res.next()) {
-            txtNo.setText(String.valueOf(res.getInt(1) + 1));
+            tfNo.setText(String.valueOf(res.getInt(1) + 1));
         } else {
-            txtNo.setText("1");
+            tfNo.setText("1");
         }
-    } catch (Exception e) { txtNo.setText("1"); }
+    } catch (Exception e) { tfNo.setText("1"); }
 }
 
 // Membersihkan form dan meriset ke mode "Tambah"
 private void bersihkanForm() {
-    txtUsn.setText("");
-    txtPass.setText("");
-    txtNama.setText("");
+    tfUsn.setText("");
+    tfPass.setText("");
+    tfNama.setText("");
     cbRole.setSelectedIndex(0);
-    txtCari.setText(""); // Bersihkan kolom cari juga
+    tfCari.setText(""); // Bersihkan kolom cari juga
     isEditMode = false;   // Kembali ke mode Tambah
     auto_number();        // Beri nomor ID baru otomatis
 }
@@ -79,24 +79,24 @@ private void bersihkanForm() {
         jRadioButton1 = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtUsn = new javax.swing.JTextField();
+        tfUsn = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtPass = new javax.swing.JPasswordField();
+        tfPass = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
-        txtNama = new javax.swing.JTextField();
+        tfNama = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cbRole = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        txtNo = new javax.swing.JTextField();
+        tfNo = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblUser = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        txtCari = new javax.swing.JTextField();
+        tfCari = new javax.swing.JTextField();
         btnEdit = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnCari = new javax.swing.JButton();
@@ -106,9 +106,9 @@ private void bersihkanForm() {
 
         jRadioButton1.setText("jRadioButton1");
 
-        setMaximumSize(new java.awt.Dimension(1060, 620));
-        setMinimumSize(new java.awt.Dimension(1060, 620));
-        setPreferredSize(new java.awt.Dimension(1060, 620));
+        setMaximumSize(new java.awt.Dimension(1720, 960));
+        setMinimumSize(new java.awt.Dimension(1720, 960));
+        setPreferredSize(new java.awt.Dimension(1720, 960));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -116,19 +116,19 @@ private void bersihkanForm() {
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel2.setText("Username :");
 
-        txtUsn.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtUsn.addActionListener(this::txtUsnActionPerformed);
+        tfUsn.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfUsn.addActionListener(this::tfUsnActionPerformed);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel3.setText("Password :");
 
-        txtPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Nama :");
 
-        txtNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtNama.addActionListener(this::txtNamaActionPerformed);
+        tfNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfNama.addActionListener(this::tfNamaActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel5.setText("Role :");
@@ -139,8 +139,8 @@ private void bersihkanForm() {
         jLabel6.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel6.setText("No :");
 
-        txtNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtNo.addActionListener(this::txtNoActionPerformed);
+        tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfNo.addActionListener(this::tfNoActionPerformed);
 
         btnSimpan.setBackground(new java.awt.Color(153, 153, 153));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -177,54 +177,55 @@ private void bersihkanForm() {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel6)
-                    .addComponent(txtNo)
-                    .addComponent(txtUsn)
-                    .addComponent(txtPass)
-                    .addComponent(txtNama)
-                    .addComponent(cbRole, 0, 269, Short.MAX_VALUE))
+                    .addComponent(tfNo)
+                    .addComponent(tfUsn)
+                    .addComponent(tfPass)
+                    .addComponent(tfNama)
+                    .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfUsn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addGap(5, 5, 5)
-                .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblUser.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tblUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -235,12 +236,13 @@ private void bersihkanForm() {
                 "No", "Username", "Password", "Nama", "Role"
             }
         ));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblUser.setRowHeight(30);
+        tblUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                tblUserMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblUser);
 
         jPanel3.setBackground(new java.awt.Color(51, 153, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -291,36 +293,42 @@ private void bersihkanForm() {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnCari)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRefresh)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                        .addComponent(btnEdit)
-                        .addGap(12, 12, 12)
-                        .addComponent(btnHapus)))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCari, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                                .addComponent(tfCari))
+                            .addComponent(btnHapus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -345,17 +353,17 @@ private void bersihkanForm() {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsnActionPerformed
+    private void tfUsnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUsnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsnActionPerformed
+    }//GEN-LAST:event_tfUsnActionPerformed
 
-    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
+    private void tfNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNamaActionPerformed
+    }//GEN-LAST:event_tfNamaActionPerformed
 
-    private void txtNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoActionPerformed
+    private void tfNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoActionPerformed
+    }//GEN-LAST:event_tfNoActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
@@ -372,13 +380,13 @@ private void bersihkanForm() {
         }
 
         java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setString(1, txtUsn.getText());
-        pst.setString(2, txtPass.getText());
-        pst.setString(3, txtNama.getText());
+        pst.setString(1, tfUsn.getText());
+        pst.setString(2, tfPass.getText());
+        pst.setString(3, tfNama.getText());
         pst.setString(4, cbRole.getSelectedItem().toString());
         
         if (isEditMode) {
-            pst.setString(5, txtNo.getText());
+            pst.setString(5, tfNo.getText());
         }
 
         pst.execute();
@@ -403,35 +411,35 @@ private void bersihkanForm() {
     model.addColumn("Password"); model.addColumn("Nama"); model.addColumn("Role");
     try {
         // Mencari berdasarkan Username atau Nama
-        String sql = "SELECT * FROM tbl_user WHERE username LIKE '%" + txtCari.getText() 
-                     + "%' OR nama LIKE '%" + txtCari.getText() + "%'";
+        String sql = "SELECT * FROM tbl_user WHERE username LIKE '%" + tfCari.getText() 
+                     + "%' OR nama LIKE '%" + tfCari.getText() + "%'";
         java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
         java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
         while(res.next()){
             model.addRow(new Object[]{res.getString(1), res.getString(2), 
                 res.getString(3), res.getString(4), res.getString(5)});
         }
-        jTable1.setModel(model);
+        tblUser.setModel(model);
     } catch (Exception e) { 
         javax.swing.JOptionPane.showMessageDialog(this, e.getMessage()); 
     }
     }//GEN-LAST:event_btnCariActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_tblUserMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
-        int barisTerpilih = jTable1.getSelectedRow();
+        int barisTerpilih = tblUser.getSelectedRow();
 
     // 2. Cek apakah ada baris yang diklik/dipilih
     if (barisTerpilih == -1) {
         javax.swing.JOptionPane.showMessageDialog(this, "Pilih dulu baris di tabel yang ingin diedit!");
     } else {
         // 3. Ambil ID dan Nama untuk konfirmasi
-        String id = jTable1.getValueAt(barisTerpilih, 0).toString();
-        String nama = jTable1.getValueAt(barisTerpilih, 3).toString();
+        String id = tblUser.getValueAt(barisTerpilih, 0).toString();
+        String nama = tblUser.getValueAt(barisTerpilih, 3).toString();
 
         // 4. Munculkan Pop-up Konfirmasi
         int konfirm = javax.swing.JOptionPane.showConfirmDialog(this, 
@@ -440,11 +448,11 @@ private void bersihkanForm() {
 
         if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
             // 5. Pindahkan data dari tabel ke form sebelah kiri
-            txtNo.setText(id);
-            txtUsn.setText(jTable1.getValueAt(barisTerpilih, 1).toString());
-            txtPass.setText(jTable1.getValueAt(barisTerpilih, 2).toString());
-            txtNama.setText(nama);
-            cbRole.setSelectedItem(jTable1.getValueAt(barisTerpilih, 4).toString());
+            tfNo.setText(id);
+            tfUsn.setText(tblUser.getValueAt(barisTerpilih, 1).toString());
+            tfPass.setText(tblUser.getValueAt(barisTerpilih, 2).toString());
+            tfNama.setText(nama);
+            cbRole.setSelectedItem(tblUser.getValueAt(barisTerpilih, 4).toString());
 
             // 6. Ubah saklar isEditMode menjadi true
             isEditMode = true;
@@ -457,15 +465,15 @@ private void bersihkanForm() {
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here :
-        int barisTerpilih = jTable1.getSelectedRow();
+        int barisTerpilih = tblUser.getSelectedRow();
 
     // 2. Cek apakah ada baris yang dipilih
     if (barisTerpilih == -1) {
         javax.swing.JOptionPane.showMessageDialog(this, "Klik dulu baris pada tabel yang ingin dihapus!");
     } else {
         // 3. Ambil ID dari kolom pertama (index 0) pada baris yang dipilih
-        String idHapus = jTable1.getValueAt(barisTerpilih, 0).toString();
-        String namaHapus = jTable1.getValueAt(barisTerpilih, 3).toString(); // Ambil kolom Nama untuk konfirmasi
+        String idHapus = tblUser.getValueAt(barisTerpilih, 0).toString();
+        String namaHapus = tblUser.getValueAt(barisTerpilih, 3).toString(); // Ambil kolom Nama untuk konfirmasi
 
         // 4. Konfirmasi penghapusan
         int konfirm = javax.swing.JOptionPane.showConfirmDialog(this, 
@@ -514,11 +522,11 @@ private void bersihkanForm() {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtCari;
-    private javax.swing.JTextField txtNama;
-    private javax.swing.JTextField txtNo;
-    private javax.swing.JPasswordField txtPass;
-    private javax.swing.JTextField txtUsn;
+    private javax.swing.JTable tblUser;
+    private javax.swing.JTextField tfCari;
+    private javax.swing.JTextField tfNama;
+    private javax.swing.JTextField tfNo;
+    private javax.swing.JPasswordField tfPass;
+    private javax.swing.JTextField tfUsn;
     // End of variables declaration//GEN-END:variables
 }
