@@ -27,7 +27,7 @@ public class PKelUser extends javax.swing.JPanel {
     
     private void load_table() {
     DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("No"); model.addColumn("Username"); 
+    model.addColumn("ID"); model.addColumn("Username"); 
     model.addColumn("Password"); model.addColumn("Nama"); model.addColumn("Role");
     try {
         String sql = "SELECT * FROM tbl_user";

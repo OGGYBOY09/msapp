@@ -26,14 +26,25 @@ public class PKelKategori extends javax.swing.JPanel {
     public PKelKategori() {
         initComponents();
         load_table();
+        auto_number();
+    }
+    
+    private void auto_number() {
+        try {
+            java.sql.Connection conn = (java.sql.Connection)mscompapp.Koneksi.configDB();
+            java.sql.ResultSet res = conn.createStatement().executeQuery("SELECT MAX(id_kategori) FROM tbl_kategori");
+            if (res.next()) {
+                tf_idKategori.setText(String.valueOf(res.getInt(1) + 1));
+            } else {
+                tf_idKategori.setText("1");
+            }
+        } catch (Exception e) { tf_idKategori.setText("1"); }
     }
     
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
-        model.addColumn("ID Kategori");
+        model.addColumn("ID");
         model.addColumn("Nama Kategori");
-        model.addColumn("Keterangan");
         
         try {
             int no = 1;
@@ -44,13 +55,16 @@ public class PKelKategori extends javax.swing.JPanel {
             
             while(res.next()) {
                 model.addRow(new Object[] {
-                    no++,
                     res.getString("id_kategori"),
                     res.getString("nama_kategori"),
-                    res.getString("keterangan")
                 });
             }
             tblKategori.setModel(model);
+            
+            //set kolom
+            tblKategori.getColumnModel().getColumn(0).setPreferredWidth(50);  // Kolom No/ID jadi kecil
+            tblKategori.getColumnModel().getColumn(0).setMaxWidth(50);       // Mengunci lebar maksimal
+            tblKategori.getColumnModel().getColumn(0).setMinWidth(50);
         } catch (Exception e) {
             System.out.println("Error Load Data: " + e.getMessage());
         }
@@ -60,7 +74,6 @@ public class PKelKategori extends javax.swing.JPanel {
     private void bersihkan() {
         tf_idKategori.setText("");
         tf_namaKat.setText("");
-        tf_ketKat.setText("");
         tf_cari.setText("");
         
         tf_idKategori.setEditable(true); // Aktifkan lagi kolom ID
@@ -87,8 +100,6 @@ public class PKelKategori extends javax.swing.JPanel {
         tf_idKategori = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         tf_namaKat = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        tf_ketKat = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -133,15 +144,15 @@ public class PKelKategori extends javax.swing.JPanel {
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel2.setText("No :");
+        jLabel2.setText("ID Kategori :");
 
+        tf_idKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tf_idKategori.addActionListener(this::tf_idKategoriActionPerformed);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel3.setText("Nama Kategori :");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel4.setText("Keterangan :");
+        tf_namaKat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnSimpan.setBackground(new java.awt.Color(153, 153, 153));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -160,9 +171,7 @@ public class PKelKategori extends javax.swing.JPanel {
                     .addComponent(tf_idKategori)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_namaKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_ketKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
+                    .addComponent(tf_namaKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -177,11 +186,7 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tf_namaKat, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tf_ketKat, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
+                .addGap(219, 219, 219)
                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -211,6 +216,7 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
+        tblKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tblKategori.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -320,20 +326,18 @@ public class PKelKategori extends javax.swing.JPanel {
             
             if(isEditMode == false) {
                 // --- MODE SIMPAN BARU ---
-                sql = "INSERT INTO tbl_kategori (id_kategori, nama_kategori, keterangan) VALUES (?, ?, ?)";
+                sql = "INSERT INTO tbl_kategori (id_kategori, nama_kategori) VALUES (?, ?)";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, tf_idKategori.getText());
                 pst.setString(2, tf_namaKat.getText());
-                pst.setString(3, tf_ketKat.getText());
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
             } else {
                 // --- MODE UPDATE (EDIT) ---
-                sql = "UPDATE tbl_kategori SET nama_kategori=?, keterangan=? WHERE id_kategori=?";
+                sql = "UPDATE tbl_kategori SET nama_kategori=? WHERE id_kategori=?";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, tf_namaKat.getText());
-                pst.setString(2, tf_ketKat.getText());
-                pst.setString(3, tf_idKategori.getText()); // Where condition
+                pst.setString(2, tf_idKategori.getText()); // Where condition
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
             }
@@ -356,14 +360,12 @@ public class PKelKategori extends javax.swing.JPanel {
         int baris = tblKategori.getSelectedRow();
         if (baris != -1) {
             // Ambil data dari tabel
-            String id = tblKategori.getValueAt(baris, 1).toString();
-            String nama = tblKategori.getValueAt(baris, 2).toString();
-            String ket = tblKategori.getValueAt(baris, 3).toString(); // Pastikan tidak null di DB atau handle null pointer
+            String id = tblKategori.getValueAt(baris, 0).toString();
+            String nama = tblKategori.getValueAt(baris, 1).toString();
             
             // Masukkan ke Text Field
             tf_idKategori.setText(id);
             tf_namaKat.setText(nama);
-            tf_ketKat.setText(ket);
             
             // Atur Mode Edit
             isEditMode = true;
@@ -390,17 +392,14 @@ public class PKelKategori extends javax.swing.JPanel {
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
-        model.addColumn("ID Kategori");
+        model.addColumn("ID");
         model.addColumn("Nama Kategori");
-        model.addColumn("Keterangan");
         
         try {
             int no = 1;
             // Mencari data yang COCOK di salah satu kolom (ID, Nama, atau Ket)
             String sql = "SELECT * FROM tbl_kategori WHERE id_kategori LIKE '%"+tf_cari.getText()+"%' "
-                       + "OR nama_kategori LIKE '%"+tf_cari.getText()+"%' "
-                       + "OR keterangan LIKE '%"+tf_cari.getText()+"%'";
+                       + "OR nama_kategori LIKE '%"+tf_cari.getText()+"%' ";
                        
             java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
             java.sql.Statement stm = conn.createStatement();
@@ -408,10 +407,8 @@ public class PKelKategori extends javax.swing.JPanel {
             
             while(res.next()) {
                 model.addRow(new Object[] {
-                    no++,
                     res.getString("id_kategori"),
                     res.getString("nama_kategori"),
-                    res.getString("keterangan")
                 });
             }
             tblKategori.setModel(model);
@@ -461,7 +458,6 @@ public class PKelKategori extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -471,7 +467,6 @@ public class PKelKategori extends javax.swing.JPanel {
     private javax.swing.JTable tblKategori;
     private javax.swing.JTextField tf_cari;
     private javax.swing.JTextField tf_idKategori;
-    private javax.swing.JTextField tf_ketKat;
     private javax.swing.JTextField tf_namaKat;
     // End of variables declaration//GEN-END:variables
 }

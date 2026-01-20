@@ -28,6 +28,7 @@ public class PKelBarang extends javax.swing.JPanel {
         initComponents();
         load_table();
         load_kategori();
+        auto_number(); // Tambahkan ini 
     }
     
     private void load_kategori() {
@@ -80,9 +81,9 @@ public class PKelBarang extends javax.swing.JPanel {
         tfNamBarang.setText("");
         cbKategori.setSelectedIndex(0);
         tfHarga.setText("");
-        spStok.setValue(0); // Reset spinner ke 0
         tfKeterangan.setText("");
         tfCari.setText("");
+        auto_number();
         
         tfKodBarang.setEditable(true); // Aktifkan lagi Kode Barang
         btnSimpan.setText("SIMPAN");
@@ -90,6 +91,38 @@ public class PKelBarang extends javax.swing.JPanel {
         tfKodBarang.requestFocus();
     }
 
+    private void auto_number() {
+    try {
+        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        // Mengambil kode_barang paling besar
+        String sql = "SELECT kode_barang FROM tbl_barang ORDER BY kode_barang DESC LIMIT 1";
+        java.sql.ResultSet res = stm.executeQuery(sql);
+        
+        if (res.next()) {
+            String kode = res.getString("kode_barang").substring(1); // Mengambil angka setelah 'B'
+            int AN = Integer.parseInt(kode) + 1;
+            String nol = "";
+            
+            // Mengatur jumlah nol di depan angka agar tetap 4 digit (000x)
+            if (AN < 10) { nol = "000"; }
+            else if (AN < 100) { nol = "00"; }
+            else if (AN < 1000) { nol = "0"; }
+            else if (AN < 10000) { nol = ""; }
+            
+            tfKodBarang.setText("B" + nol + AN);
+        } else {
+            // Jika tabel masih kosong, mulai dari B0001
+            tfKodBarang.setText("B0001");
+        }
+        
+        // Kunci TextField agar admin tidak bisa mengubah kode manual
+        tfKodBarang.setEditable(false);
+        
+    } catch (Exception e) {
+        System.out.println("Error Auto Number: " + e.getMessage());
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,11 +144,11 @@ public class PKelBarang extends javax.swing.JPanel {
         tfNamBarang = new javax.swing.JTextField();
         cbKategori = new javax.swing.JComboBox<>();
         tfHarga = new javax.swing.JTextField();
-        spStok = new javax.swing.JSpinner();
         tfKeterangan = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -186,6 +219,9 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
+        jButton1.setBackground(new java.awt.Color(255, 255, 0));
+        jButton1.setText("Tambah Stock");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -193,22 +229,23 @@ public class PKelBarang extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel4)
-                    .addComponent(tfKodBarang)
-                    .addComponent(jLabel3)
-                    .addComponent(tfNamBarang)
-                    .addComponent(tfHarga)
-                    .addComponent(spStok)
-                    .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel5)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel4)
+                        .addComponent(tfKodBarang)
+                        .addComponent(jLabel3)
+                        .addComponent(tfNamBarang)
+                        .addComponent(tfHarga)
+                        .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel8)))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -234,8 +271,8 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(11, 11, 11)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -328,12 +365,13 @@ public class PKelBarang extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCari, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
@@ -425,7 +463,6 @@ public class PKelBarang extends javax.swing.JPanel {
                 pst.setString(2, tfNamBarang.getText());
                 pst.setString(3, cbKategori.getSelectedItem().toString());
                 pst.setInt(4, Integer.parseInt(tfHarga.getText())); // Convert Harga ke Angka
-                pst.setInt(5, (Integer) spStok.getValue());         // Ambil nilai Spinner
                 pst.setString(6, tfKeterangan.getText());
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Barang Berhasil Ditambahkan");
@@ -437,7 +474,6 @@ public class PKelBarang extends javax.swing.JPanel {
                 pst.setString(1, tfNamBarang.getText());
                 pst.setString(2, cbKategori.getSelectedItem().toString());
                 pst.setInt(3, Integer.parseInt(tfHarga.getText()));
-                pst.setInt(4, (Integer) spStok.getValue());
                 pst.setString(5, tfKeterangan.getText());
                 pst.setString(6, tfKodBarang.getText()); // Where condition
                 pst.execute();
@@ -471,7 +507,6 @@ public class PKelBarang extends javax.swing.JPanel {
             tfNamBarang.setText(nama);
             cbKategori.setSelectedItem(kat); // Set combobox sesuai teks
             tfHarga.setText(hrg);
-            spStok.setValue(stok);           // Set spinner
             tfKeterangan.setText(ket);
 
             // Set Mode Edit
@@ -527,6 +562,7 @@ public class PKelBarang extends javax.swing.JPanel {
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JComboBox<String> cbKategori;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -540,7 +576,6 @@ public class PKelBarang extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner spStok;
     private javax.swing.JTable tblBarang;
     private javax.swing.JTextField tfCari;
     private javax.swing.JTextField tfHarga;

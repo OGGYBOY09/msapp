@@ -66,23 +66,25 @@
               <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="btnSimpan" max="32767" attributes="0"/>
-                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="cbKategori" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jButton1" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnSimpan" max="32767" attributes="0"/>
+                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbKategori" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfKodBarang" max="32767" attributes="0"/>
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfNamBarang" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tfHarga" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tfKeterangan" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
+                          <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfKodBarang" max="32767" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfNamBarang" alignment="0" max="32767" attributes="0"/>
-                      <Component id="tfHarga" alignment="0" max="32767" attributes="0"/>
-                      <Component id="spStok" alignment="0" max="32767" attributes="0"/>
-                      <Component id="tfKeterangan" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="73" max="32767" attributes="0"/>
               </Group>
@@ -112,8 +114,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="spStok" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="tfKeterangan" min="-2" max="-2" attributes="0"/>
@@ -200,8 +202,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="tfHarga">
         </Component>
-        <Component class="javax.swing.JSpinner" name="spStok">
-        </Component>
         <Component class="javax.swing.JTextField" name="tfKeterangan">
         </Component>
         <Component class="javax.swing.JButton" name="btnSimpan">
@@ -258,6 +258,14 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="jButton1">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Tambah Stock"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel4">
@@ -302,12 +310,14 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnRefresh" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
-                      <Component id="btnEdit" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
-                      <Component id="btnHapus" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnCari" alignment="1" pref="54" max="32767" attributes="0"/>
-                      <Component id="tfCari" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnRefresh" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                          <Component id="btnEdit" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                          <Component id="btnHapus" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                          <Component id="tfCari" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="749" max="-2" attributes="0"/>
