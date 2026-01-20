@@ -28,11 +28,11 @@ public class PKelBarang extends javax.swing.JPanel {
         initComponents();
         load_table();
         load_kategori();
-        auto_number(); // Tambahkan ini 
+        auto_number(); 
     }
     
     private void load_kategori() {
-        cbKategori.removeAllItems(); // Hapus item default/lama
+        cbKategori.removeAllItems(); 
         cbKategori.addItem("-Pilih Kategori-");
         try {
             String sql = "SELECT nama_kategori FROM tbl_kategori";
@@ -75,7 +75,7 @@ public class PKelBarang extends javax.swing.JPanel {
         } catch (Exception e) { System.out.println(e.getMessage()); }
     }
     
-    // [BARU] Method Bersihkan Form
+    // Method Bersihkan Form
     private void bersihkan() {
         tfKodBarang.setText("");
         tfNamBarang.setText("");
@@ -85,44 +85,41 @@ public class PKelBarang extends javax.swing.JPanel {
         tfCari.setText("");
         auto_number();
         
-        tfKodBarang.setEditable(true); // Aktifkan lagi Kode Barang
+        tfKodBarang.setEditable(true); 
         btnSimpan.setText("SIMPAN");
         isEditMode = false;
         tfKodBarang.requestFocus();
     }
 
     private void auto_number() {
-    try {
-        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-        java.sql.Statement stm = conn.createStatement();
-        // Mengambil kode_barang paling besar
-        String sql = "SELECT kode_barang FROM tbl_barang ORDER BY kode_barang DESC LIMIT 1";
-        java.sql.ResultSet res = stm.executeQuery(sql);
-        
-        if (res.next()) {
-            String kode = res.getString("kode_barang").substring(1); // Mengambil angka setelah 'B'
-            int AN = Integer.parseInt(kode) + 1;
-            String nol = "";
+        try {
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            // Mengambil kode_barang paling besar
+            String sql = "SELECT kode_barang FROM tbl_barang ORDER BY kode_barang DESC LIMIT 1";
+            java.sql.ResultSet res = stm.executeQuery(sql);
             
-            // Mengatur jumlah nol di depan angka agar tetap 4 digit (000x)
-            if (AN < 10) { nol = "000"; }
-            else if (AN < 100) { nol = "00"; }
-            else if (AN < 1000) { nol = "0"; }
-            else if (AN < 10000) { nol = ""; }
+            if (res.next()) {
+                String kode = res.getString("kode_barang").substring(1); 
+                int AN = Integer.parseInt(kode) + 1;
+                String nol = "";
+                
+                if (AN < 10) { nol = "000"; }
+                else if (AN < 100) { nol = "00"; }
+                else if (AN < 1000) { nol = "0"; }
+                else if (AN < 10000) { nol = ""; }
+                
+                tfKodBarang.setText("B" + nol + AN);
+            } else {
+                tfKodBarang.setText("B0001");
+            }
             
-            tfKodBarang.setText("B" + nol + AN);
-        } else {
-            // Jika tabel masih kosong, mulai dari B0001
-            tfKodBarang.setText("B0001");
+            tfKodBarang.setEditable(false);
+            
+        } catch (Exception e) {
+            System.out.println("Error Auto Number: " + e.getMessage());
         }
-        
-        // Kunci TextField agar admin tidak bisa mengubah kode manual
-        tfKodBarang.setEditable(false);
-        
-    } catch (Exception e) {
-        System.out.println("Error Auto Number: " + e.getMessage());
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,7 +135,6 @@ public class PKelBarang extends javax.swing.JPanel {
         tfKodBarang = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         tfNamBarang = new javax.swing.JTextField();
@@ -148,7 +144,6 @@ public class PKelBarang extends javax.swing.JPanel {
         btnSimpan = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -178,9 +173,6 @@ public class PKelBarang extends javax.swing.JPanel {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel5.setText("HARGA :");
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        jLabel6.setText("STOK :");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel7.setText("KATEGORI :");
@@ -219,9 +211,6 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 0));
-        jButton1.setText("Tambah Stock");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -229,23 +218,20 @@ public class PKelBarang extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel5)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jLabel4)
-                        .addComponent(tfKodBarang)
-                        .addComponent(jLabel3)
-                        .addComponent(tfNamBarang)
-                        .addComponent(tfHarga)
-                        .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel4)
+                    .addComponent(tfKodBarang)
+                    .addComponent(jLabel3)
+                    .addComponent(tfNamBarang)
+                    .addComponent(tfHarga)
+                    .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -268,11 +254,7 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(11, 11, 11)
+                .addGap(71, 71, 71)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -456,26 +438,30 @@ public class PKelBarang extends javax.swing.JPanel {
             java.sql.PreparedStatement pst;
             
             if(isEditMode == false) {
-                // --- MODE INSERT ---
-                sql = "INSERT INTO tbl_barang VALUES (?, ?, ?, ?, ?, ?)";
+                // --- MODE INSERT (TAMBAH BARU) ---
+                // Kita set Stok (kolom ke-5) menjadi 0 secara default
+                sql = "INSERT INTO tbl_barang (kode_barang, nama_barang, kategori, harga, stok, keterangan) VALUES (?, ?, ?, ?, ?, ?)";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, tfKodBarang.getText());
                 pst.setString(2, tfNamBarang.getText());
                 pst.setString(3, cbKategori.getSelectedItem().toString());
-                pst.setInt(4, Integer.parseInt(tfHarga.getText())); // Convert Harga ke Angka
+                pst.setInt(4, Integer.parseInt(tfHarga.getText())); 
+                pst.setInt(5, 0); // Default Stok 0
                 pst.setString(6, tfKeterangan.getText());
+                
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Barang Berhasil Ditambahkan");
             } else {
-                // --- MODE UPDATE ---
-                // Update berdasarkan kode_barang
-                sql = "UPDATE tbl_barang SET nama_barang=?, kategori=?, harga=?, stok=?, keterangan=? WHERE kode_barang=?";
+                // --- MODE UPDATE (EDIT) ---
+                // Hapus kolom 'stok' dari query update agar stok tidak berubah/hilang
+                sql = "UPDATE tbl_barang SET nama_barang=?, kategori=?, harga=?, keterangan=? WHERE kode_barang=?";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, tfNamBarang.getText());
                 pst.setString(2, cbKategori.getSelectedItem().toString());
                 pst.setInt(3, Integer.parseInt(tfHarga.getText()));
-                pst.setString(5, tfKeterangan.getText());
-                pst.setString(6, tfKodBarang.getText()); // Where condition
+                pst.setString(4, tfKeterangan.getText());
+                pst.setString(5, tfKodBarang.getText()); // WHERE condition
+                
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Barang Berhasil Diubah");
             }
@@ -499,15 +485,17 @@ public class PKelBarang extends javax.swing.JPanel {
             String nama = tblBarang.getValueAt(baris, 1).toString();
             String kat  = tblBarang.getValueAt(baris, 2).toString();
             String hrg  = tblBarang.getValueAt(baris, 3).toString();
-            int stok    = Integer.parseInt(tblBarang.getValueAt(baris, 4).toString());
+            // Stok ada di index 4, tapi kita tidak menampilkannya di form input lagi
             String ket  = tblBarang.getValueAt(baris, 5).toString();
 
             // Set ke Form
             tfKodBarang.setText(kode);
             tfNamBarang.setText(nama);
-            cbKategori.setSelectedItem(kat); // Set combobox sesuai teks
+            cbKategori.setSelectedItem(kat); 
             tfHarga.setText(hrg);
             tfKeterangan.setText(ket);
+            
+            // Kita TIDAK perlu set stok ke textfield/spinner karena sudah dihapus
 
             // Set Mode Edit
             isEditMode = true;
@@ -562,13 +550,11 @@ public class PKelBarang extends javax.swing.JPanel {
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JComboBox<String> cbKategori;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;

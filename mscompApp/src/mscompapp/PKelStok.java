@@ -4,8 +4,15 @@
  */
 package mscompapp;
 
+import config.Koneksi;
 import javax.swing.table.DefaultTableModel;
-import java.util.Date;  
+import java.util.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;
+import java.awt.event.KeyAdapter; // Import baru untuk event ngetik
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -13,18 +20,96 @@ import java.util.Date;
  */
 public class PKelStok extends javax.swing.JPanel {
 
+    private boolean isEditMode = false;
+    // [BARU] Variabel untuk menyimpan ID dan Jumlah Lama saat proses Edit
+    private String idPembelianEdit;
+    private int oldQty; 
+
     /**
      * Creates new form PKelStok
      */
     public PKelStok() {
         initComponents();
         loadData();
+        loadKategori(); 
         JTanggal.setDate(new java.util.Date());
+        
+        tKodeBrg.setEditable(false);
+        tNamaBarang.setEditable(false);
+        jTextField1.setEditable(false); 
+        tTotalHarga.setEditable(false);
+        
+        tJumlahBeli.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                hitungTotal();
+            }
+        });
     }
     
+    public void itemTerpilih(String kode, String nama, String kat, String harga) {
+        tKodeBrg.setText(kode);
+        tNamaBarang.setText(nama);
+        cbKategori.setSelectedItem(kat);
+        jTextField1.setText(harga); 
+        tJumlahBeli.requestFocus(); 
+    }
+    
+    private void hitungTotal() {
+        try {
+            int harga = Integer.parseInt(jTextField1.getText());
+            int jumlah = Integer.parseInt(tJumlahBeli.getText());
+            int total = harga * jumlah;
+            tTotalHarga.setText(String.valueOf(total));
+        } catch (NumberFormatException e) {
+            tTotalHarga.setText("0");
+        }
+    }
+    
+    private void bersihkan() {
+        tKodeBrg.setText("");
+        tNamaBarang.setText("");
+        cbKategori.setSelectedIndex(0);
+        jTextField1.setText("");
+        tJumlahBeli.setText("");
+        tTotalHarga.setText("");
+        JTanggal.setDate(new Date());
+        
+        // Reset Mode Edit
+        isEditMode = false;
+        btSimpan.setText("SIMPAN");
+        tKodeBrg.setEnabled(true);
+        btPilihKode.setEnabled(true);
+    }
+
+    private String generateIdPembelian() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String dateNow = sdf.format(new Date());
+            
+            String sql = "SELECT MAX(id_pembelian) FROM tbl_pembelian WHERE id_pembelian LIKE '" + dateNow + "%'";
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            
+            if (res.next()) {
+                String lastID = res.getString(1);
+                if (lastID != null) {
+                    String seq = lastID.substring(lastID.length() - 3);
+                    int nextSeq = Integer.parseInt(seq) + 1;
+                    return dateNow + String.format("%03d", nextSeq);
+                }
+            }
+            return dateNow + "001";
+        } catch (Exception e) {
+            System.out.println("Error Generate ID: " + e.getMessage());
+            return null;
+        }
+    }
+
     private void loadData(){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
+        model.addColumn("ID Pembelian"); 
         model.addColumn("Tanggal");
         model.addColumn("Kode Barang");
         model.addColumn("Nama Barang"); 
@@ -33,38 +118,34 @@ public class PKelStok extends javax.swing.JPanel {
         model.addColumn("Jumlah Beli");
         model.addColumn("Total Harga");
         try {
-            String sql = "SELECT * FROM tbl_pembelian";
+            String sql = "SELECT * FROM tbl_pembelian ORDER BY id_pembelian DESC";
             int no = 1;
             java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
             java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
             while(res.next()){
                 model.addRow(new Object[]{
                     no++,
-                    res.getString(1), 
-                    res.getString(2), 
-                    res.getString(3), 
-                    res.getString(4),    
-                    res.getInt(5),    
-                    res.getInt(6),
-                    res.getInt(7)
+                    res.getString("id_pembelian"),
+                    res.getString("tanggal"), 
+                    res.getString("kode_barang"), 
+                    res.getString("nama_barang"), 
+                    res.getString("kategori"),    
+                    res.getInt("harga"),    
+                    res.getInt("jumlah_beli"),
+                    res.getInt("total_harga")
                 });
             }
             tblBarang.setModel(model);
-            tblBarang.getColumnModel().getColumn(0).setPreferredWidth(50);  // Kolom No/ID jadi kecil
-            tblBarang.getColumnModel().getColumn(0).setMaxWidth(50);       // Mengunci lebar maksimal
-            tblBarang.getColumnModel().getColumn(0).setMinWidth(50);
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) { System.out.println("Gagal Load: " + e.getMessage()); }
     }
     
     private void loadKategori(){
-        cbKategori.removeAllItems(); // Hapus item default/lama
+        cbKategori.removeAllItems();
         cbKategori.addItem("-Pilih Kategori-");
         try {
             String sql = "SELECT nama_kategori FROM tbl_kategori";
             java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet res = stm.executeQuery(sql);
-            
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
             while(res.next()){
                 cbKategori.addItem(res.getString("nama_kategori"));
             }
@@ -107,8 +188,8 @@ public class PKelStok extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnedit = new javax.swing.JButton();
+        btndelete = new javax.swing.JButton();
         cbKategori = new javax.swing.JComboBox<>();
         tHarga = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -155,6 +236,7 @@ public class PKelStok extends javax.swing.JPanel {
 
         btPilihKode.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btPilihKode.setText("Pilih");
+        btPilihKode.addActionListener(this::btPilihKodeActionPerformed);
 
         tNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -173,6 +255,7 @@ public class PKelStok extends javax.swing.JPanel {
 
         btSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btSimpan.setText("SIMPAN");
+        btSimpan.addActionListener(this::btSimpanActionPerformed);
 
         btLihat.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btLihat.setText("LIHAT LAPORAN");
@@ -207,14 +290,15 @@ public class PKelStok extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setText("Filter Bulan");
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 153));
-        jButton1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jButton1.setText("EDIT");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        btnedit.setBackground(new java.awt.Color(255, 255, 153));
+        btnedit.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        btnedit.setText("EDIT");
+        btnedit.addActionListener(this::btneditActionPerformed);
 
-        jButton2.setBackground(new java.awt.Color(255, 51, 51));
-        jButton2.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jButton2.setText("DELETE");
+        btndelete.setBackground(new java.awt.Color(255, 51, 51));
+        btndelete.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        btndelete.setText("DELETE");
+        btndelete.addActionListener(this::btndeleteActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -239,9 +323,9 @@ public class PKelStok extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(btCari)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnedit, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btndelete, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(166, 166, 166))
         );
         jPanel2Layout.setVerticalGroup(
@@ -265,8 +349,8 @@ public class PKelStok extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))))
+                            .addComponent(btnedit)
+                            .addComponent(btndelete))))
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
@@ -286,59 +370,66 @@ public class PKelStok extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btLihat, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(tKodeBrg)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btPilihKode))
-                    .addComponent(JTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tNamaBarang)
-                    .addComponent(tJumlahBeli)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(39, 39, 39)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tHarga)
-                            .addComponent(jTextField1)))
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(tKodeBrg)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btPilihKode))
+                            .addComponent(JTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tNamaBarang)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tHarga)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btLihat, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(tJumlahBeli)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(tKodeBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btPilihKode, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tNamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tKodeBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btPilihKode, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tNamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -346,32 +437,235 @@ public class PKelStok extends javax.swing.JPanel {
                             .addComponent(jTextField1))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tJumlahBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tJumlahBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btLihat, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(btLihat, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btLihatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLihatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btLihatActionPerformed
+   private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try {
+            if(tKodeBrg.getText().isEmpty() || tJumlahBeli.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Data Barang dan Jumlah Beli harus diisi!");
+                return;
+            }
 
-    private void btCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btCariActionPerformed
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tgl = sdf.format(JTanggal.getDate());
+            
+            if (isEditMode == false) {
+                // --- MODE SIMPAN BARU ---
+                String idPembelian = generateIdPembelian();
+                
+                String sql = "INSERT INTO tbl_pembelian VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, idPembelian);
+                pst.setString(2, tgl);
+                pst.setString(3, tKodeBrg.getText());
+                pst.setString(4, tNamaBarang.getText());
+                pst.setString(5, cbKategori.getSelectedItem().toString());
+                pst.setInt(6, Integer.parseInt(jTextField1.getText())); 
+                pst.setInt(7, Integer.parseInt(tJumlahBeli.getText()));
+                pst.setInt(8, Integer.parseInt(tTotalHarga.getText()));
+                pst.execute();
+                
+                // Update Tambah Stok
+                String sqlUp = "UPDATE tbl_barang SET stok = stok + ? WHERE kode_barang = ?";
+                java.sql.PreparedStatement pstUp = conn.prepareStatement(sqlUp);
+                pstUp.setInt(1, Integer.parseInt(tJumlahBeli.getText()));
+                pstUp.setString(2, tKodeBrg.getText());
+                pstUp.execute();
+                
+                JOptionPane.showMessageDialog(this, "Data Disimpan! ID: " + idPembelian);
+                
+            } else {
+                // --- MODE UPDATE (EDIT) ---
+                String sql = "UPDATE tbl_pembelian SET tanggal=?, kategori=?, jumlah_beli=?, total_harga=? WHERE id_pembelian=?";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, tgl);
+                pst.setString(2, cbKategori.getSelectedItem().toString());
+                pst.setInt(3, Integer.parseInt(tJumlahBeli.getText()));
+                pst.setInt(4, Integer.parseInt(tTotalHarga.getText()));
+                pst.setString(5, idPembelianEdit);
+                pst.execute();
+                
+                // [PENTING] Update Koreksi Stok
+                // Rumus: Stok Sekarang + (Jumlah Baru - Jumlah Lama)
+                int newQty = Integer.parseInt(tJumlahBeli.getText());
+                int diff = newQty - oldQty;
+                
+                String sqlUp = "UPDATE tbl_barang SET stok = stok + ? WHERE kode_barang = ?";
+                java.sql.PreparedStatement pstUp = conn.prepareStatement(sqlUp);
+                pstUp.setInt(1, diff); // Menambah/Mengurang selisih
+                pstUp.setString(2, tKodeBrg.getText());
+                pstUp.execute();
+                
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diubah!");
+            }
+            
+            loadData();
+            bersihkan();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Proses Gagal: " + e.getMessage());
+        }
+    }                                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    // [BARU] Logika Edit Data (Mengambil data ke form)
+    private void btneditActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        int baris = tblBarang.getSelectedRow();
+        if (baris != -1) {
+            // Ambil data dari tabel
+            // Kolom index: 1=ID, 2=Tgl, 3=Kode, 4=Nama, 5=Kat, 6=Hrg, 7=Jml, 8=Total
+            idPembelianEdit = tblBarang.getValueAt(baris, 1).toString();
+            String tgl = tblBarang.getValueAt(baris, 2).toString();
+            String kode = tblBarang.getValueAt(baris, 3).toString();
+            String nama = tblBarang.getValueAt(baris, 4).toString();
+            String kat = tblBarang.getValueAt(baris, 5).toString();
+            String hrg = tblBarang.getValueAt(baris, 6).toString();
+            String jml = tblBarang.getValueAt(baris, 7).toString();
+            String total = tblBarang.getValueAt(baris, 8).toString();
+            
+            // Set ke Form
+            try {
+                java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(tgl);
+                JTanggal.setDate(date);
+            } catch (Exception e) {}
+            
+            tKodeBrg.setText(kode);
+            tNamaBarang.setText(nama);
+            cbKategori.setSelectedItem(kat);
+            jTextField1.setText(hrg);
+            tJumlahBeli.setText(jml);
+            tTotalHarga.setText(total);
+            
+            // Simpan jumlah lama untuk hitungan stok nanti
+            oldQty = Integer.parseInt(jml);
+            
+            // Ubah tampilan jadi Mode Edit
+            isEditMode = true;
+            btSimpan.setText("UBAH");
+            tKodeBrg.setEnabled(false); // Kode barang gaboleh ganti saat edit
+            btPilihKode.setEnabled(false);
+            
+            JOptionPane.showMessageDialog(this, "Silahkan edit jumlah atau tanggal, lalu tekan UBAH");
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data yang ingin diedit!");
+        }
+    }                                       
+
+    // [BARU] Logika Delete Data (Hapus & Kembalikan Stok)
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        int baris = tblBarang.getSelectedRow();
+        if (baris != -1) {
+            String id = tblBarang.getValueAt(baris, 1).toString();
+            String kode = tblBarang.getValueAt(baris, 3).toString();
+            int qty = Integer.parseInt(tblBarang.getValueAt(baris, 7).toString());
+            
+            int confirm = JOptionPane.showConfirmDialog(this, "Hapus data pembelian ID: " + id + "?\nStok barang akan dikurangi otomatis.", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+                    
+                    // 1. Hapus Data Pembelian
+                    String sql = "DELETE FROM tbl_pembelian WHERE id_pembelian = ?";
+                    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                    pst.setString(1, id);
+                    pst.execute();
+                    
+                    // 2. Kembalikan Stok (Kurangi stok di tbl_barang)
+                    String sqlStok = "UPDATE tbl_barang SET stok = stok - ? WHERE kode_barang = ?";
+                    java.sql.PreparedStatement pstStok = conn.prepareStatement(sqlStok);
+                    pstStok.setInt(1, qty);
+                    pstStok.setString(2, kode);
+                    pstStok.execute();
+                    
+                    JOptionPane.showMessageDialog(this, "Data dihapus dan stok dikembalikan.");
+                    loadData();
+                    bersihkan();
+                    
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Gagal Hapus: " + e.getMessage());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!");
+        }
+    }                                         
+
+    // [BARU] Logika Filter Data Berdasarkan Tanggal (btCari)
+    private void btCariActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        if (dateAwal.getDate() == null || dateAkhir.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih Tanggal Awal dan Akhir dulu!");
+            return;
+        }
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("ID Pembelian");
+        model.addColumn("Tanggal");
+        model.addColumn("Kode Barang");
+        model.addColumn("Nama Barang"); 
+        model.addColumn("Kategori"); 
+        model.addColumn("Harga");
+        model.addColumn("Jumlah Beli");
+        model.addColumn("Total Harga");
+        
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tgl1 = sdf.format(dateAwal.getDate());
+            String tgl2 = sdf.format(dateAkhir.getDate());
+            
+            // Query filter
+            String sql = "SELECT * FROM tbl_pembelian WHERE tanggal BETWEEN '" + tgl1 + "' AND '" + tgl2 + "'";
+            
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            
+            int no = 1;
+            while(res.next()){
+                model.addRow(new Object[]{
+                    no++,
+                    res.getString("id_pembelian"),
+                    res.getString("tanggal"), 
+                    res.getString("kode_barang"), 
+                    res.getString("nama_barang"), 
+                    res.getString("kategori"),    
+                    res.getInt("harga"),    
+                    res.getInt("jumlah_beli"),
+                    res.getInt("total_harga")
+                });
+            }
+            tblBarang.setModel(model);
+        } catch (Exception e) {
+            System.out.println("Gagal Filter: " + e.getMessage());
+        }
+    }                                      
+
+    private void btPilihKodeActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        PopUpBarang popup = new PopUpBarang();
+        popup.stokForm = this; 
+        popup.setVisible(true);
+    }                                           
+
+    private void btLihatActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // Kosong (Untuk fitur laporan nanti)
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -380,11 +674,11 @@ public class PKelStok extends javax.swing.JPanel {
     private javax.swing.JButton btLihat;
     private javax.swing.JButton btPilihKode;
     private javax.swing.JButton btSimpan;
+    private javax.swing.JButton btndelete;
+    private javax.swing.JButton btnedit;
     private javax.swing.JComboBox<String> cbKategori;
     private com.toedter.calendar.JDateChooser dateAkhir;
     private com.toedter.calendar.JDateChooser dateAwal;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
