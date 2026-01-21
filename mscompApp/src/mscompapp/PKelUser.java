@@ -142,13 +142,13 @@ private void bersihkanForm() {
         tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         tfNo.addActionListener(this::tfNoActionPerformed);
 
-        btnSimpan.setBackground(new java.awt.Color(153, 153, 153));
+        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSimpan.setForeground(new java.awt.Color(255, 255, 255));
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
-        jPanel4.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel4.setBackground(new java.awt.Color(102, 204, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -244,7 +244,7 @@ private void bersihkanForm() {
         });
         jScrollPane2.setViewportView(tblUser);
 
-        jPanel3.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel3.setBackground(new java.awt.Color(102, 204, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -267,18 +267,20 @@ private void bersihkanForm() {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        btnEdit.setBackground(new java.awt.Color(204, 204, 204));
+        btnEdit.setBackground(new java.awt.Color(255, 255, 102));
         btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnEdit.setText("EDIT");
         btnEdit.addActionListener(this::btnEditActionPerformed);
 
-        btnRefresh.setBackground(new java.awt.Color(51, 255, 51));
+        btnRefresh.setBackground(new java.awt.Color(153, 153, 153));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
-        btnCari.setBackground(new java.awt.Color(51, 255, 51));
+        btnCari.setBackground(new java.awt.Color(153, 153, 153));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCari.setForeground(new java.awt.Color(255, 255, 255));
         btnCari.setText("CARI");
         btnCari.addActionListener(this::btnCariActionPerformed);
 

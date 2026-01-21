@@ -12,6 +12,7 @@ public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     public static String namaUser; // Variabel static agar bisa dipanggil dari mana saja
+   
     /**
      * Creates new form Login
      */
@@ -40,41 +41,41 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
-        setPreferredSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel3.setText("Password :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 450, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 420, 120, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel2.setText("Username :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 295, 150, 60));
 
-        btLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btLogin.setBackground(new java.awt.Color(102, 255, 102));
+        btLogin.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btLogin.setText("LOGIN");
         btLogin.addActionListener(this::btLoginActionPerformed);
-        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 570, -1, -1));
+        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 630, 200, 60));
 
-        jLabel1.setFont(new java.awt.Font("Swis721 Cn BT", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 Cn BT", 1, 35)); // NOI18N
         jLabel1.setText("LOGIN");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, 90, 60));
 
-        tPass.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tPass.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tPass.addActionListener(this::tPassActionPerformed);
-        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, 260, -1));
+        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 260, 50));
 
-        tUsn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tUsn.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tUsn.addActionListener(this::tUsnActionPerformed);
-        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 260, -1));
+        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 360, 260, 50));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 Cn BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 Cn BT", 1, 25)); // NOI18N
         jLabel4.setText("Silahkan masukkan username dan password");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 260, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 240, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 0, 600, 1080));
 
@@ -98,6 +99,7 @@ public class Login extends javax.swing.JFrame {
 
         // 1. Membuat objek dari frame Dashboard
         String user = res.getString("nama");
+        namaUser = res.getString("username");
         Dashboard dash = new Dashboard(user);
 
         // 2. Mengatur agar dashboard muncul di tengah layar

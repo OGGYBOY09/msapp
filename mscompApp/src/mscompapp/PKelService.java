@@ -17,243 +17,159 @@ import javax.swing.JOptionPane;
  */
 public class PKelService extends javax.swing.JPanel {   
     
-    int idPelanggan;
+    public int idPelanggan = 0; 
 
-    
-    /**
-     * Creates new form PKelService
-     */
     public PKelService() {
         initComponents();
         auto_number_service();
         tampilkanAdmin();
-        tampilTanggal(); // Tambahkan ini
+        tampilTanggal();
+        load_jenis_perangkat();
+        load_status();
+        load_table_service();
+        
+        // Default State
         rbLama.setSelected(true);
-        tCari.setEnabled(true);
-        tNamaPelanggan.setEnabled(false);
-        tNoPelanggan.setEnabled(false);
-        tAlamatPelanggan.setEnabled(false);
+        btnCari.setEnabled(true);
+        tNamaPelanggan.setEditable(false);
+        tNoPelanggan.setEditable(false);
+        tAlamatPelanggan.setEditable(false);
     }
     
-    private void cariPelanggan() {
-    try {
-        Connection conn = Koneksi.configDB();
-        String sql = "SELECT * FROM tbl_pelanggan WHERE no_hp LIKE ? OR nama_pelanggan LIKE ?";
-        PreparedStatement pst = conn.prepareStatement(sql);
-
-        pst.setString(1, "%" + tCari.getText() + "%");
-        pst.setString(2, "%" + tCari.getText() + "%");
-
-        ResultSet rs = pst.executeQuery();
-
-        if (rs.next()) {
-            tNamaPelanggan.setText(rs.getString("nama_pelanggan"));
-            tNoPelanggan.setText(rs.getString("no_hp"));
-            tAlamatPelanggan.setText(rs.getString("alamat"));
-
-            idPelanggan = rs.getInt("id_pelanggan"); // variabel global
-        } else {
-            tNamaPelanggan.setText("");
-            tNoPelanggan.setText("");
-            tAlamatPelanggan.setText("");
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Gagal mencari pelanggan");
-    }
-}
+    // --- LOAD DATA & HELPER METHODS ---
     
-    private boolean validasiNoHp() {
-
-    String hp = tNoPelanggan.getText();
-
-    if (hp.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "No HP tidak boleh kosong");
-        return false;
-    }
-
-    if (!hp.matches("[0-9]+")) {
-        JOptionPane.showMessageDialog(null, "No HP harus angka");
-        return false;
-    }
-
-    if (hp.length() < 10) {
-        JOptionPane.showMessageDialog(null, "No HP minimal 10 digit");
-        return false;
-    }
-
-    // cek duplikat
-    try {
-        Connection conn = Koneksi.configDB();
-        String sql = "SELECT * FROM tbl_pelanggan WHERE no_hp=?";
-        PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setString(1, hp);
-
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "No HP sudah terdaftar");
-            return false;
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Validasi No HP gagal");
-        return false;
-    }
-
-    return true;
-}
-
-
-    
-    private void load_table_service() {
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("No Service");
-    model.addColumn("Pelanggan");
-    model.addColumn("Barang");
-    model.addColumn("Status");
-
-    try {
-        // Query JOIN untuk mengambil nama pelanggan dari tbl_pelanggan
-        String sql = "SELECT s.no_service, p.nama, s.jenis_barang, s.status " +
-                     "FROM tbl_service s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
-                     "ORDER BY s.tanggal DESC";
-        
-        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-        java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-        
-        while(res.next()){
-            model.addRow(new Object[]{
-                res.getString(1), res.getString(2), res.getString(3), res.getString(4)
-            });
-        }
-        tblServis.setModel(model);
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-    }
-}
     private void tampilkanAdmin() {
-    // Mengambil nama dari variabel static di class Login
-    String namaLog = mscompapp.Login.namaUser; 
-    // Set ke textfield tNamaAdmin
-    tNamaAdmin.setText(namaLog);    
-    // Kunci agar tidak bisa diubah manual
-    tNamaAdmin.setEditable(false);
-}
-    
-    private void simpanServis() {
-
-    Connection conn = null;
-
-    try {
-        conn = Koneksi.configDB();
-        conn.setAutoCommit(false); // TRANSACTION MULAI
-
-        // =========================
-        // JIKA PELANGGAN BARU
-        // =========================
-        if (rbBaru.isSelected()) {
-
-            if (!validasiNoHp()) {
-                return;
+        try {
+            // Pastikan di Login.java sudah ada: public static String namaUser;
+            String namaLog = Login.namaUser; 
+            if (namaLog != null && !namaLog.isEmpty()) {
+                tNamaAdmin.setText(namaLog);
+            } else {
+                tNamaAdmin.setText("Admin");
             }
-
-            String sqlPelanggan =
-                "INSERT INTO tbl_pelanggan (nama, no_hp, alamat) VALUES (?, ?, ?)";
-
-            PreparedStatement pstPel = conn.prepareStatement(
-                    sqlPelanggan, Statement.RETURN_GENERATED_KEYS);
-
-            pstPel.setString(1, tNamaPelanggan.getText());
-            pstPel.setString(2, tNoPelanggan.getText());
-            pstPel.setString(3, tAlamatPelanggan.getText());
-            pstPel.executeUpdate();
-
-            ResultSet rs = pstPel.getGeneratedKeys();
-            if (rs.next()) {
-                idPelanggan = rs.getInt(1);
-            }
+        } catch (Exception e) {
+            tNamaAdmin.setText("Admin");
         }
-
-        // =========================
-        // SIMPAN SERVIS
-        // =========================
-        String sqlServis =
-            "INSERT INTO servis (id_pelanggan, tanggal_masuk, jenis_barang, merek, model, no_seri, keluhan_awal, status) " +
-            "VALUES (?, CURDATE(), ?, ?, ?, ?, ?, ?)";
-
-        PreparedStatement pstServis = conn.prepareStatement(sqlServis);
-
-        pstServis.setInt(1, idPelanggan);
-        pstServis.setString(2, cbJenisBrg.getSelectedItem().toString());
-        pstServis.setString(3, tMerek.getText());
-        pstServis.setString(4, tModel.getText());
-        pstServis.setString(5, tSeri.getText());
-        pstServis.setString(6, tKeluhan.getText());
-        pstServis.setString(7, cbStatusServ.getSelectedItem().toString());
-
-        pstServis.executeUpdate();
-
-        conn.commit(); // BERHASIL SEMUA
-
-        JOptionPane.showMessageDialog(null, "Data servis berhasil disimpan");
-
-    } catch (Exception e) {
+        tNamaAdmin.setEditable(false);
+    }
+    
+    private void load_jenis_perangkat() {
+        cbJenisBrg.removeAllItems();
+        cbJenisBrg.addItem("- Pilih Jenis -");
         try {
-            if (conn != null) conn.rollback();
-        } catch (Exception ex) {}
-
-        JOptionPane.showMessageDialog(null, "Gagal menyimpan servis");
-
-    } finally {
-        try {
-            if (conn != null) conn.setAutoCommit(true);
+            String sql = "SELECT nama_jenis FROM jenis_perangkat";
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            while(res.next()) {
+                cbJenisBrg.addItem(res.getString("nama_jenis"));
+            }
         } catch (Exception e) {}
     }
-}
-
     
-    private void auto_number_service() {
-    try {
-        java.sql.Connection conn = (java.sql.Connection)mscompapp.Koneksi.configDB();
-        java.sql.Statement stm = conn.createStatement();
-        // Mengambil id_servis terbesar dari tabel servis
-        String sql = "SELECT id_servis FROM servis ORDER BY id_servis DESC LIMIT 1";
-        java.sql.ResultSet res = stm.executeQuery(sql);
-        
-        if (res.next()) {
-            // Mengambil angka setelah tulisan 'SRV' (indeks ke-3 sampai selesai)
-            String kode = res.getString("id_servis").substring(3); 
-            int AN = Integer.parseInt(kode) + 1;
-            String nol = "";
-            
-            // Mengatur format 4 digit angka (000x)
-            if (AN < 10) { nol = "000"; }
-            else if (AN < 100) { nol = "00"; }
-            else if (AN < 1000) { nol = "0"; }
-            else { nol = ""; }
-            
-            tNomorServ.setText("SRV" + nol + AN);
-        } else {
-            // Jika database masih kosong, mulai dari SRV0001
-            tNomorServ.setText("SRV0001");
-        }
-        
-        // Agar tidak bisa diubah manual oleh admin
-        tNomorServ.setEditable(false);
-        
-    } catch (Exception e) {
-        System.out.println("Error Auto Number Service: " + e.getMessage());
+    private void load_status() {
+        cbStatusServ.removeAllItems();
+        cbStatusServ.addItem("Menunggu");
+        cbStatusServ.addItem("Proses");
+        cbStatusServ.addItem("Selesai");
+        cbStatusServ.addItem("Dibatalkan");
     }
-}
+    
+    public void pelangganTerpilih(String id, String nama, String hp, String alamat) {
+        idPelanggan = Integer.parseInt(id);
+        tNamaPelanggan.setText(nama);
+        tNoPelanggan.setText(hp);
+        tAlamatPelanggan.setText(alamat);
+    }
+
+    private void auto_number_service() {
+        try {
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            String sql = "SELECT id_servis FROM servis ORDER BY id_servis DESC LIMIT 1";
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            if (res.next()) {
+                String kode = res.getString("id_servis").substring(3); 
+                int AN = Integer.parseInt(kode) + 1;
+                String nol = (AN < 10) ? "000" : (AN < 100) ? "00" : (AN < 1000) ? "0" : "";
+                tNomorServ.setText("SRV" + nol + AN);
+            } else {
+                tNomorServ.setText("SRV0001");
+            }
+            tNomorServ.setEditable(false);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
     
     private void tampilTanggal() {
-    // Membuat format tanggal (Hari-Bulan-Tahun)
-    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-    Date sekarang = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        tTgl.setText(df.format(new Date()));
+    }
     
-    // Set teks label tTgl dengan tanggal sekarang
-    tTgl.setText(df.format(sekarang));
-}
+    // Helper untuk mengambil ID Admin dari tabel User berdasarkan Nama di Textfield
+    private int getAdminId() {
+        try {
+            String sql = "SELECT id_user FROM tbl_user WHERE username = ?";
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, tNamaAdmin.getText());
+            java.sql.ResultSet res = pst.executeQuery();
+            if (res.next()) {
+                return res.getInt("id_user");
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return 1; // Default jika gagal (pastikan ID 1 ada di tbl_user)
+    }
+
+    // Helper untuk menggabungkan Checkbox
+    private String getKelengkapan() {
+        StringBuilder sb = new StringBuilder();
+        if (ck1.isSelected()) sb.append("Charger, ");
+        if (ck2.isSelected()) sb.append("Mouse, ");
+        if (ck3.isSelected()) sb.append("Tas, ");
+        if (ck4.isSelected()) sb.append("Kabel, ");
+        
+        if (sb.length() > 0) {
+            return sb.substring(0, sb.length() - 2); // Hapus koma terakhir
+        }
+        return "Unit Only";
+    }
+
+    private void load_table_service() {
+        DefaultTableModel model = new DefaultTableModel();
+        // Sesuaikan urutan dengan JTable Design kamu
+        model.addColumn("No Servis");
+        model.addColumn("Nama");
+        model.addColumn("HP");
+        model.addColumn("Jenis");
+        model.addColumn("Merek");
+        model.addColumn("Model");
+        model.addColumn("Keluhan");
+        model.addColumn("Status");
+
+        try {
+            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_telp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
+                         "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
+                         "ORDER BY s.tanggal_masuk DESC";
+            
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            
+            while(res.next()){
+                model.addRow(new Object[]{
+                    res.getString("id_servis"),
+                    res.getString("nama_pelanggan"),
+                    res.getString("no_telp"),
+                    res.getString("jenis_barang"),
+                    res.getString("merek"),
+                    res.getString("model"),
+                    res.getString("keluhan_awal"),
+                    res.getString("status")
+                });
+            }
+            tblServis.setModel(model);
+        } catch (Exception e) {
+            System.out.println("Error Load Table: " + e.getMessage());
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -281,7 +197,6 @@ public class PKelService extends javax.swing.JPanel {
         rbBaru = new javax.swing.JRadioButton();
         rbLama = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
-        tCari = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -290,6 +205,10 @@ public class PKelService extends javax.swing.JPanel {
         tAlamatPelanggan = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
+        btBatal = new javax.swing.JButton();
+        btSimpan = new javax.swing.JButton();
+        btReset = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -314,9 +233,6 @@ public class PKelService extends javax.swing.JPanel {
         jLabel19 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblServis = new javax.swing.JTable();
-        btSimpan = new javax.swing.JButton();
-        btReset = new javax.swing.JButton();
-        btBatal = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
@@ -432,15 +348,6 @@ public class PKelService extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel4.setText("Cari No Hp / Nama :");
 
-        tCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tCari.setText("Cari");
-        tCari.addActionListener(this::tCariActionPerformed);
-        tCari.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tCariKeyReleased(evt);
-            }
-        });
-
         jLabel9.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel9.setText("Nama :");
 
@@ -485,6 +392,24 @@ public class PKelService extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
+        btBatal.setBackground(new java.awt.Color(255, 51, 51));
+        btBatal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btBatal.setText("BATAL");
+        btBatal.addActionListener(this::btBatalActionPerformed);
+
+        btSimpan.setBackground(new java.awt.Color(102, 255, 102));
+        btSimpan.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btSimpan.setText("SIMPAN");
+        btSimpan.addActionListener(this::btSimpanActionPerformed);
+
+        btReset.setBackground(new java.awt.Color(255, 255, 102));
+        btReset.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btReset.setText("RESET");
+        btReset.addActionListener(this::btResetActionPerformed);
+
+        btnCari.setText("cari");
+        btnCari.addActionListener(this::btnCariActionPerformed);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -492,24 +417,36 @@ public class PKelService extends javax.swing.JPanel {
             .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(52, 52, 52)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btSimpan)
+                        .addGap(44, 44, 44)
+                        .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tAlamatPelanggan))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tNoPelanggan))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(tNamaPelanggan))
-                    .addComponent(jLabel4)
-                    .addComponent(rbLama)
-                    .addComponent(rbBaru)
-                    .addComponent(tCari, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel14)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(tAlamatPelanggan))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel13)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(tNoPelanggan))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel9)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(tNamaPelanggan))
+                                .addComponent(jLabel4)
+                                .addComponent(rbLama)
+                                .addComponent(rbBaru)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(88, 88, 88)))
+                            .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -522,8 +459,8 @@ public class PKelService extends javax.swing.JPanel {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(tNamaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -535,7 +472,13 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 65, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btSimpan)
+                    .addComponent(btReset))
+                .addGap(35, 35, 35)
+                .addComponent(btBatal)
+                .addGap(54, 54, 54))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -571,6 +514,7 @@ public class PKelService extends javax.swing.JPanel {
         cbJenisBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         tMerek.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tMerek.addActionListener(this::tMerekActionPerformed);
 
         tModel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tModel.addActionListener(this::tModelActionPerformed);
@@ -610,9 +554,12 @@ public class PKelService extends javax.swing.JPanel {
         jLabel18.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel18.setText("Keluhan :");
 
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
         tKeluhan.setColumns(20);
         tKeluhan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tKeluhan.setRows(5);
+        tKeluhan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tKeluhan);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -623,33 +570,29 @@ public class PKelService extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
                     .addComponent(jLabel8)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel10)
-                                .addGroup(jPanel4Layout.createSequentialGroup()
-                                    .addComponent(ck1)
-                                    .addGap(26, 26, 26)
-                                    .addComponent(ck3)))
-                            .addGap(269, 269, 269))
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel16)
-                                .addComponent(jLabel17)
-                                .addComponent(jLabel18)
-                                .addComponent(jLabel15))
-                            .addGap(20, 20, 20)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(tMerek)
-                                .addComponent(tModel)
-                                .addComponent(cbJenisBrg, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tSeri)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                            .addComponent(ck2)
-                            .addGap(34, 34, 34)
-                            .addComponent(ck4))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(ck2)
+                        .addGap(34, 34, 34)
+                        .addComponent(ck4))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel15))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tMerek)
+                            .addComponent(tModel)
+                            .addComponent(cbJenisBrg, 0, 293, Short.MAX_VALUE)
+                            .addComponent(tSeri)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(ck1)
+                        .addGap(26, 26, 26)
+                        .addComponent(ck3)))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -666,20 +609,21 @@ public class PKelService extends javax.swing.JPanel {
                             .addComponent(cbJenisBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
                         .addGap(70, 70, 70)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tModel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(tSeri, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ck1)
                     .addComponent(ck3))
@@ -687,10 +631,11 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ck2)
                     .addComponent(ck4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel7.setPreferredSize(new java.awt.Dimension(815, 960));
 
         jPanel8.setBackground(new java.awt.Color(102, 204, 255));
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -721,16 +666,28 @@ public class PKelService extends javax.swing.JPanel {
 
         tblServis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblServis);
+        if (tblServis.getColumnModel().getColumnCount() > 0) {
+            tblServis.getColumnModel().getColumn(7).setResizable(false);
+            tblServis.getColumnModel().getColumn(8).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -746,23 +703,10 @@ public class PKelService extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 17, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
-
-        btSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btSimpan.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btSimpan.setText("SIMPAN");
-        btSimpan.addActionListener(this::btSimpanActionPerformed);
-
-        btReset.setBackground(new java.awt.Color(255, 255, 102));
-        btReset.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btReset.setText("RESET");
-
-        btBatal.setBackground(new java.awt.Color(255, 51, 51));
-        btBatal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btBatal.setText("BATAL");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -773,17 +717,7 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGap(71, 71, 71)
-                                    .addComponent(btSimpan)
-                                    .addGap(32, 32, 32)
-                                    .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(136, 136, 136)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
@@ -795,60 +729,42 @@ public class PKelService extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btSimpan)
-                                    .addComponent(btReset))
-                                .addGap(35, 35, 35)
-                                .addComponent(btBatal))
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(73, Short.MAX_VALUE))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbBaruActionPerformed
-        // TODO add your handling code here:
+        btnCari.setEnabled(false);
+        tNamaPelanggan.setEditable(true);
+        tNoPelanggan.setEditable(true);
+        tAlamatPelanggan.setEditable(true);
 
-        tCari.setEnabled(false);
-
-        tNamaPelanggan.setEnabled(true);
-        tNoPelanggan.setEnabled(true);
-        tAlamatPelanggan.setEnabled(true);
-
-        // kosongkan field
-        tCari.setText("");
         tNamaPelanggan.setText("");
         tNoPelanggan.setText("");
         tAlamatPelanggan.setText("");
-
-
+        tNamaPelanggan.requestFocus();
+        idPelanggan = 0; // Reset ID
     }//GEN-LAST:event_rbBaruActionPerformed
 
     private void rbLamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbLamaActionPerformed
         // TODO add your handling code here:
-        tCari.setEnabled(true);
-        tNamaPelanggan.setEnabled(false);
-        tNoPelanggan.setEnabled(false);
-        tAlamatPelanggan.setEnabled(false);
+        btnCari.setEnabled(true);
+        tNamaPelanggan.setEditable(false);
+        tNoPelanggan.setEditable(false);
+        tAlamatPelanggan.setEditable(false);
 
-        // kosongkan field
-        tCari.setText("");
         tNamaPelanggan.setText("");
         tNoPelanggan.setText("");
         tAlamatPelanggan.setText("");
     }//GEN-LAST:event_rbLamaActionPerformed
-
-    private void tCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tCariActionPerformed
 
     private void tNamaPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNamaPelangganActionPerformed
         // TODO add your handling code here:
@@ -879,19 +795,124 @@ public class PKelService extends javax.swing.JPanel {
     }//GEN-LAST:event_tNoPelangganActionPerformed
 
     private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
-        simpanServis();
+
+        try {
+            // 1. Validasi Input
+            if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nama, Jenis Barang, dan Keluhan wajib diisi!");
+                return;
+            }
+
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            int finalIdPelanggan = idPelanggan;
+
+            // 2. Cek apakah Pelanggan Baru? Jika ya, simpan dulu ke tbl_pelanggan
+            if (rbBaru.isSelected()) {
+                String sqlPelanggan = "INSERT INTO tbl_pelanggan (nama_pelanggan, no_telp, alamat) VALUES (?, ?, ?)";
+                // Gunakan RETURN_GENERATED_KEYS untuk mengambil ID auto increment
+                java.sql.PreparedStatement pstPel = conn.prepareStatement(sqlPelanggan, Statement.RETURN_GENERATED_KEYS);
+                pstPel.setString(1, tNamaPelanggan.getText());
+                pstPel.setString(2, tNoPelanggan.getText());
+                pstPel.setString(3, tAlamatPelanggan.getText());
+                pstPel.executeUpdate();
+                
+                // Ambil ID yang baru dibuat
+                java.sql.ResultSet rsId = pstPel.getGeneratedKeys();
+                if (rsId.next()) {
+                    finalIdPelanggan = rsId.getInt(1);
+                }
+            } else {
+                // Jika pelanggan lama tapi ID masih 0 (belum pilih dari pop up)
+                if (finalIdPelanggan == 0) {
+                    JOptionPane.showMessageDialog(this, "Mohon cari dan pilih data pelanggan lama!");
+                    return;
+                }
+            }
+
+            // 3. Simpan ke Tabel Servis
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tgl = sdf.format(new Date()); // Tanggal hari ini
+            int idAdmin = getAdminId(); // Ambil ID Admin
+            String kelengkapan = getKelengkapan();
+
+            String sqlService = "INSERT INTO servis (id_servis, id_pelanggan, id_admin, tanggal_masuk, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            java.sql.PreparedStatement pstServ = conn.prepareStatement(sqlService);
+            
+            pstServ.setString(1, tNomorServ.getText());
+            pstServ.setInt(2, finalIdPelanggan);
+            pstServ.setInt(3, idAdmin);
+            pstServ.setString(4, tgl);
+            pstServ.setString(5, cbJenisBrg.getSelectedItem().toString());
+            pstServ.setString(6, tMerek.getText());
+            pstServ.setString(7, tModel.getText());
+            pstServ.setString(8, tSeri.getText());
+            pstServ.setString(9, kelengkapan);
+            pstServ.setString(10, tKeluhan.getText());
+            pstServ.setString(11, cbStatusServ.getSelectedItem().toString());
+            
+            pstServ.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Data Service Berhasil Disimpan!\nNo: " + tNomorServ.getText());
+            
+            // Refresh
+            load_table_service();
+            btResetActionPerformed(null); // Reset Form
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btSimpanActionPerformed
 
-    private void tCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCariKeyReleased
+    private void tMerekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tMerekActionPerformed
         // TODO add your handling code here:
-        cariPelanggan();
-    }//GEN-LAST:event_tCariKeyReleased
+    }//GEN-LAST:event_tMerekActionPerformed
+
+    private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
+        // TODO add your handling code here:
+        btBatalActionPerformed(null); // Panggil fungsi batal untuk form pelanggan
+        
+        // Reset Form Barang
+        cbJenisBrg.setSelectedIndex(0);
+        tMerek.setText("");
+        tModel.setText("");
+        tSeri.setText("");
+        tKeluhan.setText("");
+        ck1.setSelected(false);
+        ck2.setSelected(false);
+        ck3.setSelected(false);
+        ck4.setSelected(false);
+        cbStatusServ.setSelectedIndex(0);
+        
+        auto_number_service();
+    }//GEN-LAST:event_btResetActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        PopUpPelanggan popup = new PopUpPelanggan();
+        popup.serviceForm = this; // Sambungkan pop-up dengan form ini
+        popup.setVisible(true);
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBatalActionPerformed
+        // TODO add your handling code here:
+        tNamaPelanggan.setText("");
+        tNoPelanggan.setText("");
+        tAlamatPelanggan.setText("");
+        rbLama.setSelected(true);
+        btnCari.setEnabled(true);
+        tNamaPelanggan.setEditable(false);
+        tNoPelanggan.setEditable(false);
+        tAlamatPelanggan.setEditable(false);
+        idPelanggan = 0;
+    }//GEN-LAST:event_btBatalActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBatal;
     private javax.swing.JButton btReset;
     private javax.swing.JButton btSimpan;
+    private javax.swing.JButton btnCari;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbJenisBrg;
     private javax.swing.JComboBox<String> cbStatusServ;
@@ -931,7 +952,6 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbBaru;
     private javax.swing.JRadioButton rbLama;
     private javax.swing.JTextField tAlamatPelanggan;
-    private javax.swing.JTextField tCari;
     private javax.swing.JTextArea tKeluhan;
     private javax.swing.JTextField tMerek;
     private javax.swing.JTextField tModel;

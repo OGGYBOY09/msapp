@@ -101,6 +101,8 @@ public class PKelKategori extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         tf_namaKat = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        tf_namaKat1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -120,7 +122,7 @@ public class PKelKategori extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jPanel3.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel3.setBackground(new java.awt.Color(102, 204, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -154,10 +156,15 @@ public class PKelKategori extends javax.swing.JPanel {
 
         tf_namaKat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        btnSimpan.setBackground(new java.awt.Color(153, 153, 153));
+        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel4.setText("Keterangan :");
+
+        tf_namaKat1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -171,7 +178,9 @@ public class PKelKategori extends javax.swing.JPanel {
                     .addComponent(tf_idKategori)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_namaKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
+                    .addComponent(tf_namaKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_namaKat1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -186,14 +195,18 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tf_namaKat, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(219, 219, 219)
+                .addGap(41, 41, 41)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tf_namaKat1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jPanel4.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel4.setBackground(new java.awt.Color(102, 204, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -234,10 +247,12 @@ public class PKelKategori extends javax.swing.JPanel {
         tf_cari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         tf_cari.addActionListener(this::tf_cariActionPerformed);
 
+        btn_refresh.setBackground(new java.awt.Color(153, 153, 153));
         btn_refresh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_refresh.setText("Refresh");
         btn_refresh.addActionListener(this::btn_refreshActionPerformed);
 
+        btn_edit.setBackground(new java.awt.Color(255, 255, 102));
         btn_edit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_edit.setText("Edit");
         btn_edit.addActionListener(this::btn_editActionPerformed);
@@ -247,6 +262,7 @@ public class PKelKategori extends javax.swing.JPanel {
         jButton5.setText("Hapus");
         jButton5.addActionListener(this::jButton5ActionPerformed);
 
+        btn_cari.setBackground(new java.awt.Color(153, 153, 153));
         btn_cari.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_cari.setText("Cari");
         btn_cari.addActionListener(this::btn_cariActionPerformed);
@@ -458,6 +474,7 @@ public class PKelKategori extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -468,5 +485,6 @@ public class PKelKategori extends javax.swing.JPanel {
     private javax.swing.JTextField tf_cari;
     private javax.swing.JTextField tf_idKategori;
     private javax.swing.JTextField tf_namaKat;
+    private javax.swing.JTextField tf_namaKat1;
     // End of variables declaration//GEN-END:variables
 }
