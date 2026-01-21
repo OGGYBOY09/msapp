@@ -11,7 +11,7 @@ package mscompapp;
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-
+    public static String namaUser; // Variabel static agar bisa dipanggil dari mana saja
     /**
      * Creates new form Login
      */
@@ -97,7 +97,7 @@ public class Login extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(null, "Login Berhasil!");
 
         // 1. Membuat objek dari frame Dashboard
-        String user = res.getString("username");
+        String user = res.getString("nama");
         Dashboard dash = new Dashboard(user);
 
         // 2. Mengatur agar dashboard muncul di tengah layar
