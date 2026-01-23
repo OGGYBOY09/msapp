@@ -27,6 +27,7 @@ public class PKelService extends javax.swing.JPanel {
         load_jenis_perangkat();
         load_status();
         load_table_service();
+        tampilKategori();       // DATA KATEGORI DARI DATABASE
         
         // Default State
         rbLama.setSelected(true);
@@ -37,6 +38,28 @@ public class PKelService extends javax.swing.JPanel {
     }
     
     // --- LOAD DATA & HELPER METHODS ---
+    
+    private void tampilKategori() {
+    try {
+        // 1. Bersihkan dulu agar tidak double
+        cbJenisBrg.removeAllItems();
+        cbJenisBrg.addItem("- Pilih Jenis -");
+
+        // 2. Query ke tbl_kategori
+        String sql = "SELECT nama_kategori FROM tbl_kategori";
+        java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        java.sql.ResultSet res = stm.executeQuery(sql);
+
+        // 3. Masukkan hasil ke ComboBox
+        while (res.next()) {
+            cbJenisBrg.addItem(res.getString("nama_kategori"));
+        }
+    } catch (Exception e) {
+        // Ini akan membantu kita tahu kalau ada error database
+        System.out.println("Error tampil kategori: " + e.getMessage());
+    }
+}
     
     private void tampilkanAdmin() {
         try {
@@ -145,7 +168,7 @@ public class PKelService extends javax.swing.JPanel {
         model.addColumn("Status");
 
         try {
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_telp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
+            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
                          "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
                          "ORDER BY s.tanggal_masuk DESC";
             
@@ -156,7 +179,7 @@ public class PKelService extends javax.swing.JPanel {
                 model.addRow(new Object[]{
                     res.getString("id_servis"),
                     res.getString("nama_pelanggan"),
-                    res.getString("no_telp"),
+                    res.getString("no_hp"),
                     res.getString("jenis_barang"),
                     res.getString("merek"),
                     res.getString("model"),
@@ -472,7 +495,7 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btSimpan)
                     .addComponent(btReset))
@@ -512,6 +535,7 @@ public class PKelService extends javax.swing.JPanel {
 
         cbJenisBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbJenisBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbJenisBrg.addActionListener(this::cbJenisBrgActionPerformed);
 
         tMerek.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tMerek.addActionListener(this::tMerekActionPerformed);
@@ -609,7 +633,6 @@ public class PKelService extends javax.swing.JPanel {
                             .addComponent(cbJenisBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
                         .addGap(70, 70, 70)))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tModel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
@@ -619,9 +642,9 @@ public class PKelService extends javax.swing.JPanel {
                     .addComponent(tSeri, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -735,8 +758,10 @@ public class PKelService extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -808,7 +833,7 @@ public class PKelService extends javax.swing.JPanel {
 
             // 2. Cek apakah Pelanggan Baru? Jika ya, simpan dulu ke tbl_pelanggan
             if (rbBaru.isSelected()) {
-                String sqlPelanggan = "INSERT INTO tbl_pelanggan (nama_pelanggan, no_telp, alamat) VALUES (?, ?, ?)";
+                String sqlPelanggan = "INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)";
                 // Gunakan RETURN_GENERATED_KEYS untuk mengambil ID auto increment
                 java.sql.PreparedStatement pstPel = conn.prepareStatement(sqlPelanggan, Statement.RETURN_GENERATED_KEYS);
                 pstPel.setString(1, tNamaPelanggan.getText());
@@ -906,6 +931,11 @@ public class PKelService extends javax.swing.JPanel {
         tAlamatPelanggan.setEditable(false);
         idPelanggan = 0;
     }//GEN-LAST:event_btBatalActionPerformed
+
+    private void cbJenisBrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbJenisBrgActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cbJenisBrgActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

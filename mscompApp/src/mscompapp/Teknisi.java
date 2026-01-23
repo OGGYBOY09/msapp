@@ -4,19 +4,78 @@
  */
 package mscompapp;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Acer Aspire Lite 15
  */
 public class Teknisi extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PKelTeknisi
-     */
     public Teknisi() {
         initComponents();
+        // Memanggil fungsi tampilData saat panel pertama kali dimuat
+        tampilData();
     }
 
+    // Method untuk menampilkan data ke JTable
+    public void tampilData() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Nama");
+        model.addColumn("Nomor HP");
+        model.addColumn("Alamat");
+        model.addColumn("Jenis Barang");
+        model.addColumn("Merek");
+        model.addColumn("Model/Tipe");
+        model.addColumn("Nomor Seri");
+        model.addColumn("Keluhan");
+        model.addColumn("Kelengkapan");
+        model.addColumn("Status");
+
+        try {
+            // Pengaturan koneksi (Sesuaikan db_name, user, dan password XAMPP kamu)
+            String url = "jdbc:mysql://localhost:3306/ms_db";
+            String user = "root";
+            String pass = "";
+            Connection conn = DriverManager.getConnection(url, user, pass);
+            Statement stmt = conn.createStatement();
+
+            // Query JOIN antara tabel servis (s) dan tbl_pelanggan (p)
+            String sql = "SELECT p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
+                       + "s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+                       + "FROM servis s "
+                       + "INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan";
+
+            ResultSet rs = stmt.executeQuery(sql);
+
+            int no = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    rs.getString("nama_pelanggan"),
+                    rs.getString("no_hp"),
+                    rs.getString("alamat"),
+                    rs.getString("jenis_barang"),
+                    rs.getString("merek"),
+                    rs.getString("model"),
+                    rs.getString("no_seri"),
+                    rs.getString("keluhan_awal"),
+                    rs.getString("kelengkapan"),
+                    rs.getString("status")
+                });
+            }
+            tblServ.setModel(model);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +87,7 @@ public class Teknisi extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnLihDetail = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
@@ -38,7 +97,7 @@ public class Teknisi extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblServ = new javax.swing.JTable();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
@@ -58,10 +117,10 @@ public class Teknisi extends javax.swing.JPanel {
             .addGap(0, 82, Short.MAX_VALUE)
         );
 
-        jButton1.setBackground(new java.awt.Color(153, 153, 153));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
-        jButton1.setText("LIHAT DETAIL");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        btnLihDetail.setBackground(new java.awt.Color(153, 153, 153));
+        btnLihDetail.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        btnLihDetail.setText("LIHAT DETAIL");
+        btnLihDetail.addActionListener(this::btnLihDetailActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel1.setText("Tanggal :");
@@ -75,11 +134,12 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel3.setText(" Status :");
 
         jButton2.setText("REFRESH");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel4.setText("Daftar Service Bulanan :");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblServ.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -90,7 +150,7 @@ public class Teknisi extends javax.swing.JPanel {
                 "No", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Perbaikan", "Part yang Diganti", "Status"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblServ);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -107,7 +167,7 @@ public class Teknisi extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLihDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
@@ -130,7 +190,7 @@ public class Teknisi extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLihDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -172,13 +232,20 @@ public class Teknisi extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLihDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLihDetailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLihDetailActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        tampilData(); // Memperbarui tabel saat tombol Refresh diklik
+        JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+  
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLihDetail;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -190,6 +257,6 @@ public class Teknisi extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblServ;
     // End of variables declaration//GEN-END:variables
 }

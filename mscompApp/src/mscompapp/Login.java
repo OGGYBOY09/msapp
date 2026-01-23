@@ -95,28 +95,22 @@ public class Login extends javax.swing.JFrame {
         java.sql.ResultSet res = stm.executeQuery(sql);
         
         if (res.next()) {
-        javax.swing.JOptionPane.showMessageDialog(null, "Login Berhasil!");
+            javax.swing.JOptionPane.showMessageDialog(null, "Login Berhasil!");
 
-        // 1. Membuat objek dari frame Dashboard
-        String user = res.getString("nama");
-        namaUser = res.getString("username");
-        Dashboard dash = new Dashboard(user);
-
-        // 2. Mengatur agar dashboard muncul di tengah layar
-        dash.setLocationRelativeTo(null);
-
-        // 3. Menampilkan frame Dashboard
-        dash.setVisible(true);
-
-        // 4. Menutup frame Login agar tidak menumpuk di memori
-        this.dispose(); 
-
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
-            }
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
+            String user = res.getString("nama");
+            String role = res.getString("role"); // Ambil role (admin/teknisi)
+            
+            // Kirim user dan role ke Dashboard
+            Dashboard dash = new Dashboard(user, role); 
+            dash.setLocationRelativeTo(null);
+            dash.setVisible(true);
+            this.dispose(); 
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
         }
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
+    }
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void tPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tPassActionPerformed

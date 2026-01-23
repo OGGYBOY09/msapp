@@ -17,20 +17,24 @@ import javax.swing.JOptionPane;
 public class Dashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
-    
-    /**
-     * Creates new form Dashboard
-     */
-    public Dashboard(String username) {
+    private String userRole;
+
+    // Constructor menerima dua parameter: username dan role
+    public Dashboard(String username, String role) {
         initComponents();
+        this.userRole = role;
         Login.namaUser = username;
         lblWelcome.setText("Selamat Datang, " + username);
+        
+        // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
+        pSide.setLayout(new java.awt.BorderLayout());
+        
+        initSidebar();
         panelutama();
         
         Timer timer = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-                // Format tanggal dan waktu
                 SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
                 String waktuSekarang = sdf.format(new Date());
                 lblTanggal.setText(waktuSekarang);
@@ -38,19 +42,32 @@ public class Dashboard extends javax.swing.JFrame {
         });
         timer.start();
     }
+
+    // Fungsi untuk memasang sidebar sesuai role
+    private void initSidebar() {
+        pSide.removeAll();
+        if ("admin".equalsIgnoreCase(userRole)) {
+            pSide.add(new sidebar_admin(this)); 
+        } else if ("teknisi".equalsIgnoreCase(userRole)) {
+            pSide.add(new sidebar_teknisi(this));
+        }
+        pSide.repaint();
+        pSide.revalidate();
+    }
     
-    private void switchPanel(javax.swing.JPanel panel) {
-        pMain.removeAll();        // Menghapus panel lama yang ada di pMain
-        pMain.add(panel);         // Menambahkan panel baru (PKelUser)
-        pMain.repaint();          // Menggambar ulang tampilan
-        pMain.revalidate();       // Menyusun ulang layout agar pas
+    // Ubah ke PUBLIC agar bisa diakses dari file Sidebar
+    public void switchPanel(javax.swing.JPanel panel) {
+        pMain.removeAll();
+        pMain.add(panel);
+        pMain.repaint();
+        pMain.revalidate();
     }
     
     private void panelutama() {
-        pMain.removeAll();        // Menghapus panel lama yang ada di pMain
-        pMain.add(new beranda());         // Menambahkan panel baru (PKelUser)
-        pMain.repaint();          // Menggambar ulang tampilan
-        pMain.revalidate();       // Menyusun ulang layout agar pas
+        pMain.removeAll();
+        pMain.add(new beranda());
+        pMain.repaint();
+        pMain.revalidate();
     }
 
     /**
@@ -67,13 +84,7 @@ public class Dashboard extends javax.swing.JFrame {
         lblTanggal = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         pSide = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        lblKelolaUser = new javax.swing.JLabel();
-        lblKelolaBarang = new javax.swing.JLabel();
         btLogout = new javax.swing.JButton();
-        lblKelolaKategori = new javax.swing.JLabel();
-        lblKelStock = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -97,104 +108,24 @@ public class Dashboard extends javax.swing.JFrame {
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu.png"))); // NOI18N
-        jLabel1.setText("Menu");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
-            }
-        });
-
-        lblKelolaUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        lblKelolaUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
-        lblKelolaUser.setText("Kelola User");
-        lblKelolaUser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelolaUserMouseClicked(evt);
-            }
-        });
-
-        lblKelolaBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/list.png"))); // NOI18N
-        lblKelolaBarang.setText("Kelola Barang");
-        lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelolaBarangMouseClicked(evt);
-            }
-        });
-
         btLogout.setBackground(new java.awt.Color(255, 51, 51));
         btLogout.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btLogout.setText("LOGOUT");
         btLogout.addActionListener(this::btLogoutActionPerformed);
-
-        lblKelolaKategori.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblKelolaKategori.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategori.png"))); // NOI18N
-        lblKelolaKategori.setText("Kategori");
-        lblKelolaKategori.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelolaKategoriMouseClicked(evt);
-            }
-        });
-
-        lblKelStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/process.png"))); // NOI18N
-        lblKelStock.setText("Kelola Stock");
-        lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelStockMouseClicked(evt);
-            }
-        });
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wrench.png"))); // NOI18N
-        jLabel3.setText("Kelola Service");
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
         pSide.setLayout(pSideLayout);
         pSideLayout.setHorizontalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
-                .addGroup(pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pSideLayout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addComponent(btLogout))
-                    .addGroup(pSideLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblKelStock)
-                            .addComponent(jLabel3)
-                            .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pSideLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(45, 45, 45))
+                .addGap(101, 101, 101)
+                .addComponent(btLogout)
+                .addGap(53, 53, 53))
         );
         pSideLayout.setVerticalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pSideLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel1)
-                .addGap(36, 36, 36)
-                .addComponent(lblKelolaUser)
-                .addGap(18, 18, 18)
-                .addComponent(lblKelolaBarang)
-                .addGap(18, 18, 18)
-                .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblKelStock)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(559, 559, 559)
+                .addGap(902, 902, 902)
                 .addComponent(btLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -205,22 +136,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lblKelolaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaUserMouseClicked
-        // TODO add your handling code here:
-        switchPanel(new PKelUser());
-    }//GEN-LAST:event_lblKelolaUserMouseClicked
-
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        // TODO add your handling code here:
-        switchPanel(new beranda());
-    }//GEN-LAST:event_jLabel1MouseClicked
-
-    private void lblKelolaBarangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaBarangMouseClicked
-        // TODO add your handling code here:
-        switchPanel(new PKelBarang());
-
-    }//GEN-LAST:event_lblKelolaBarangMouseClicked
 
     private void btLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLogoutActionPerformed
         // TODO add your handling code here:
@@ -241,32 +156,10 @@ public class Dashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btLogoutActionPerformed
 
-    private void lblKelolaKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaKategoriMouseClicked
-        // TODO add your handling code here:
-        switchPanel(new PKelKategori());
-    }//GEN-LAST:event_lblKelolaKategoriMouseClicked
-
-    private void lblKelStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelStockMouseClicked
-        // TODO add your handling code here:
-                switchPanel(new PKelStok());
-
-    }//GEN-LAST:event_lblKelStockMouseClicked
-
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        // TODO add your handling code here:
-                        switchPanel(new PKelService());
-
-    }//GEN-LAST:event_jLabel3MouseClicked
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+   public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -274,24 +167,16 @@ public class Dashboard extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Dashboard("").setVisible(true));
+        // PERBAIKAN ERROR: Menambahkan parameter kedua pada inisialisasi Dashboard
+        java.awt.EventQueue.invokeLater(() -> new Dashboard("", "").setVisible(true));
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btLogout;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel lblKelStock;
-    private javax.swing.JLabel lblKelolaBarang;
-    private javax.swing.JLabel lblKelolaKategori;
-    private javax.swing.JLabel lblKelolaUser;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JPanel pMain;
