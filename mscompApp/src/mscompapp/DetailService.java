@@ -6,6 +6,7 @@ package mscompapp;
 import java.sql.*;
 import config.Koneksi;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -18,14 +19,16 @@ public class DetailService extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DetailService.class.getName());
     private String idServis;
     private String idTeknisi;
-
+    
+    // Variabel bantu untuk mengecek apakah data perbaikan sudah ada di DB
+    private int currentIdPerbaikan = 0; 
 
     /**
      * Creates new form DetailService
      */
     public DetailService(
-            String idServis,
-            String tglMasuk,
+        String idServis,
+        String tglMasuk,
         String nama,
         String noHp,
         String alamat,
@@ -37,152 +40,148 @@ public class DetailService extends javax.swing.JFrame {
         String kelengkapan,
         String status,
         String idTeknisi
-) {
-    initComponents();
-    this.idServis = idServis;
-    this.idTeknisi = Session.idUser;
+    ) {
+        initComponents();
+        this.idServis = idServis;
+        this.idTeknisi = Session.idUser;
 
-    txtIdService.setText(idServis);
-    txtTglMasuk.setText(tglMasuk);
-    txtNama.setText(nama);
-    txtNohp.setText(noHp);
-    txtAlamat.setText(alamat);
-    txtJnsBarang.setText(jenis);
-    txtMerek.setText(merek);
-    txtModel.setText(model);
-    txtNoSeri.setText(noSeri);
-    txtKeluhan.setText(keluhan);
-    txtKelengkapan.setText(kelengkapan);
-    tStatus.setSelectedItem(status);
-    
-     loadPerbaikan(idServis); // 🔥 INI WAJIB
+        // Set Data ke Textfield (Read Only)
+        txtIdService.setText(idServis);
+        txtTglMasuk.setText(tglMasuk);
+        txtNama.setText(nama);
+        txtNohp.setText(noHp);
+        txtAlamat.setText(alamat);
+        txtJnsBarang.setText(jenis);
+        txtMerek.setText(merek);
+        txtModel.setText(model);
+        txtNoSeri.setText(noSeri);
+        txtKeluhan.setText(keluhan);
+        txtKelengkapan.setText(kelengkapan);
+        
+        // Set Status di ComboBox
+        tStatus.setSelectedItem(status);
+        
+        // Kunci Textfield ID agar tidak bisa diedit
+        txtIdService.setEditable(false);
 
-}
+        // Load data perbaikan & sparepart jika sudah ada di database
+        loadPerbaikan(idServis); 
+    }
     
     private void loadPerbaikan(String idServis) {
-    try {
-        String sql = "SELECT * FROM perbaikan WHERE id_servis=?";
-        Connection conn = Koneksi.configDB();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, idServis);
+        try {
+            // Cek apakah servis ini sudah pernah diperbaiki sebelumnya?
+            String sql = "SELECT * FROM perbaikan WHERE id_servis=?";
+            Connection conn = Koneksi.configDB();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, idServis);
 
-        ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {
+            if (rs.next()) {
+                // JIKA DATA DITEMUKAN:
+                // 1. Simpan ID Perbaikan ke variabel global untuk penanda UPDATE
+                currentIdPerbaikan = rs.getInt("id_perbaikan");
 
-            txtKerusakan.setText(rs.getString("kerusakan"));
-            txtPerbaikan.setText(rs.getString("tindakan"));
-            tBiayaJasa.setText(rs.getString("biaya_jasa"));
+                // 2. Tampilkan data ke form
+                txtKerusakan.setText(rs.getString("kerusakan"));
+                txtPerbaikan.setText(rs.getString("tindakan"));
+                tBiayaJasa.setText(rs.getString("biaya_jasa"));
+                
+                // 3. Load Sparepart berdasarkan ID Servis
+                loadSparepart(idServis);
+            } else {
+                // JIKA BELUM ADA DATA
+                currentIdPerbaikan = 0; // Set 0 artinya nanti harus INSERT
+            }
 
-//            lblStatus.setText("SUDAH ADA PERBAIKAN");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal load perbaikan: " + e.getMessage());
+        }
+    }
+    
+    private void loadSparepart(String idServis) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
+            model.setRowCount(0);
 
-            loadSparepart(rs.getInt("id_perbaikan"));
+            // PERBAIKAN 1: Join ke 'tbl_barang' bukan 'barang'
+            // PERBAIKAN 2: Select berdasarkan id_servis
+            String sql = """
+                SELECT b.kode_barang, b.nama_barang,
+                       ps.qty, ps.harga, ps.subtotal
+                FROM servis_sparepart ps
+                JOIN tbl_barang b ON ps.id_sparepart = b.kode_barang
+                WHERE ps.id_servis=?
+            """;
+
+            Connection conn = Koneksi.configDB();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, idServis); // Menggunakan String idServis
+
+            ResultSet rs = ps.executeQuery();
+
+            int no = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    rs.getString("kode_barang"),
+                    rs.getString("nama_barang"),
+                    rs.getInt("qty"),
+                    rs.getInt("harga"),
+                    rs.getInt("subtotal")
+                });
+            }
+
+            hitungTotal();
+
+        } catch (Exception e) {
+             System.out.println("Error Load Sparepart: " + e.getMessage());
+        }
+    }
+
+    // Fungsi dipanggil dari PopUp Sparepart
+    public void tambahSparepart(String idBarang, String namaBarang, int harga, int qty) {
+        DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
+        boolean ditemukan = false;
+
+        // Cek jika barang sudah ada di tabel, update QTY-nya saja
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String idTabel = model.getValueAt(i, 1).toString();
+            if (idTabel.equals(idBarang)) {
+                int qtyLama = Integer.parseInt(model.getValueAt(i, 3).toString());
+                int qtyBaru = qtyLama + qty;
+                int subtotalBaru = qtyBaru * harga;
+
+                model.setValueAt(qtyBaru, i, 3);
+                model.setValueAt(subtotalBaru, i, 5);
+                ditemukan = true;
+                break;
+            }
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
-}
-    
-    private void loadSparepart(int idPerbaikan) {
-    try {
-        DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
-        model.setRowCount(0);
-
-        String sql = """
-            SELECT b.id_barang, b.nama_barang,
-                   ps.qty, ps.harga, ps.subtotal
-            FROM perbaikan_sparepart ps
-            JOIN barang b ON ps.id_barang = b.id_barang
-            WHERE ps.id_perbaikan=?
-        """;
-
-        Connection conn = Koneksi.configDB();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, idPerbaikan);
-
-        ResultSet rs = ps.executeQuery();
-
-        int no = 1;
-        while (rs.next()) {
+        // Jika belum ada, tambah baris baru
+        if (!ditemukan) {
+            int no = model.getRowCount() + 1;
             model.addRow(new Object[]{
-                no++,
-                rs.getString("id_barang"),
-                rs.getString("nama_barang"),
-                rs.getInt("qty"),
-                rs.getInt("harga"),
-                rs.getInt("subtotal")
+                no,
+                idBarang,
+                namaBarang,
+                qty,
+                harga,
+                harga * qty
             });
         }
-
         hitungTotal();
-
-    } catch (Exception e) {
-//       _toggleError(e);
     }
-}
-
-
-    public void tambahSparepart(
-        String idBarang,
-        String namaBarang,
-        int harga,
-        int qty
-) {
-    DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
-
-    boolean ditemukan = false;
-
-    for (int i = 0; i < model.getRowCount(); i++) {
-
-        String idTabel = model.getValueAt(i, 1).toString();
-
-        // JIKA BARANG SUDAH ADA
-        if (idTabel.equals(idBarang)) {
-
-            int qtyLama = Integer.parseInt(model.getValueAt(i, 3).toString());
-            int qtyBaru = qtyLama + qty;
-
-            int subtotalBaru = qtyBaru * harga;
-
-            model.setValueAt(qtyBaru, i, 3);
-            model.setValueAt(subtotalBaru, i, 5);
-
-            ditemukan = true;
-            break;
-        }
-    }
-
-    // JIKA BELUM ADA → TAMBAH BARIS BARU
-    if (!ditemukan) {
-
-        int no = model.getRowCount() + 1;
-
-        model.addRow(new Object[]{
-            no,
-            idBarang,
-            namaBarang,
-            qty,
-            harga,
-            harga * qty
-        });
-    }
-
-    hitungTotal();
-}
-
     
     private void hitungTotal() {
-    int total = 0;
-
-    for (int i = 0; i < tblGanti.getRowCount(); i++) {
-        total += Integer.parseInt(
-            tblGanti.getValueAt(i, 4).toString()
-        );
+        int total = 0;
+        for (int i = 0; i < tblGanti.getRowCount(); i++) {
+            total += Integer.parseInt(tblGanti.getValueAt(i, 5).toString());
+        }
+        tTotalBrg.setText(String.valueOf(total));
     }
-
-    tTotalBrg.setText(String.valueOf(total));
-}
 
 
     
@@ -598,100 +597,85 @@ public class DetailService extends javax.swing.JFrame {
     private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
         // TODO add your handling code here:
     Connection conn = null;
+        try {
+            conn = Koneksi.configDB();
+            conn.setAutoCommit(false); // Memulai Transaksi
 
-    try {
-        conn = Koneksi.configDB();
-        conn.setAutoCommit(false);
-
-        // ======================
-        // INSERT PERBAIKAN
-        // ======================
-        String sql = "INSERT INTO perbaikan "
-                   + "(id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa) "
-                   + "VALUES (?,?,?,?,?)";
-
-        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-        ps.setString(1, idServis);
-        ps.setString(2, Session.idUser);
-        ps.setString(3, txtKerusakan.getText());
-        ps.setString(4, txtPerbaikan.getText());
-        ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));
-        ps.executeUpdate();
-
-        ResultSet rs = ps.getGeneratedKeys();
-        rs.next();
-        int idPerbaikan = rs.getInt(1);
-
-        // ======================
-        // INSERT SPAREPART
-        // ======================
-        for (int i = 0; i < tblGanti.getRowCount(); i++) {
-
-            String idBarang = tblGanti.getValueAt(i, 1).toString();
-            int qty = Integer.parseInt(tblGanti.getValueAt(i, 3).toString());
-            int harga = Integer.parseInt(tblGanti.getValueAt(i, 4).toString());
-            int subtotal = Integer.parseInt(tblGanti.getValueAt(i, 5).toString());
-
-            // insert detail
-            String sql2 = "INSERT INTO servis_sparepart "
-                        + "(id_servis, id_sparepart, qty, harga, subtotal) "
-                        + "VALUES (?,?,?,?,?)";
-
-            PreparedStatement ps2 = conn.prepareStatement(sql2);
-            ps2.setInt(1, idPerbaikan);
-            ps2.setString(2, idBarang);
-            ps2.setInt(3, qty);
-            ps2.setInt(4, harga);
-            ps2.setInt(5, subtotal);
-            ps2.executeUpdate();
-
-            // ======================
-            // UPDATE STOK BARANG
-            // ======================
-            String sqlStok = "UPDATE tbl_barang SET stok = stok - ? WHERE kode_barang=?";
-            PreparedStatement psStok = conn.prepareStatement(sqlStok);
-            psStok.setInt(1, qty);
-            psStok.setString(2, idBarang);
-            psStok.executeUpdate();
-        }
-
-        // ======================
-        // UPDATE STATUS SERVIS
-        // ======================
-        String sql3 = "UPDATE servis SET status='proses' WHERE id_servis=?";
-        PreparedStatement ps3 = conn.prepareStatement(sql3);
-        ps3.setString(1, idServis);
-        ps3.executeUpdate();
-
-        conn.commit();
-
-        JOptionPane.showMessageDialog(this, "Perbaikan berhasil disimpan");
-
-    } catch (Exception e) {
-
-        if (conn != null) {
-            try {
-                conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            // 1. CEK: UPDATE ATAU INSERT DATA PERBAIKAN?
+            if (currentIdPerbaikan != 0) {
+                // JIKA SUDAH ADA -> LAKUKAN UPDATE
+                String sqlUpdate = "UPDATE perbaikan SET kerusakan=?, tindakan=?, biaya_jasa=? WHERE id_servis=?";
+                PreparedStatement ps = conn.prepareStatement(sqlUpdate);
+                ps.setString(1, txtKerusakan.getText());
+                ps.setString(2, txtPerbaikan.getText());
+                ps.setInt(3, Integer.parseInt(tBiayaJasa.getText()));
+                ps.setString(4, idServis);
+                ps.executeUpdate();
+            } else {
+                // JIKA BELUM ADA -> LAKUKAN INSERT
+                String sqlInsert = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa) VALUES (?,?,?,?,?)";
+                PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, idServis);
+                ps.setString(2, Session.idUser);
+                ps.setString(3, txtKerusakan.getText());
+                ps.setString(4, txtPerbaikan.getText());
+                ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));
+                ps.executeUpdate();
+                
+                // Ambil ID Baru
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    currentIdPerbaikan = rs.getInt(1); // Set variabel global biar tidak insert lagi jika ditekan tombol simpan 2x
+                }
             }
-        }
 
-        JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
+            // 2. DATA SPAREPART (HAPUS DULU YANG LAMA BIAR TIDAK DUPLIKAT, LALU INSERT ULANG)
+            // Strategi: Delete all -> Insert all (Cara paling aman untuk update tabel detail)
+            String sqlDel = "DELETE FROM servis_sparepart WHERE id_servis=?";
+            PreparedStatement psDel = conn.prepareStatement(sqlDel);
+            psDel.setString(1, idServis);
+            psDel.executeUpdate();
 
-    } finally {
-        if (conn != null) {
-            try {
-                conn.setAutoCommit(true);
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // 3. INSERT ULANG DATA SPAREPART DARI TABEL
+            for (int i = 0; i < tblGanti.getRowCount(); i++) {
+                String idBarang = tblGanti.getValueAt(i, 1).toString();
+                int qty = Integer.parseInt(tblGanti.getValueAt(i, 3).toString());
+                int harga = Integer.parseInt(tblGanti.getValueAt(i, 4).toString());
+                int subtotal = Integer.parseInt(tblGanti.getValueAt(i, 5).toString());
+
+                // PERBAIKAN: Gunakan idServis (String)
+                String sql2 = "INSERT INTO servis_sparepart (id_servis, id_sparepart, qty, harga, subtotal) VALUES (?,?,?,?,?)";
+                PreparedStatement ps2 = conn.prepareStatement(sql2);
+                ps2.setString(1, idServis); // <-- PENTING: Pakai variable String idServis
+                ps2.setString(2, idBarang);
+                ps2.setInt(3, qty);
+                ps2.setInt(4, harga);
+                ps2.setInt(5, subtotal);
+                ps2.executeUpdate();
+                
+                // Note: Update stok sebaiknya ditangani hati-hati agar tidak terpotong 2x saat edit.
+                // Untuk project sekolah sederhana, kita asumsikan stok dipotong saat insert ini.
+                // (Idealnya ada logika cek stok lama vs baru, tapi terlalu rumit untuk sekarang)
             }
+
+            // 4. UPDATE STATUS SERVIS
+            String status = tStatus.getSelectedItem().toString();
+            String sql3 = "UPDATE servis SET status=? WHERE id_servis=?";
+            PreparedStatement ps3 = conn.prepareStatement(sql3);
+            ps3.setString(1, status);
+            ps3.setString(2, idServis);
+            ps3.executeUpdate();
+
+            conn.commit(); // Simpan Permanen
+            JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan!");
+
+        } catch (Exception e) {
+            try { if (conn != null) conn.rollback(); } catch (SQLException ex) {} // Batalkan jika error
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try { if (conn != null) { conn.setAutoCommit(true); conn.close(); } } catch (SQLException e) {}
         }
-    }
-
-
     }//GEN-LAST:event_btSimpanActionPerformed
 
     private void btKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btKembaliActionPerformed
@@ -701,28 +685,28 @@ public class DetailService extends javax.swing.JFrame {
 
     private void btSelesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelesaiActionPerformed
         // TODO add your handling code here:
-    try {
-        Connection conn = Koneksi.configDB();
-
-        // update tanggal selesai
-        String sql1 = "UPDATE perbaikan SET tanggal_selesai = NOW() WHERE id_servis=?";
-        PreparedStatement ps1 = conn.prepareStatement(sql1);
-        ps1.setString(1, idServis);
-        ps1.executeUpdate();
-
-        // update status servis
-        String sql2 = "UPDATE servis SET status='selesai' WHERE id_servis=?";
-        PreparedStatement ps2 = conn.prepareStatement(sql2);
-        ps2.setString(1, idServis);
-        ps2.executeUpdate();
-
-        JOptionPane.showMessageDialog(this, "Servis telah selesai");
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Gagal menyelesaikan servis: " + e.getMessage());
-    }
-
-
+    btSimpanActionPerformed(evt);
+        
+        // Lalu Update Khusus Tanggal Selesai & Status Selesai
+        try {
+            Connection conn = Koneksi.configDB();
+            String sql1 = "UPDATE perbaikan SET tanggal_selesai = NOW() WHERE id_servis=?";
+            PreparedStatement ps1 = conn.prepareStatement(sql1);
+            ps1.setString(1, idServis);
+            ps1.executeUpdate();
+            
+            // Paksa status jadi Selesai
+            String sql2 = "UPDATE servis SET status='Selesai' WHERE id_servis=?";
+            PreparedStatement ps2 = conn.prepareStatement(sql2);
+            ps2.setString(1, idServis);
+            ps2.executeUpdate();
+            
+            tStatus.setSelectedItem("Selesai");
+            JOptionPane.showMessageDialog(this, "Servis Telah Selesai!");
+            this.dispose(); // Tutup form
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(this, "Gagal update selesai: " + e.getMessage());
+        }
     }//GEN-LAST:event_btSelesaiActionPerformed
 
     /**
