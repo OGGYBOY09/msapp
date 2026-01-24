@@ -17,16 +17,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Teknisi extends javax.swing.JPanel {
 
+    private String idTeknsi;
     public Teknisi() {
         initComponents();
         // Memanggil fungsi tampilData saat panel pertama kali dimuat
         tampilData();
+        this.idTeknsi = Session.idUser;
     }
 
     // Method untuk menampilkan data ke JTable
     public void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
+        model.addColumn("ID Servis");
+        model.addColumn("Tanggal Masuk");
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
@@ -47,8 +51,8 @@ public class Teknisi extends javax.swing.JPanel {
             Statement stmt = conn.createStatement();
 
             // Query JOIN antara tabel servis (s) dan tbl_pelanggan (p)
-            String sql = "SELECT p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
+                       + "s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
                        + "FROM servis s "
                        + "INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan";
 
@@ -58,6 +62,8 @@ public class Teknisi extends javax.swing.JPanel {
             while (rs.next()) {
                 model.addRow(new Object[]{
                     no++,
+                    rs.getString("id_servis"),
+                    rs.getDate("tanggal_masuk"),
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
@@ -87,7 +93,7 @@ public class Teknisi extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        btnLihDetail = new javax.swing.JButton();
+        btnLihatDetail = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
@@ -117,10 +123,10 @@ public class Teknisi extends javax.swing.JPanel {
             .addGap(0, 82, Short.MAX_VALUE)
         );
 
-        btnLihDetail.setBackground(new java.awt.Color(153, 153, 153));
-        btnLihDetail.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
-        btnLihDetail.setText("LIHAT DETAIL");
-        btnLihDetail.addActionListener(this::btnLihDetailActionPerformed);
+        btnLihatDetail.setBackground(new java.awt.Color(153, 153, 153));
+        btnLihatDetail.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        btnLihatDetail.setText("LIHAT DETAIL");
+        btnLihatDetail.addActionListener(this::btnLihatDetailActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel1.setText("Tanggal :");
@@ -167,7 +173,7 @@ public class Teknisi extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnLihDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLihatDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
@@ -190,7 +196,7 @@ public class Teknisi extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLihDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLihatDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -232,9 +238,36 @@ public class Teknisi extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLihDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLihDetailActionPerformed
+    private void btnLihatDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLihatDetailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLihDetailActionPerformed
+        int row = tblServ.getSelectedRow();
+
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data service terlebih dahulu!");
+            return;
+        }
+        
+        String idServis = tblServ.getValueAt(row, 1).toString();
+        String tglMasuk = tblServ.getValueAt(row, 2).toString();
+        String nama = tblServ.getValueAt(row, 3).toString();
+        String noHp = tblServ.getValueAt(row, 4).toString();
+        String alamat = tblServ.getValueAt(row, 5).toString();
+        String jenis = tblServ.getValueAt(row, 6).toString();
+        String merek = tblServ.getValueAt(row, 7).toString();
+        String model = tblServ.getValueAt(row, 8).toString();
+        String noSeri = tblServ.getValueAt(row, 9).toString();
+        String keluhan = tblServ.getValueAt(row, 10).toString();
+        String kelengkapan = tblServ.getValueAt(row, 11).toString();
+        String status = tblServ.getValueAt(row, 12).toString();
+        String idTeknisi = this.idTeknsi;
+
+        DetailService ds = new DetailService(
+                idServis, tglMasuk, nama, noHp, alamat, jenis, merek,
+                model, noSeri, keluhan, kelengkapan, status, idTeknisi
+        );
+
+        ds.setVisible(true);
+    }//GEN-LAST:event_btnLihatDetailActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -245,7 +278,7 @@ public class Teknisi extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLihDetail;
+    private javax.swing.JButton btnLihatDetail;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;

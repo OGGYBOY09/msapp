@@ -4,6 +4,8 @@
  */
 package mscompapp;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -95,13 +97,14 @@ public class Login extends javax.swing.JFrame {
         java.sql.ResultSet res = stm.executeQuery(sql);
         
         if (res.next()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Login Berhasil!");
+            Session.idUser   = res.getString("id_user");
+            Session.namaUser = res.getString("nama");
+            Session.level    = res.getString("role");
 
-            String user = res.getString("nama");
-            String role = res.getString("role"); // Ambil role (admin/teknisi)
+            JOptionPane.showMessageDialog(null, "Login Berhasil!");
             
             // Kirim user dan role ke Dashboard
-            Dashboard dash = new Dashboard(user, role); 
+            Dashboard dash = new Dashboard(Session.namaUser, Session.level); 
             dash.setLocationRelativeTo(null);
             dash.setVisible(true);
             this.dispose(); 
