@@ -5,10 +5,12 @@
 package mscompapp;
 
 
+import config.Koneksi;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -17,15 +19,65 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Teknisi extends javax.swing.JPanel {
 
-    private String idTeknsi;
+    private String idTeknisi;
+
     public Teknisi() {
         initComponents();
-        // Memanggil fungsi tampilData saat panel pertama kali dimuat
+        this.idTeknisi = Session.idUser;
+        
+        // 1. Load Data ComboBox saat panel dibuka
+        loadComboStatus();
+        loadComboKategori();
+        
+        // 2. Tampilkan Data Awal
         tampilData();
-        this.idTeknsi = Session.idUser;
+        
+        // 3. Tambahkan Event Listener (Agar saat dipilih langsung filter otomatis)
+        addFilterListeners();
+    }
+    
+    // --- SETUP LISTENER AGAR OTOMATIS FILTER SAAT DIKLIK ---
+    private void addFilterListeners() {
+        // Saat Status diubah -> Refresh Tabel
+        cbStatus.addActionListener(e -> tampilData());
+        
+        // Saat Kategori diubah -> Refresh Tabel
+        cbKategori.addActionListener(e -> tampilData());
+        
+        // Saat Tanggal diubah -> Refresh Tabel
+        dtFilterdate.addPropertyChangeListener("date", e -> tampilData());
     }
 
-    // Method untuk menampilkan data ke JTable
+    // --- LOAD COMBOBOX STATUS (Manual sesuai Enum Database) ---
+    private void loadComboStatus() {
+        cbStatus.removeAllItems();
+        cbStatus.addItem("- Semua Status -");
+        cbStatus.addItem("Menunggu");
+        cbStatus.addItem("Proses");
+        cbStatus.addItem("Selesai");
+        cbStatus.addItem("Dibatalkan");
+    }
+
+    // --- LOAD COMBOBOX KATEGORI (Dari Database tbl_kategori) ---
+    private void loadComboKategori() {
+        cbKategori.removeAllItems();
+        cbKategori.addItem("- Semua Kategori -");
+        
+        try {
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            // Mengambil nama_kategori dari tabel tbl_kategori
+            ResultSet rs = stm.executeQuery("SELECT nama_kategori FROM tbl_kategori");
+            
+            while (rs.next()) {
+                cbKategori.addItem(rs.getString("nama_kategori"));
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal load kategori: " + e.getMessage());
+        }
+    }
+
+    // --- METHOD UTAMA: TAMPILKAN DATA DENGAN FILTER ---
     public void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
@@ -43,20 +95,41 @@ public class Teknisi extends javax.swing.JPanel {
         model.addColumn("Status");
 
         try {
-            // Pengaturan koneksi (Sesuaikan db_name, user, dan password XAMPP kamu)
-            String url = "jdbc:mysql://localhost:3306/ms_db";
-            String user = "root";
-            String pass = "";
-            Connection conn = DriverManager.getConnection(url, user, pass);
+            // 1. Bangun Query Dasar
+            // Menggunakan 1=1 agar mudah menyambung kata kunci 'AND'
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
+               .append("s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
+               .append("FROM servis s ")
+               .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
+               .append("WHERE 1=1 "); 
+
+            // 2. Cek Filter Status
+            if (cbStatus.getSelectedIndex() > 0) {
+                String statusPilih = cbStatus.getSelectedItem().toString();
+                sql.append("AND s.status = '").append(statusPilih).append("' ");
+            }
+
+            // 3. Cek Filter Kategori
+            if (cbKategori.getSelectedIndex() > 0) {
+                String kategoriPilih = cbKategori.getSelectedItem().toString();
+                sql.append("AND s.jenis_barang = '").append(kategoriPilih).append("' ");
+            }
+
+            // 4. Cek Filter Tanggal
+            if (dtFilterdate.getDate() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String tglPilih = sdf.format(dtFilterdate.getDate());
+                sql.append("AND s.tanggal_masuk = '").append(tglPilih).append("' ");
+            }
+            
+            // Urutkan dari yang terbaru
+            sql.append("ORDER BY s.tanggal_masuk DESC");
+
+            // 5. Eksekusi Query
+            Connection conn = Koneksi.configDB();
             Statement stmt = conn.createStatement();
-
-            // Query JOIN antara tabel servis (s) dan tbl_pelanggan (p)
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
-                       + "FROM servis s "
-                       + "INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan";
-
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(sql.toString());
 
             int no = 1;
             while (rs.next()) {
@@ -80,6 +153,7 @@ public class Teknisi extends javax.swing.JPanel {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     /**
@@ -95,16 +169,16 @@ public class Teknisi extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         btnLihatDetail = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbStatus = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dtFilterdate = new com.toedter.calendar.JDateChooser();
         jMonthChooser1 = new com.toedter.calendar.JMonthChooser();
-        jButton2 = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblServ = new javax.swing.JTable();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbKategori = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
@@ -133,7 +207,7 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel1.setText("Tanggal :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel2.setText(" Status :");
@@ -141,8 +215,8 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel3.setText(" Status :");
 
-        jButton2.setText("REFRESH");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnRefresh.setText("REFRESH");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel4.setText("Daftar Service Bulanan :");
@@ -160,7 +234,8 @@ public class Teknisi extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblServ);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addActionListener(this::cbKategoriActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel5.setText("Kategori :");
@@ -186,19 +261,19 @@ public class Teknisi extends javax.swing.JPanel {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(21, 21, 21)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(45, 45, 45)
                                 .addComponent(jLabel5)
                                 .addGap(21, 21, 21)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addGap(3, 3, 3)
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dtFilterdate, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
                                 .addComponent(jMonthChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(28, 28, 28))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -220,21 +295,21 @@ public class Teknisi extends javax.swing.JPanel {
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(19, 19, 19)
-                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(dtFilterdate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(19, 19, 19)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jMonthChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))))
+                                            .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
-                                .addComponent(jComboBox2)
+                                .addComponent(cbKategori)
                                 .addGap(15, 15, 15)))
                         .addGap(18, 18, 18)))
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,30 +357,38 @@ public class Teknisi extends javax.swing.JPanel {
         String keluhan = tblServ.getValueAt(row, 10).toString();
         String kelengkapan = tblServ.getValueAt(row, 11).toString();
         String status = tblServ.getValueAt(row, 12).toString();
-        String idTeknisi = this.idTeknsi;
-
+        
+        // Membuka DetailService
         DetailService ds = new DetailService(
                 idServis, tglMasuk, nama, noHp, alamat, jenis, merek,
-                model, noSeri, keluhan, kelengkapan, status, idTeknisi
+                model, noSeri, keluhan, kelengkapan, status, this.idTeknisi
         );
-
+        ds.setLocationRelativeTo(null); // Agar muncul di tengah
         ds.setVisible(true);
     }//GEN-LAST:event_btnLihatDetailActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        tampilData(); // Memperbarui tabel saat tombol Refresh diklik
-        JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+        cbStatus.setSelectedIndex(0);
+        cbKategori.setSelectedIndex(0);
+        dtFilterdate.setDate(null);
+        
+        tampilData(); // Muat ulang data mentah
+        JOptionPane.showMessageDialog(this, "Data direfresh & Filter direset!");
   
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void cbKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKategoriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbKategoriActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLihatDetail;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JComboBox<String> cbKategori;
+    private javax.swing.JComboBox<String> cbStatus;
+    private com.toedter.calendar.JDateChooser dtFilterdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

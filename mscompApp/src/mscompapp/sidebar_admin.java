@@ -36,7 +36,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lblKelolaUser = new javax.swing.JLabel();
         lblKelolaBarang = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
@@ -96,9 +96,10 @@ public class sidebar_admin extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(255, 0, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("LOG OUT");
+        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnLogout.setText("LOG OUT");
+        btnLogout.addActionListener(this::btnLogoutActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -118,7 +119,7 @@ public class sidebar_admin extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -137,7 +138,7 @@ public class sidebar_admin extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(123, 123, 123)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(500, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -172,9 +173,14 @@ public class sidebar_admin extends javax.swing.JPanel {
         dashboard.switchPanel(new PKelBarang());
     }//GEN-LAST:event_lblKelolaBarangMouseClicked
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        dashboard.logout();
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblKelStock;

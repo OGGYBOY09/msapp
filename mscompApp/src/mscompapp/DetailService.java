@@ -4,11 +4,11 @@
  */
 package mscompapp;
 import java.sql.*;
+import javax.swing.JFrame;
 import config.Koneksi;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -42,6 +42,10 @@ public class DetailService extends javax.swing.JFrame {
         String idTeknisi
     ) {
         initComponents();
+        
+        // --- PERBAIKAN 1: MENGATUR TOMBOL X AGAR TIDAK MENUTUP SELURUH APLIKASI ---
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
         this.idServis = idServis;
         this.idTeknisi = Session.idUser;
 
@@ -63,6 +67,15 @@ public class DetailService extends javax.swing.JFrame {
         
         // Kunci Textfield ID agar tidak bisa diedit
         txtIdService.setEditable(false);
+        
+        // --- PERBAIKAN 2: LOGIKA BUTTON SELESAI ---
+        // Jika status sudah Selesai atau Dibatalkan, sembunyikan tombol Selesai & Simpan
+        if ("Selesai".equalsIgnoreCase(status) || "Dibatalkan".equalsIgnoreCase(status)) {
+            btSelesai.setVisible(false);
+            btSimpan.setEnabled(false); // Opsional: Matikan tombol simpan agar data historis aman
+            btnHapusBrg.setEnabled(false);
+            btPilih.setEnabled(false);
+        }
 
         // Load data perbaikan & sparepart jika sudah ada di database
         loadPerbaikan(idServis); 
@@ -70,7 +83,6 @@ public class DetailService extends javax.swing.JFrame {
     
     private void loadPerbaikan(String idServis) {
         try {
-            // Cek apakah servis ini sudah pernah diperbaiki sebelumnya?
             String sql = "SELECT * FROM perbaikan WHERE id_servis=?";
             Connection conn = Koneksi.configDB();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -79,20 +91,13 @@ public class DetailService extends javax.swing.JFrame {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // JIKA DATA DITEMUKAN:
-                // 1. Simpan ID Perbaikan ke variabel global untuk penanda UPDATE
                 currentIdPerbaikan = rs.getInt("id_perbaikan");
-
-                // 2. Tampilkan data ke form
                 txtKerusakan.setText(rs.getString("kerusakan"));
                 txtPerbaikan.setText(rs.getString("tindakan"));
                 tBiayaJasa.setText(rs.getString("biaya_jasa"));
-                
-                // 3. Load Sparepart berdasarkan ID Servis
                 loadSparepart(idServis);
             } else {
-                // JIKA BELUM ADA DATA
-                currentIdPerbaikan = 0; // Set 0 artinya nanti harus INSERT
+                currentIdPerbaikan = 0; 
             }
 
         } catch (Exception e) {
@@ -105,8 +110,6 @@ public class DetailService extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
             model.setRowCount(0);
 
-            // PERBAIKAN 1: Join ke 'tbl_barang' bukan 'barang'
-            // PERBAIKAN 2: Select berdasarkan id_servis
             String sql = """
                 SELECT b.kode_barang, b.nama_barang,
                        ps.qty, ps.harga, ps.subtotal
@@ -117,7 +120,7 @@ public class DetailService extends javax.swing.JFrame {
 
             Connection conn = Koneksi.configDB();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, idServis); // Menggunakan String idServis
+            ps.setString(1, idServis); 
 
             ResultSet rs = ps.executeQuery();
 
@@ -140,12 +143,10 @@ public class DetailService extends javax.swing.JFrame {
         }
     }
 
-    // Fungsi dipanggil dari PopUp Sparepart
     public void tambahSparepart(String idBarang, String namaBarang, int harga, int qty) {
         DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
         boolean ditemukan = false;
 
-        // Cek jika barang sudah ada di tabel, update QTY-nya saja
         for (int i = 0; i < model.getRowCount(); i++) {
             String idTabel = model.getValueAt(i, 1).toString();
             if (idTabel.equals(idBarang)) {
@@ -160,7 +161,6 @@ public class DetailService extends javax.swing.JFrame {
             }
         }
 
-        // Jika belum ada, tambah baris baru
         if (!ditemukan) {
             int no = model.getRowCount() + 1;
             model.addRow(new Object[]{
@@ -182,10 +182,6 @@ public class DetailService extends javax.swing.JFrame {
         }
         tTotalBrg.setText(String.valueOf(total));
     }
-
-
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -195,6 +191,7 @@ public class DetailService extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -243,6 +240,9 @@ public class DetailService extends javax.swing.JFrame {
         btSimpan = new javax.swing.JButton();
         btSelesai = new javax.swing.JButton();
         btKembali = new javax.swing.JButton();
+        btnHapusBrg = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -399,6 +399,9 @@ public class DetailService extends javax.swing.JFrame {
         btKembali.setText("Kembali");
         btKembali.addActionListener(this::btKembaliActionPerformed);
 
+        btnHapusBrg.setText("habus barang");
+        btnHapusBrg.addActionListener(this::btnHapusBrgActionPerformed);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -406,18 +409,22 @@ public class DetailService extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel7)
                         .addComponent(jLabel2)
                         .addComponent(jScrollPane1)
                         .addComponent(jLabel15)
                         .addComponent(jScrollPane2)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel17)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btPilih))
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel16)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel17)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnHapusBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btPilih)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -459,7 +466,8 @@ public class DetailService extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel17)
-                            .addComponent(btPilih))
+                            .addComponent(btPilih)
+                            .addComponent(btnHapusBrg))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
@@ -599,11 +607,9 @@ public class DetailService extends javax.swing.JFrame {
     Connection conn = null;
         try {
             conn = Koneksi.configDB();
-            conn.setAutoCommit(false); // Memulai Transaksi
+            conn.setAutoCommit(false); 
 
-            // 1. CEK: UPDATE ATAU INSERT DATA PERBAIKAN?
             if (currentIdPerbaikan != 0) {
-                // JIKA SUDAH ADA -> LAKUKAN UPDATE
                 String sqlUpdate = "UPDATE perbaikan SET kerusakan=?, tindakan=?, biaya_jasa=? WHERE id_servis=?";
                 PreparedStatement ps = conn.prepareStatement(sqlUpdate);
                 ps.setString(1, txtKerusakan.getText());
@@ -612,7 +618,6 @@ public class DetailService extends javax.swing.JFrame {
                 ps.setString(4, idServis);
                 ps.executeUpdate();
             } else {
-                // JIKA BELUM ADA -> LAKUKAN INSERT
                 String sqlInsert = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa) VALUES (?,?,?,?,?)";
                 PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, idServis);
@@ -622,43 +627,33 @@ public class DetailService extends javax.swing.JFrame {
                 ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));
                 ps.executeUpdate();
                 
-                // Ambil ID Baru
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
-                    currentIdPerbaikan = rs.getInt(1); // Set variabel global biar tidak insert lagi jika ditekan tombol simpan 2x
+                    currentIdPerbaikan = rs.getInt(1); 
                 }
             }
 
-            // 2. DATA SPAREPART (HAPUS DULU YANG LAMA BIAR TIDAK DUPLIKAT, LALU INSERT ULANG)
-            // Strategi: Delete all -> Insert all (Cara paling aman untuk update tabel detail)
             String sqlDel = "DELETE FROM servis_sparepart WHERE id_servis=?";
             PreparedStatement psDel = conn.prepareStatement(sqlDel);
             psDel.setString(1, idServis);
             psDel.executeUpdate();
 
-            // 3. INSERT ULANG DATA SPAREPART DARI TABEL
             for (int i = 0; i < tblGanti.getRowCount(); i++) {
                 String idBarang = tblGanti.getValueAt(i, 1).toString();
                 int qty = Integer.parseInt(tblGanti.getValueAt(i, 3).toString());
                 int harga = Integer.parseInt(tblGanti.getValueAt(i, 4).toString());
                 int subtotal = Integer.parseInt(tblGanti.getValueAt(i, 5).toString());
 
-                // PERBAIKAN: Gunakan idServis (String)
                 String sql2 = "INSERT INTO servis_sparepart (id_servis, id_sparepart, qty, harga, subtotal) VALUES (?,?,?,?,?)";
                 PreparedStatement ps2 = conn.prepareStatement(sql2);
-                ps2.setString(1, idServis); // <-- PENTING: Pakai variable String idServis
+                ps2.setString(1, idServis); 
                 ps2.setString(2, idBarang);
                 ps2.setInt(3, qty);
                 ps2.setInt(4, harga);
                 ps2.setInt(5, subtotal);
                 ps2.executeUpdate();
-                
-                // Note: Update stok sebaiknya ditangani hati-hati agar tidak terpotong 2x saat edit.
-                // Untuk project sekolah sederhana, kita asumsikan stok dipotong saat insert ini.
-                // (Idealnya ada logika cek stok lama vs baru, tapi terlalu rumit untuk sekarang)
             }
 
-            // 4. UPDATE STATUS SERVIS
             String status = tStatus.getSelectedItem().toString();
             String sql3 = "UPDATE servis SET status=? WHERE id_servis=?";
             PreparedStatement ps3 = conn.prepareStatement(sql3);
@@ -666,11 +661,11 @@ public class DetailService extends javax.swing.JFrame {
             ps3.setString(2, idServis);
             ps3.executeUpdate();
 
-            conn.commit(); // Simpan Permanen
+            conn.commit(); 
             JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan!");
 
         } catch (Exception e) {
-            try { if (conn != null) conn.rollback(); } catch (SQLException ex) {} // Batalkan jika error
+            try { if (conn != null) conn.rollback(); } catch (SQLException ex) {}
             JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
             e.printStackTrace();
         } finally {
@@ -685,29 +680,56 @@ public class DetailService extends javax.swing.JFrame {
 
     private void btSelesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelesaiActionPerformed
         // TODO add your handling code here:
-    btSimpanActionPerformed(evt);
-        
-        // Lalu Update Khusus Tanggal Selesai & Status Selesai
-        try {
-            Connection conn = Koneksi.configDB();
-            String sql1 = "UPDATE perbaikan SET tanggal_selesai = NOW() WHERE id_servis=?";
-            PreparedStatement ps1 = conn.prepareStatement(sql1);
-            ps1.setString(1, idServis);
-            ps1.executeUpdate();
+    int confirm = JOptionPane.showConfirmDialog(this, 
+            "Apakah Anda yakin servis ini sudah selesai?\nStatus akan berubah permanen.",
+            "Konfirmasi Selesai",
+            JOptionPane.YES_NO_OPTION);
             
-            // Paksa status jadi Selesai
-            String sql2 = "UPDATE servis SET status='Selesai' WHERE id_servis=?";
-            PreparedStatement ps2 = conn.prepareStatement(sql2);
-            ps2.setString(1, idServis);
-            ps2.executeUpdate();
-            
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Ubah combobox status jadi Selesai
             tStatus.setSelectedItem("Selesai");
-            JOptionPane.showMessageDialog(this, "Servis Telah Selesai!");
-            this.dispose(); // Tutup form
-        } catch (Exception e) {
-             JOptionPane.showMessageDialog(this, "Gagal update selesai: " + e.getMessage());
+            
+            // Simpan Data (Panggil method simpan yang sudah ada)
+            btSimpanActionPerformed(evt);
+            
+            // Update Tambahan (Tanggal Selesai)
+            try {
+                Connection conn = Koneksi.configDB();
+                String sql = "UPDATE perbaikan SET tanggal_selesai = CURDATE() WHERE id_servis=?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, idServis);
+                ps.executeUpdate();
+                
+                // --- PERBAIKAN 4: TUTUP HALAMAN OTOMATIS ---
+                this.dispose(); 
+                
+            } catch (Exception e) {
+                System.out.println("Gagal update tanggal selesai: " + e.getMessage());
+            }
         }
     }//GEN-LAST:event_btSelesaiActionPerformed
+
+    private void btnHapusBrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusBrgActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
+        int row = tblGanti.getSelectedRow();
+        
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih barang yang akan dihapus!");
+            return;
+        }
+        
+        // Hapus baris yang dipilih
+        model.removeRow(row);
+        
+        // Rapikan Nomor Urut (Kolom 1)
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(i + 1, i, 0);
+        }
+        
+        // Hitung ulang total harga
+        hitungTotal();
+    }//GEN-LAST:event_btnHapusBrgActionPerformed
 
     /**
      * @param args the command line arguments
@@ -739,6 +761,8 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JButton btPilih;
     private javax.swing.JButton btSelesai;
     private javax.swing.JButton btSimpan;
+    private javax.swing.JButton btnHapusBrg;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

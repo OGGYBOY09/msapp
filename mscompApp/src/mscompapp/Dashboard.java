@@ -30,7 +30,7 @@ public class Dashboard extends javax.swing.JFrame {
         pSide.setLayout(new java.awt.BorderLayout());
         
         initSidebar();
-        panelutama();
+        panelutama(); // Akan memuat panel sesuai Role
         
         Timer timer = new Timer(1000, new ActionListener() {
         @Override
@@ -63,11 +63,37 @@ public class Dashboard extends javax.swing.JFrame {
         pMain.revalidate();
     }
     
+    // --- FITUR 1: LOGIKA HALAMAN UTAMA BERDASARKAN ROLE ---
     private void panelutama() {
         pMain.removeAll();
-        pMain.add(new beranda());
+        
+        if ("teknisi".equalsIgnoreCase(userRole)) {
+            // Jika Teknisi -> Buka Panel Teknisi
+            pMain.add(new Teknisi());
+        } else {
+            // Jika Admin (atau lainnya) -> Buka Beranda
+            pMain.add(new beranda());
+        }
+        
         pMain.repaint();
         pMain.revalidate();
+    }
+    
+    // --- FITUR 2: LOGOUT (Public agar bisa dipanggil Sidebar) ---
+    public void logout() {
+        int jawaban = JOptionPane.showConfirmDialog(this, 
+                "Apakah Anda yakin ingin Logout?", 
+                "Konfirmasi Keluar", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (jawaban == JOptionPane.YES_OPTION) {
+            this.dispose(); // Tutup Dashboard
+            
+            // Buka kembali halaman Login
+            Login loginPage = new Login();
+            loginPage.setVisible(true);
+            loginPage.setLocationRelativeTo(null);
+        }
     }
 
     /**
