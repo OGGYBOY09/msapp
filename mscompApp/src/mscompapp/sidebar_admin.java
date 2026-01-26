@@ -37,6 +37,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelolaUser = new javax.swing.JLabel();
         lblKelolaBarang = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
@@ -88,7 +89,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
 
         lblKelolaBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/list.png"))); // NOI18N
+        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/package-box.png"))); // NOI18N
         lblKelolaBarang.setText("Kelola Barang");
         lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -101,26 +102,37 @@ public class sidebar_admin extends javax.swing.JPanel {
         btnLogout.setText("LOG OUT");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
+        jLabel2.setText("Laporan Service");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 19, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblKelStock)
-                            .addComponent(jLabel3)
-                            .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 19, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblKelStock)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,9 +149,11 @@ public class sidebar_admin extends javax.swing.JPanel {
                 .addComponent(lblKelStock)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addGap(123, 123, 123)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(89, 89, 89)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addContainerGap(484, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -160,7 +174,7 @@ public class sidebar_admin extends javax.swing.JPanel {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
-        dashboard.switchPanel(new beranda());
+        dashboard.switchPanel(new Beranda());
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void lblKelolaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaUserMouseClicked
@@ -178,10 +192,17 @@ public class sidebar_admin extends javax.swing.JPanel {
         dashboard.logout();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // TODO add your handling code here:
+                dashboard.switchPanel(new PKelLaporan());
+
+    }//GEN-LAST:event_jLabel2MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblKelStock;
     private javax.swing.JLabel lblKelolaBarang;

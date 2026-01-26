@@ -307,7 +307,7 @@ public class PKelService extends javax.swing.JPanel {
         jLabel7.setText("Status :");
 
         cbStatusServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai" }));
+        cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

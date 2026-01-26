@@ -21,9 +21,9 @@ public class Dashboard extends javax.swing.JFrame {
 
     // Constructor menerima dua parameter: username dan role
     public Dashboard(String username, String role) {
-        initComponents();
         this.userRole = role;
-        Login.namaUser = username;
+        Login.namaUser = username;        
+        initComponents();
         lblWelcome.setText("Selamat Datang, " + username);
         
         // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
@@ -72,7 +72,7 @@ public class Dashboard extends javax.swing.JFrame {
             pMain.add(new Teknisi());
         } else {
             // Jika Admin (atau lainnya) -> Buka Beranda
-            pMain.add(new beranda());
+            pMain.add(new Beranda());
         }
         
         pMain.repaint();
@@ -88,7 +88,8 @@ public class Dashboard extends javax.swing.JFrame {
         
         if (jawaban == JOptionPane.YES_OPTION) {
             this.dispose(); // Tutup Dashboard
-            
+            Session.idUser = null;
+            Session.namaUser = null;
             // Buka kembali halaman Login
             Login loginPage = new Login();
             loginPage.setVisible(true);

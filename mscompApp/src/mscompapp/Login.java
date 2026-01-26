@@ -14,12 +14,19 @@ public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     public static String namaUser; // Variabel static agar bisa dipanggil dari mana saja
-   
+    public static String role;
+    public static String idUser;
+    
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        this.namaUser = Session.namaUser;
+        this.role = Session.level;
+        this.idUser = Session.idUser;
+        
+        
     }
 
     /**
@@ -97,22 +104,35 @@ public class Login extends javax.swing.JFrame {
         java.sql.ResultSet res = stm.executeQuery(sql);
         
         if (res.next()) {
-            Session.idUser   = res.getString("id_user");
-            Session.namaUser = res.getString("nama");
-            Session.level    = res.getString("role");
+            // 1. Ambil data
+            String id = res.getString("id_user");
+            String nama = res.getString("nama");
+            String hakAkses = res.getString("role");
 
-            JOptionPane.showMessageDialog(null, "Login Berhasil!");
-            
-            // Kirim user dan role ke Dashboard
-            Dashboard dash = new Dashboard(Session.namaUser, Session.level); 
-            dash.setLocationRelativeTo(null);
-            dash.setVisible(true);
-            this.dispose(); 
+            // 2. ISI SESSION (Wajib agar Teknisi.java tidak crash)
+            Session.idUser = id;
+            Session.namaUser = nama;
+            Session.level = hakAkses; 
+
+            // 3. Gunakan Try-Catch khusus saat membuka Dashboard
+            try {
+                Dashboard dash = new Dashboard(nama, hakAkses); 
+
+                // Pastikan objek dash berhasil dibuat sebelum mengatur lokasi
+                if (dash != null) {
+                    dash.setLocationRelativeTo(null);
+                    dash.setVisible(true);
+                    this.dispose();
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Gagal memuat Dashboard: " + ex.getMessage());
+                ex.printStackTrace(); // Cek di console NetBeans baris mana yang error
+            }
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
         }
     } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
+        javax.swing.JOptionPane.showMessageDialog(this, "Error Login: " + e.getMessage());
     }
     }//GEN-LAST:event_btLoginActionPerformed
 
