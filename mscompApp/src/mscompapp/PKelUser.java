@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package mscompapp;
+import config.Koneksi;
 import java.sql.Connection;        // Untuk koneksi ke database
 import java.sql.PreparedStatement; // Untuk menjalankan query SQL yang aman
 import java.sql.ResultSet;         // Untuk menampung hasil data dari database
