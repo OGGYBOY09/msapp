@@ -221,31 +221,32 @@ public class PKelStok extends javax.swing.JPanel {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Tanggal :");
 
         JTanggal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Kode Barang :");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Nama Barang :");
 
         tKodeBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        btPilihKode.setBackground(new java.awt.Color(204, 204, 204));
         btPilihKode.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btPilihKode.setText("Pilih");
         btPilihKode.addActionListener(this::btPilihKodeActionPerformed);
 
         tNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setText("Jumlah Beli :");
 
         tJumlahBeli.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Total Harga :");
 
         tTotalHarga.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -258,7 +259,7 @@ public class PKelStok extends javax.swing.JPanel {
         btSimpan.setText("SIMPAN");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
-        btLihat.setBackground(new java.awt.Color(153, 153, 153));
+        btLihat.setBackground(new java.awt.Color(204, 204, 204));
         btLihat.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btLihat.setText("LIHAT LAPORAN");
         btLihat.addActionListener(this::btLihatActionPerformed);
@@ -279,9 +280,8 @@ public class PKelStok extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblBarang);
 
-        btCari.setBackground(new java.awt.Color(153, 153, 153));
-        btCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btCari.setForeground(new java.awt.Color(255, 255, 255));
+        btCari.setBackground(new java.awt.Color(204, 204, 204));
+        btCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCari.setText("Cari");
         btCari.addActionListener(this::btCariActionPerformed);
 
@@ -388,14 +388,13 @@ public class PKelStok extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tHarga)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(tJumlahBeli, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tTotalHarga, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(tJumlahBeli, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tTotalHarga, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 58, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())

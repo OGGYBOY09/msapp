@@ -31,14 +31,14 @@ public class PKelKategori extends javax.swing.JPanel {
     
     private void auto_number() {
         try {
-            java.sql.Connection conn = (java.sql.Connection)mscompapp.Koneksi.configDB();
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
             java.sql.ResultSet res = conn.createStatement().executeQuery("SELECT MAX(id_kategori) FROM tbl_kategori");
             if (res.next()) {
-                tf_idKategori.setText(String.valueOf(res.getInt(1) + 1));
+                tfIdKatBarang.setText(String.valueOf(res.getInt(1) + 1));
             } else {
-                tf_idKategori.setText("1");
+                tfIdKatBarang.setText("1");
             }
-        } catch (Exception e) { tf_idKategori.setText("1"); }
+        } catch (Exception e) { tfIdKatBarang.setText("1"); }
     }
     
     private void load_table() {
@@ -59,12 +59,12 @@ public class PKelKategori extends javax.swing.JPanel {
                     res.getString("nama_kategori"),
                 });
             }
-            tblKategori.setModel(model);
+            tblKatBarang.setModel(model);
             
             //set kolom
-            tblKategori.getColumnModel().getColumn(0).setPreferredWidth(50);  // Kolom No/ID jadi kecil
-            tblKategori.getColumnModel().getColumn(0).setMaxWidth(50);       // Mengunci lebar maksimal
-            tblKategori.getColumnModel().getColumn(0).setMinWidth(50);
+            tblKatBarang.getColumnModel().getColumn(0).setPreferredWidth(50);  // Kolom No/ID jadi kecil
+            tblKatBarang.getColumnModel().getColumn(0).setMaxWidth(50);       // Mengunci lebar maksimal
+            tblKatBarang.getColumnModel().getColumn(0).setMinWidth(50);
         } catch (Exception e) {
             System.out.println("Error Load Data: " + e.getMessage());
         }
@@ -72,15 +72,15 @@ public class PKelKategori extends javax.swing.JPanel {
     
     // [UBAH] Method bersihkan kini lebih lengkap
     private void bersihkan() {
-        tf_idKategori.setText("");
-        tf_namaKat.setText("");
+        tfIdKatBarang.setText("");
+        tfNmKatBarang.setText("");
         tf_cari.setText("");
         
-        tf_idKategori.setEditable(true); // Aktifkan lagi kolom ID
+        tfIdKatBarang.setEditable(true); // Aktifkan lagi kolom ID
         btnSimpan.setText("SIMPAN");     // Kembalikan teks tombol
         isEditMode = false;              // Matikan mode edit
         
-        tf_idKategori.requestFocus();
+        tfIdKatBarang.requestFocus();
     }
 
     /**
@@ -97,17 +97,17 @@ public class PKelKategori extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        tf_idKategori = new javax.swing.JTextField();
+        tfIdKatBarang = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        tf_namaKat = new javax.swing.JTextField();
+        tfNmKatBarang = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        tf_namaKat1 = new javax.swing.JTextField();
+        tfKetKatBarang = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblKategori = new javax.swing.JTable();
+        tblKatBarang = new javax.swing.JTable();
         tf_cari = new javax.swing.JTextField();
         btn_refresh = new javax.swing.JButton();
         btn_edit = new javax.swing.JButton();
@@ -123,48 +123,45 @@ public class PKelKategori extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jPanel3.setBackground(new java.awt.Color(102, 204, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Tambah Kategori");
+        jLabel1.setText("TAMBAH KATEGORI BARANG");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addGap(0, 152, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(0, 54, Short.MAX_VALUE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("ID Kategori :");
 
-        tf_idKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tf_idKategori.addActionListener(this::tf_idKategoriActionPerformed);
+        tfIdKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfIdKatBarang.addActionListener(this::tfIdKatBarangActionPerformed);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Nama Kategori :");
 
-        tf_namaKat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfNmKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Keterangan :");
 
-        tf_namaKat1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfKetKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,12 +172,12 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tf_idKategori)
+                    .addComponent(tfIdKatBarang)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_namaKat, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                    .addComponent(tfNmKatBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_namaKat1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
+                    .addComponent(tfKetKatBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -190,16 +187,16 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tf_idKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addComponent(tfIdKatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tf_namaKat, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addComponent(tfNmKatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tf_namaKat1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
+                .addComponent(tfKetKatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -207,30 +204,27 @@ public class PKelKategori extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jPanel4.setBackground(new java.awt.Color(102, 204, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel5.setText("Daftar Kategori");
+        jLabel5.setText("DAFTAR KATEGORI BARANG");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(464, 464, 464)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(535, Short.MAX_VALUE))
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(0, 54, Short.MAX_VALUE))
         );
 
-        tblKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tblKategori.setModel(new javax.swing.table.DefaultTableModel(
+        tblKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tblKatBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -238,32 +232,32 @@ public class PKelKategori extends javax.swing.JPanel {
                 {null, null, null}
             },
             new String [] {
-                "No", "Nama Kategori", "Keterangan"
+                "ID", "NAMA KATEGORI", "KETERANGAN"
             }
         ));
-        tblKategori.setRowHeight(40);
-        jScrollPane1.setViewportView(tblKategori);
+        tblKatBarang.setRowHeight(40);
+        jScrollPane1.setViewportView(tblKatBarang);
 
         tf_cari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         tf_cari.addActionListener(this::tf_cariActionPerformed);
 
-        btn_refresh.setBackground(new java.awt.Color(153, 153, 153));
-        btn_refresh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_refresh.setBackground(new java.awt.Color(204, 204, 204));
+        btn_refresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btn_refresh.setText("Refresh");
         btn_refresh.addActionListener(this::btn_refreshActionPerformed);
 
         btn_edit.setBackground(new java.awt.Color(255, 255, 102));
-        btn_edit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_edit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btn_edit.setText("Edit");
         btn_edit.addActionListener(this::btn_editActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 0, 51));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton5.setText("Hapus");
         jButton5.addActionListener(this::jButton5ActionPerformed);
 
-        btn_cari.setBackground(new java.awt.Color(153, 153, 153));
-        btn_cari.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_cari.setBackground(new java.awt.Color(204, 204, 204));
+        btn_cari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btn_cari.setText("Cari");
         btn_cari.addActionListener(this::btn_cariActionPerformed);
 
@@ -276,15 +270,16 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
+                        .addComponent(tf_cari, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
                         .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
                         .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1194, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel2Layout.setVerticalGroup(
@@ -292,9 +287,6 @@ public class PKelKategori extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,7 +297,10 @@ public class PKelKategori extends javax.swing.JPanel {
                         .addGap(17, 17, 17)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 746, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -331,7 +326,7 @@ public class PKelKategori extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             // Validasi sederhana
-            if(tf_idKategori.getText().equals("") || tf_namaKat.getText().equals("")){
+            if(tfIdKatBarang.getText().equals("") || tfNmKatBarang.getText().equals("")){
                 JOptionPane.showMessageDialog(this, "ID dan Nama Kategori tidak boleh kosong!");
                 return;
             }
@@ -344,16 +339,16 @@ public class PKelKategori extends javax.swing.JPanel {
                 // --- MODE SIMPAN BARU ---
                 sql = "INSERT INTO tbl_kategori (id_kategori, nama_kategori) VALUES (?, ?)";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tf_idKategori.getText());
-                pst.setString(2, tf_namaKat.getText());
+                pst.setString(1, tfIdKatBarang.getText());
+                pst.setString(2, tfNmKatBarang.getText());
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
             } else {
                 // --- MODE UPDATE (EDIT) ---
                 sql = "UPDATE tbl_kategori SET nama_kategori=? WHERE id_kategori=?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tf_namaKat.getText());
-                pst.setString(2, tf_idKategori.getText()); // Where condition
+                pst.setString(1, tfNmKatBarang.getText());
+                pst.setString(2, tfIdKatBarang.getText()); // Where condition
                 pst.execute();
                 JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
             }
@@ -373,19 +368,19 @@ public class PKelKategori extends javax.swing.JPanel {
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
         // TODO add your handling code here:
-        int baris = tblKategori.getSelectedRow();
+        int baris = tblKatBarang.getSelectedRow();
         if (baris != -1) {
             // Ambil data dari tabel
-            String id = tblKategori.getValueAt(baris, 0).toString();
-            String nama = tblKategori.getValueAt(baris, 1).toString();
+            String id = tblKatBarang.getValueAt(baris, 0).toString();
+            String nama = tblKatBarang.getValueAt(baris, 1).toString();
             
             // Masukkan ke Text Field
-            tf_idKategori.setText(id);
-            tf_namaKat.setText(nama);
+            tfIdKatBarang.setText(id);
+            tfNmKatBarang.setText(nama);
             
             // Atur Mode Edit
             isEditMode = true;
-            tf_idKategori.setEditable(false); // ID jangan diedit (Primary Key)
+            tfIdKatBarang.setEditable(false); // ID jangan diedit (Primary Key)
             btnSimpan.setText("UBAH"); // Ganti teks tombol biar user sadar
             
             JOptionPane.showMessageDialog(this, "Silahkan ubah data di form sebelah kiri, lalu tekan tombol UBAH");
@@ -400,10 +395,10 @@ public class PKelKategori extends javax.swing.JPanel {
         bersihkan();
     }//GEN-LAST:event_btn_refreshActionPerformed
 
-    private void tf_idKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_idKategoriActionPerformed
+    private void tfIdKatBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdKatBarangActionPerformed
         // TODO add your handling code here:
         btn_cariActionPerformed(evt);
-    }//GEN-LAST:event_tf_idKategoriActionPerformed
+    }//GEN-LAST:event_tfIdKatBarangActionPerformed
 
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
         // TODO add your handling code here:
@@ -427,7 +422,7 @@ public class PKelKategori extends javax.swing.JPanel {
                     res.getString("nama_kategori"),
                 });
             }
-            tblKategori.setModel(model);
+            tblKatBarang.setModel(model);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error Pencarian: " + e.getMessage());
         }
@@ -435,9 +430,9 @@ public class PKelKategori extends javax.swing.JPanel {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        int baris = tblKategori.getSelectedRow();
+        int baris = tblKatBarang.getSelectedRow();
         if (baris != -1) {
-            String id = tblKategori.getValueAt(baris, 1).toString();
+            String id = tblKatBarang.getValueAt(baris, 1).toString();
             
             int konfirmasi = JOptionPane.showConfirmDialog(this, 
                     "Apakah Anda yakin menghapus kategori ID: " + id + "?",
@@ -481,10 +476,10 @@ public class PKelKategori extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblKategori;
+    private javax.swing.JTable tblKatBarang;
+    private javax.swing.JTextField tfIdKatBarang;
+    private javax.swing.JTextField tfKetKatBarang;
+    private javax.swing.JTextField tfNmKatBarang;
     private javax.swing.JTextField tf_cari;
-    private javax.swing.JTextField tf_idKategori;
-    private javax.swing.JTextField tf_namaKat;
-    private javax.swing.JTextField tf_namaKat1;
     // End of variables declaration//GEN-END:variables
 }

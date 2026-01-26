@@ -56,15 +56,13 @@
                           <Component id="tHarga" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="tJumlahBeli" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jLabel2" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                      <Component id="jLabel5" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                      <Component id="jLabel9" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                      <Component id="tTotalHarga" alignment="0" pref="351" max="32767" attributes="0"/>
-                      <Component id="jLabel8" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="tJumlahBeli" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
+                  <Component id="jLabel3" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
+                  <Component id="jLabel5" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
+                  <Component id="jLabel9" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
+                  <Component id="tTotalHarga" alignment="0" pref="351" max="32767" attributes="0"/>
+                  <Component id="jLabel8" alignment="0" min="-2" pref="214" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="58" max="32767" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -165,7 +163,7 @@
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Tanggal :"/>
       </Properties>
@@ -180,7 +178,7 @@
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Kode Barang :"/>
       </Properties>
@@ -188,7 +186,7 @@
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Nama Barang :"/>
       </Properties>
@@ -202,6 +200,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btPilihKode">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="cc" red="cc" type="rgb"/>
+        </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
         </Property>
@@ -221,7 +222,7 @@
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Jumlah Beli :"/>
       </Properties>
@@ -236,7 +237,7 @@
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="1"/>
+          <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Total Harga :"/>
       </Properties>
@@ -273,7 +274,7 @@
     <Component class="javax.swing.JButton" name="btLihat">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="99" green="99" red="99" type="rgb"/>
+          <Color blue="cc" green="cc" red="cc" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="1"/>
@@ -435,13 +436,10 @@
         <Component class="javax.swing.JButton" name="btCari">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="99" green="99" red="99" type="rgb"/>
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="18" style="0"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+              <Font name="Segoe UI" size="18" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cari"/>
           </Properties>

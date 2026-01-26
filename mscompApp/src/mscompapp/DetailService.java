@@ -477,7 +477,7 @@ public class DetailService extends javax.swing.JFrame {
             tblGanti.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
 
-        btPilih.setBackground(new java.awt.Color(153, 153, 153));
+        btPilih.setBackground(new java.awt.Color(204, 204, 204));
         btPilih.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         btPilih.setText("PIlih Barang");
         btPilih.addActionListener(this::btPilihActionPerformed);
@@ -499,6 +499,7 @@ public class DetailService extends javax.swing.JFrame {
         tStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan", " " }));
 
+        btSimpan.setBackground(new java.awt.Color(204, 204, 204));
         btSimpan.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         btSimpan.setText("Simpan Perbaikan");
         btSimpan.addActionListener(this::btSimpanActionPerformed);

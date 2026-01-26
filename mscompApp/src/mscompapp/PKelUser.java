@@ -145,7 +145,6 @@ private void bersihkanForm() {
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSimpan.setForeground(new java.awt.Color(255, 255, 255));
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
@@ -269,24 +268,22 @@ private void bersihkanForm() {
         );
 
         btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnEdit.setText("EDIT");
         btnEdit.addActionListener(this::btnEditActionPerformed);
 
-        btnRefresh.setBackground(new java.awt.Color(153, 153, 153));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
-        btnCari.setBackground(new java.awt.Color(153, 153, 153));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnCari.setForeground(new java.awt.Color(255, 255, 255));
+        btnCari.setBackground(new java.awt.Color(204, 204, 204));
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnCari.setText("CARI");
         btnCari.addActionListener(this::btnCariActionPerformed);
 
         btnHapus.setBackground(new java.awt.Color(255, 0, 0));
-        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnHapus.setText("HAPUS");
         btnHapus.addActionListener(this::btnHapusActionPerformed);
 

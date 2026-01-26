@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
 
 /**
  *
@@ -22,84 +23,42 @@ public class PKelLaporan extends javax.swing.JPanel {
      */
     public PKelLaporan() {
         initComponents();
-        tampilData();
+        
+        jPanel4.setLayout(new BorderLayout());
+        
+        jComboBox1.addActionListener(e -> gantiHalamanLaporan());
+        
+        gantiHalamanLaporan(); 
     }
     
-    public void tampilData() {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
-        model.addColumn("ID Servis");
-        model.addColumn("Tanggal Masuk");
-        model.addColumn("Nama");
-        model.addColumn("Nomor HP");
-        model.addColumn("Alamat");
-        model.addColumn("Jenis Barang");
-        model.addColumn("Merek");
-        model.addColumn("Model/Tipe");
-        model.addColumn("Nomor Seri");
-        model.addColumn("Keluhan");
-        model.addColumn("Kelengkapan");
-        model.addColumn("Status");
+    // --- METHOD GANTI PANEL ---
+    private void gantiHalamanLaporan() {
+        // Hapus panel yang sedang tampil (bersihkan area)
+        jPanel4.removeAll();
         
-
-        try {
-            // 1. Bangun Query Dasar
-            // Menggunakan 1=1 agar mudah menyambung kata kunci 'AND'
-            StringBuilder sql = new StringBuilder();
-            sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
-               .append("s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
-               .append("FROM servis s ")
-               .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
-               .append("WHERE 1=1 "); 
-            
-            String cari = txtCari.getText().trim(); // Pastikan variabel cari sudah didefinisikan
-            if (!cari.isEmpty()) {
-                // Gunakan .append() karena 'sql' adalah StringBuilder
-                // Gunakan alias 'p.' sesuai dengan INNER JOIN tbl_pelanggan p
-                sql.append(" AND (p.nama_pelanggan LIKE '%").append(cari)
-                   .append("%' OR p.no_hp LIKE '%").append(cari).append("%') ");
-            }
-            
-            if (dtTanggal.getDate() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String tglPilihan = sdf.format(dtTanggal.getDate());
-            sql.append(" AND s.tanggal_masuk = '").append(tglPilihan).append("' ");
+        // Ambil teks yang dipilih di ComboBox
+        String pilihan = jComboBox1.getSelectedItem().toString();
+        
+        // Cek pilihan dan tambahkan panel yang sesuai
+        switch (pilihan) {
+            case "Laporan harian":
+                jPanel4.add(new LapHarian(), BorderLayout.CENTER);
+                break;
+            case "Laporan mingguan":
+                jPanel4.add(new LapMingguan(), BorderLayout.CENTER);
+                break;
+            case "Laporan bulanan":
+                jPanel4.add(new LapBulanan(), BorderLayout.CENTER);
+                break;
+            default:
+                break;
         }
         
-            // Urutkan dari yang terbaru
-            sql.append("ORDER BY s.tanggal_masuk DESC");
-
-            // 5. Eksekusi Query
-            Connection conn = config.Koneksi.configDB();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql.toString());
-
-            int no = 1;
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    no++,
-                    rs.getString("id_servis"),
-                    rs.getDate("tanggal_masuk"),
-                    rs.getString("nama_pelanggan"),
-                    rs.getString("no_hp"),
-                    rs.getString("alamat"),
-                    rs.getString("jenis_barang"),
-                    rs.getString("merek"),
-                    rs.getString("model"),
-                    rs.getString("no_seri"),
-                    rs.getString("keluhan_awal"),
-                    rs.getString("kelengkapan"),
-                    rs.getString("status")
-                });
-            }
-            tblServ.setModel(model);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
-            e.printStackTrace();
-        }
+        jPanel4.revalidate();
+        jPanel4.repaint();
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,14 +74,6 @@ public class PKelLaporan extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
-        txtCari = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
-        btnDetail = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblServ = new javax.swing.JTable();
-        dtTanggal = new com.toedter.calendar.JDateChooser();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
@@ -156,7 +107,7 @@ public class PKelLaporan extends javax.swing.JPanel {
         jLabel2.setText("Filter :");
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan harian", "Laporan mingguan", "Laporan bulanan" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -183,79 +134,17 @@ public class PKelLaporan extends javax.swing.JPanel {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        txtCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        btnCari.setBackground(new java.awt.Color(153, 153, 153));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCari.setText("CARI");
-        btnCari.addActionListener(this::btnCariActionPerformed);
-
-        btnDetail.setBackground(new java.awt.Color(153, 153, 153));
-        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnDetail.setText("DETAIL");
-        btnDetail.addActionListener(this::btnDetailActionPerformed);
-
-        btnRefresh.setBackground(new java.awt.Color(153, 153, 153));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnRefresh.setText("REFRESH");
-        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Tanggal :");
-
-        tblServ.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "No", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "keluhan", "Kelengkapan"
-            }
-        ));
-        jScrollPane1.setViewportView(tblServ);
+        jPanel4.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(106, 106, 106)))
-                .addGap(25, 25, 25))
+            .addGap(0, 1718, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(dtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 748, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -274,75 +163,13 @@ public class PKelLaporan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
-        // TODO add your handling code here:
-        int row = tblServ.getSelectedRow();
-        
-        if (row != -1) {
-        try {
-            // 3. Ambil data dari kolom tabel (sesuaikan indeks kolom dengan tampilData)
-            String idServis = tblServ.getValueAt(row, 1).toString();
-            String tglMasuk = tblServ.getValueAt(row, 2).toString();
-            String nama     = tblServ.getValueAt(row, 3).toString();
-            String noHp     = tblServ.getValueAt(row, 4).toString();
-            String alamat   = tblServ.getValueAt(row, 5).toString();
-            String jenis    = tblServ.getValueAt(row, 6).toString();
-            String merek    = tblServ.getValueAt(row, 7).toString();
-            String model    = tblServ.getValueAt(row, 8).toString();
-            String noSeri   = tblServ.getValueAt(row, 9).toString();
-            String keluhan  = tblServ.getValueAt(row, 10).toString();
-            String kelengkap= tblServ.getValueAt(row, 11).toString();
-            String status   = tblServ.getValueAt(row, 12).toString();
-            
-            // ID Teknisi bisa dikosongkan dulu atau ambil dari session jika ada
-            String idTeknisi = ""; 
-
-            // 4. Inisialisasi JFrame DetailService dengan parameter yang sesuai constructor
-            DetailService detail = new DetailService(
-                idServis, tglMasuk, nama, noHp, alamat, jenis, 
-                merek, model, noSeri, keluhan, kelengkap, status, idTeknisi
-            );
-            
-            // 5. Tampilkan Form
-            detail.setVisible(true);
-            detail.setLocationRelativeTo(null); // Agar muncul di tengah layar
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal memproses data detail: " + e.getMessage());
-        }
-    } else {
-        // Jika tidak ada baris yang dipilih
-        JOptionPane.showMessageDialog(this, "Silahkan pilih data pada tabel terlebih dahulu!");
-    }
-    }//GEN-LAST:event_btnDetailActionPerformed
-
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:'
-        tampilData();
-    }//GEN-LAST:event_btnCariActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-        txtCari.setText("");
-        dtTanggal.setDate(null); // Mengosongkan pilihan tanggal
-        tampilData();
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCari;
-    private javax.swing.JButton btnDetail;
-    private javax.swing.JButton btnRefresh;
-    private com.toedter.calendar.JDateChooser dtTanggal;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblServ;
-    private javax.swing.JTextField txtCari;
     // End of variables declaration//GEN-END:variables
 }

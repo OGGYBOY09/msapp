@@ -4,6 +4,7 @@
  */
 package mscompapp;
 
+import config.Koneksi;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,7 +14,8 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-    public static String namaUser; // Variabel static agar bisa dipanggil dari mana saja
+    public static String namaUser;
+    
     public static String role;
     public static String idUser;
     
@@ -25,7 +27,7 @@ public class Login extends javax.swing.JFrame {
         this.namaUser = Session.namaUser;
         this.role = Session.level;
         this.idUser = Session.idUser;
-        
+        this.getRootPane().setDefaultButton(btLogin);
         
     }
 
@@ -97,51 +99,53 @@ public class Login extends javax.swing.JFrame {
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
         // TODO add your handling code here
         try {
-        String sql = "SELECT * FROM tbl_user WHERE username='" + tUsn.getText() 
-                   + "' AND password='" + new String(tPass.getPassword()) + "'";
-        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet res = stm.executeQuery(sql);
-        
-        if (res.next()) {
-            // 1. Ambil data
-            String id = res.getString("id_user");
-            String nama = res.getString("nama");
-            String hakAkses = res.getString("role");
+            String sql = "SELECT * FROM tbl_user WHERE username='" + tUsn.getText() 
+                       + "' AND password='" + new String(tPass.getPassword()) + "'";
+            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+            
+            if (res.next()) {
+                // 1. Ambil data
+                String id = res.getString("id_user");
+                String nama = res.getString("nama");
+                String hakAkses = res.getString("role");
 
-            // 2. ISI SESSION (Wajib agar Teknisi.java tidak crash)
-            Session.idUser = id;
-            Session.namaUser = nama;
-            Session.level = hakAkses; 
+                // 2. ISI SESSION (Wajib agar Teknisi.java tidak crash)
+                Session.idUser = id;
+                Session.namaUser = nama;
+                Session.level = hakAkses; 
 
-            // 3. Gunakan Try-Catch khusus saat membuka Dashboard
-            try {
-                Dashboard dash = new Dashboard(nama, hakAkses); 
+                // 3. Gunakan Try-Catch khusus saat membuka Dashboard
+                try {
+                    Dashboard dash = new Dashboard(nama, hakAkses); 
 
-                // Pastikan objek dash berhasil dibuat sebelum mengatur lokasi
-                if (dash != null) {
-                    dash.setLocationRelativeTo(null);
-                    dash.setVisible(true);
-                    this.dispose();
+                    // Pastikan objek dash berhasil dibuat sebelum mengatur lokasi
+                    if (dash != null) {
+                        dash.setLocationRelativeTo(null);
+                        dash.setVisible(true);
+                        this.dispose();
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Gagal memuat Dashboard: " + ex.getMessage());
+                    ex.printStackTrace(); 
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Gagal memuat Dashboard: " + ex.getMessage());
-                ex.printStackTrace(); // Cek di console NetBeans baris mana yang error
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
             }
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error Login: " + e.getMessage());
         }
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Error Login: " + e.getMessage());
-    }
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void tPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tPassActionPerformed
         // TODO add your handling code here:
+        btLogin.doClick();
     }//GEN-LAST:event_tPassActionPerformed
 
     private void tUsnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tUsnActionPerformed
         // TODO add your handling code here:
+        tPass.requestFocus();
     }//GEN-LAST:event_tUsnActionPerformed
 
     /**

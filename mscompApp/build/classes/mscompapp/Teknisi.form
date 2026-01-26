@@ -83,8 +83,8 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jLabel6" min="-2" pref="78" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtCari" min="-2" pref="141" max="-2" attributes="0"/>
-                                  <EmptySpace pref="89" max="32767" attributes="0"/>
+                                  <Component id="txtCari" pref="212" max="32767" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnRefresh" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -106,15 +106,15 @@
                                   <Component id="cbStatus" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                   <Component id="jLabel2" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jLabel5" min="-2" pref="59" max="-2" attributes="0"/>
+                              <Component id="jLabel5" min="-2" pref="50" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="jLabel6" alignment="0" pref="57" max="32767" attributes="0"/>
-                                  <Component id="dtFilterdate" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="dtFilterdate" alignment="0" pref="50" max="32767" attributes="0"/>
                                   <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cbKategori" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cbKategori" alignment="0" pref="50" max="32767" attributes="0"/>
                               </Group>
                               <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                  <Component id="txtCari" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
+                                  <Component id="txtCari" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                   <Component id="btnRefresh" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -127,8 +127,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="655" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="719" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -157,7 +157,7 @@
         <Component class="javax.swing.JButton" name="btnLihatDetail">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="99" green="99" red="99" type="rgb"/>
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="25" style="1"/>
@@ -203,6 +203,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnRefresh">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="66" green="ff" red="66" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="REFRESH"/>
           </Properties>
           <Events>
