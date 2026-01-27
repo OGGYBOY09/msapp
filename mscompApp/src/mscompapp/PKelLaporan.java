@@ -41,13 +41,13 @@ public class PKelLaporan extends javax.swing.JPanel {
         
         // Cek pilihan dan tambahkan panel yang sesuai
         switch (pilihan) {
-            case "Laporan harian":
+            case "Laporan Harian":
                 jPanel4.add(new LapHarian(), BorderLayout.CENTER);
                 break;
-            case "Laporan mingguan":
+            case "Laporan Mingguan":
                 jPanel4.add(new LapMingguan(), BorderLayout.CENTER);
                 break;
-            case "Laporan bulanan":
+            case "Laporan Bulanan":
                 jPanel4.add(new LapBulanan(), BorderLayout.CENTER);
                 break;
             default:
@@ -107,7 +107,7 @@ public class PKelLaporan extends javax.swing.JPanel {
         jLabel2.setText("Filter :");
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan harian", "Laporan mingguan", "Laporan bulanan" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan Bulanan", "Laporan Mingguan", "Laporan Harian" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -144,7 +144,7 @@ public class PKelLaporan extends javax.swing.JPanel {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 748, Short.MAX_VALUE)
+            .addGap(0, 769, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -158,7 +158,7 @@ public class PKelLaporan extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

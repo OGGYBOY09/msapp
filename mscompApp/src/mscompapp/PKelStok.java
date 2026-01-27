@@ -143,7 +143,7 @@ public class PKelStok extends javax.swing.JPanel {
         cbKategori.removeAllItems();
         cbKategori.addItem("-Pilih Kategori-");
         try {
-            String sql = "SELECT nama_kategori FROM tbl_kategori";
+            String sql = "SELECT nama_kategori FROM tbl_kat_barang";
             java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
             java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
             while(res.next()){
@@ -178,7 +178,6 @@ public class PKelStok extends javax.swing.JPanel {
         tTotalHarga = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         btSimpan = new javax.swing.JButton();
-        btLihat = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBarang = new javax.swing.JTable();
@@ -194,6 +193,7 @@ public class PKelStok extends javax.swing.JPanel {
         tHarga = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMaximumSize(new java.awt.Dimension(1780, 960));
         setMinimumSize(new java.awt.Dimension(1780, 960));
@@ -259,11 +259,7 @@ public class PKelStok extends javax.swing.JPanel {
         btSimpan.setText("SIMPAN");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
-        btLihat.setBackground(new java.awt.Color(204, 204, 204));
-        btLihat.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btLihat.setText("LIHAT LAPORAN");
-        btLihat.addActionListener(this::btLihatActionPerformed);
-
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -278,6 +274,7 @@ public class PKelStok extends javax.swing.JPanel {
                 "Id", "Tanggal", "Kode Barang", "Nama Barang", "Kategori ", "Harga", "Jumlah", "Total Harga"
             }
         ));
+        tblBarang.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(tblBarang);
 
         btCari.setBackground(new java.awt.Color(204, 204, 204));
@@ -373,7 +370,6 @@ public class PKelStok extends javax.swing.JPanel {
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btSimpan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
-                    .addComponent(btLihat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(tKodeBrg)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -437,9 +433,7 @@ public class PKelStok extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btLihat, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -660,7 +654,6 @@ public class PKelStok extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser JTanggal;
     private javax.swing.JButton btCari;
-    private javax.swing.JButton btLihat;
     private javax.swing.JButton btPilihKode;
     private javax.swing.JButton btSimpan;
     private javax.swing.JButton btndelete;

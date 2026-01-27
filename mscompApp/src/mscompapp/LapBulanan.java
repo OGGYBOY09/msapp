@@ -152,6 +152,7 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         thTahun = new com.toedter.calendar.JYearChooser();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMaximumSize(new java.awt.Dimension(1720, 750));
         setMinimumSize(new java.awt.Dimension(1720, 750));

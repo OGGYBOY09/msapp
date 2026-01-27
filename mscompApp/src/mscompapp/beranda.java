@@ -27,71 +27,73 @@ public class Beranda extends javax.swing.JPanel {
         initComponents();
         tampilTotalUser();
         tampilTotalBarang();
-        tampilTotalKategori();
+        tampilTotalService();
+        tampilTotalStock();
 
     }
     
     private void tampilTotalUser() {
     try {
-        // Query SQL untuk menghitung jumlah baris di tabel tbl_user
         String sql = "SELECT COUNT(*) FROM tbl_user";
-        
         java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
         java.sql.Statement stm = conn.createStatement();
         java.sql.ResultSet res = stm.executeQuery(sql);
-        
         if (res.next()) {
-            // Mengambil hasil count (kolom pertama)
-            int total = res.getInt(1);
-            // Update label angka 0 dengan total dari database
-            lblTotalUser.setText(String.valueOf(total));
+            lblTotalUser.setText(String.valueOf(res.getInt(1)));
         }
     } catch (Exception e) {
-        System.out.println("Error hitung user: " + e.getMessage());
-        lblTotalUser.setText("Err");
+        System.out.println("Error User: " + e.getMessage());
+        lblTotalUser.setText("Err"); 
     }
 }
 
-    
-    private void tampilTotalBarang() {
+private void tampilTotalBarang() {
     try {
-        // Query SQL untuk menghitung jumlah baris di tabel tbl_user
         String sql = "SELECT COUNT(*) FROM tbl_barang";
-        
         java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
         java.sql.Statement stm = conn.createStatement();
         java.sql.ResultSet res = stm.executeQuery(sql);
-        
         if (res.next()) {
-            // Mengambil hasil count (kolom pertama)
-            int total = res.getInt(1);
-            // Update label angka 0 dengan total dari database
-            lblTotalBarang.setText(String.valueOf(total));
+            lblTotalBarang.setText(String.valueOf(res.getInt(1)));
         }
     } catch (Exception e) {
-        System.out.println("Error hitung user: " + e.getMessage());
-        lblTotalUser.setText("Err");
+        System.out.println("Error Barang: " + e.getMessage());
+        lblTotalBarang.setText("Err"); // Perbaiki dari lblTotalUser ke lblTotalBarang
     }
 }
-    
-    private void tampilTotalKategori() {
+
+private void tampilTotalService() {
     try {
-        // Query SQL untuk menghitung jumlah baris di tabel tbl_user
-        String sql = "SELECT COUNT(*) FROM tbl_kategori";
-        
+        String sql = "SELECT COUNT(*) FROM servis";
         java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+        java.sql.Statement stm = conn.createStatement();
+        java.sql.ResultSet res = stm.executeQuery(sql);
+        if (res.next()) {
+            lblTotalService.setText(String.valueOf(res.getInt(1)));
+        }
+    } catch (Exception e) {
+        System.out.println("Error servis: " + e.getMessage());
+        lblTotalService.setText("Err"); // Perbaiki dari lblTotalUser ke lblTotalKategori
+    }
+}
+
+private void tampilTotalStock() {
+    try {
+        // Menggunakan SUM untuk menjumlahkan semua angka di kolom stok
+        String sql = "SELECT SUM(stok) AS total_stok FROM tbl_barang";
+        
+        java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
         java.sql.Statement stm = conn.createStatement();
         java.sql.ResultSet res = stm.executeQuery(sql);
         
         if (res.next()) {
-            // Mengambil hasil count (kolom pertama)
-            int total = res.getInt(1);
-            // Update label angka 0 dengan total dari database
-            lblTotalKategori.setText(String.valueOf(total));
+            int total = res.getInt("total_stok");
+            // Set text ke label dashboard (pastikan nama variabel labelnya benar)
+            lblTotalStock.setText(String.valueOf(total));
         }
     } catch (Exception e) {
-        System.out.println("Error hitung : " + e.getMessage());
-        lblTotalUser.setText("Err");
+        System.out.println("Error hitung stok: " + e.getMessage());
+        lblTotalStock.setText("0");
     }
 }
     
@@ -117,7 +119,10 @@ public class Beranda extends javax.swing.JPanel {
         lblTotalBarang = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        lblTotalKategori = new javax.swing.JLabel();
+        lblTotalService = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        lblTotalStock = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
@@ -137,7 +142,7 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
-        jLabel1.setText("Kelola User");
+        jLabel1.setText("Jumlah User");
 
         lblTotalUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         lblTotalUser.setText("0");
@@ -170,7 +175,7 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/package-box.png"))); // NOI18N
-        jLabel3.setText("Kelola Barang");
+        jLabel3.setText("Jumlah Barang");
 
         lblTotalBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         lblTotalBarang.setText("0");
@@ -203,10 +208,10 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
-        jLabel4.setText("Kelola Kategori");
+        jLabel4.setText("Jumlah Service");
 
-        lblTotalKategori.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
-        lblTotalKategori.setText("0");
+        lblTotalService.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalService.setText("0");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -218,7 +223,7 @@ public class Beranda extends javax.swing.JPanel {
                 .addContainerGap(192, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblTotalKategori)
+                .addComponent(lblTotalService)
                 .addGap(19, 19, 19))
         );
         jPanel5Layout.setVerticalGroup(
@@ -227,7 +232,40 @@ public class Beranda extends javax.swing.JPanel {
                 .addGap(17, 17, 17)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addComponent(lblTotalKategori)
+                .addComponent(lblTotalService)
+                .addGap(19, 19, 19))
+        );
+
+        jPanel6.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
+        jLabel5.setText("Total Stock Barang");
+
+        lblTotalStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalStock.setText("0");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel5)
+                .addContainerGap(123, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTotalStock)
+                .addGap(19, 19, 19))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addComponent(lblTotalStock)
                 .addGap(19, 19, 19))
         );
 
@@ -242,17 +280,21 @@ public class Beranda extends javax.swing.JPanel {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(460, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(766, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(712, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -260,9 +302,9 @@ public class Beranda extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(721, 721, 721)
+                .addGap(703, 703, 703)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(746, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -287,9 +329,8 @@ public class Beranda extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -299,13 +340,16 @@ public class Beranda extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel lblTotalBarang;
-    private javax.swing.JLabel lblTotalKategori;
+    private javax.swing.JLabel lblTotalService;
+    private javax.swing.JLabel lblTotalStock;
     private javax.swing.JLabel lblTotalUser;
     // End of variables declaration//GEN-END:variables
 }

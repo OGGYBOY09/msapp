@@ -57,12 +57,12 @@ public class PKelBarang extends javax.swing.JPanel {
                 String id = rs.getString(1); 
                 // Asumsi ID formatnya "B001", ambil angka mulai index 1
                 int angka = Integer.parseInt(id.substring(1)); 
-                tfKodeBarang.setText(String.format("B%03d", angka + 1));
+                tfKodeBarang.setText(String.format("B%04d", angka + 1));
             } else {
-                tfKodeBarang.setText("B001");
+                tfKodeBarang.setText("B0001");
             }
         } catch (Exception e) {
-            tfKodeBarang.setText("B001");
+            tfKodeBarang.setText("B0001");
         }
     }
 

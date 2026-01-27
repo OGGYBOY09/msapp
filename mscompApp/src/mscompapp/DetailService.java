@@ -343,43 +343,35 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addGap(12, 12, 12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAlamat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                            .addComponent(txtNohp, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtNama, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtIdService)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtIdService)
-                            .addComponent(txtNama)
-                            .addComponent(txtNohp)
-                            .addComponent(txtAlamat))
-                        .addGap(16, 16, 16))
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel6))
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtJnsBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                            .addComponent(txtTglMasuk)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
                             .addComponent(jLabel11)
-                            .addComponent(jLabel12))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtMerek, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                            .addComponent(txtModel)
-                            .addComponent(txtNoSeri))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addGap(27, 27, 27)
-                                .addComponent(txtKeluhan))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtKelengkapan))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtJnsBarang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                    .addComponent(txtTglMasuk))))
-                        .addGap(0, 16, Short.MAX_VALUE))))
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtKeluhan)
+                            .addComponent(txtKelengkapan)
+                            .addComponent(txtModel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtMerek)
+                            .addComponent(txtNoSeri))))
+                .addGap(16, 16, 16))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,7 +457,7 @@ public class DetailService extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -474,7 +466,13 @@ public class DetailService extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tblGanti);
         if (tblGanti.getColumnModel().getColumnCount() > 0) {
+            tblGanti.getColumnModel().getColumn(0).setResizable(false);
             tblGanti.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblGanti.getColumnModel().getColumn(1).setResizable(false);
+            tblGanti.getColumnModel().getColumn(2).setResizable(false);
+            tblGanti.getColumnModel().getColumn(3).setResizable(false);
+            tblGanti.getColumnModel().getColumn(4).setResizable(false);
+            tblGanti.getColumnModel().getColumn(5).setResizable(false);
         }
 
         btPilih.setBackground(new java.awt.Color(204, 204, 204));
@@ -499,7 +497,6 @@ public class DetailService extends javax.swing.JFrame {
         tStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan", " " }));
 
-        btSimpan.setBackground(new java.awt.Color(204, 204, 204));
         btSimpan.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
         btSimpan.setText("Simpan Perbaikan");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
@@ -609,10 +606,10 @@ public class DetailService extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
