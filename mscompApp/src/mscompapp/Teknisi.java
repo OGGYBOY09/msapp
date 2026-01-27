@@ -23,36 +23,33 @@ public class Teknisi extends javax.swing.JPanel {
 
     public Teknisi() {
         initComponents();
-// Proteksi agar tidak NullPointer
-    if (Session.idUser != null) {
-        this.idTeknisi = Session.idUser;
-    } else {
-        this.idTeknisi = "0"; // atau handling lainnya
-    }        
-        // 1. Load Data ComboBox saat panel dibuka
+        
+        // Proteksi Null Pointer Session
+        if (Session.idUser != null) {
+            this.idTeknisi = Session.idUser;
+        } else {
+            this.idTeknisi = "0"; 
+        }        
+        
+        // 1. Load Data ComboBox
         loadComboStatus();
         loadComboKategori();
         
         // 2. Tampilkan Data Awal
         tampilData();
         
-        // 3. Tambahkan Event Listener (Agar saat dipilih langsung filter otomatis)
+        // 3. Tambahkan Event Listener
         addFilterListeners();
     }
     
-    // --- SETUP LISTENER AGAR OTOMATIS FILTER SAAT DIKLIK ---
+    // --- LISTENER FILTER ---
     private void addFilterListeners() {
-        // Saat Status diubah -> Refresh Tabel
         cbStatus.addActionListener(e -> tampilData());
-        
-        // Saat Kategori diubah -> Refresh Tabel
         cbKategori.addActionListener(e -> tampilData());
-        
-        // Saat Tanggal diubah -> Refresh Tabel
         dtFilterdate.addPropertyChangeListener("date", e -> tampilData());
     }
 
-    // --- LOAD COMBOBOX STATUS (Manual sesuai Enum Database) ---
+    // --- LOAD COMBO STATUS ---
     private void loadComboStatus() {
         cbStatus.removeAllItems();
         cbStatus.addItem("- Semua Status -");
@@ -62,7 +59,7 @@ public class Teknisi extends javax.swing.JPanel {
         cbStatus.addItem("Dibatalkan");
     }
 
-    // --- LOAD COMBOBOX KATEGORI (Dari Database tbl_kategori) ---
+    // --- LOAD COMBO KATEGORI (DARI tbl_jenis_perangkat) ---
     private void loadComboKategori() {
         cbKategori.removeAllItems();
         cbKategori.addItem("- Semua Kategori -");
@@ -70,18 +67,19 @@ public class Teknisi extends javax.swing.JPanel {
         try {
             Connection conn = Koneksi.configDB();
             Statement stm = conn.createStatement();
-            // Mengambil nama_kategori dari tabel tbl_kategori
-            ResultSet rs = stm.executeQuery("SELECT nama_kategori FROM tbl_kategori");
+            // Mengambil nama_jenis dari tabel master jenis perangkat
+            String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat ORDER BY nama_jenis ASC";
+            ResultSet rs = stm.executeQuery(sql);
             
             while (rs.next()) {
-                cbKategori.addItem(rs.getString("nama_kategori"));
+                cbKategori.addItem(rs.getString("nama_jenis"));
             }
         } catch (Exception e) {
             System.err.println("Gagal load kategori: " + e.getMessage());
         }
     }
 
-    // --- METHOD UTAMA: TAMPILKAN DATA DENGAN FILTER ---
+    // --- TAMPILKAN DATA (FILTER & SORTING) ---
     public void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
@@ -97,49 +95,47 @@ public class Teknisi extends javax.swing.JPanel {
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
         model.addColumn("Status");
-        
 
         try {
-            // 1. Bangun Query Dasar
-            // Menggunakan 1=1 agar mudah menyambung kata kunci 'AND'
+            // Query Dasar
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
                .append("s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
                .append("FROM servis s ")
                .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
-               .append("WHERE 1=1 "); 
+               .append("WHERE 1=1 "); // 1=1 memudahkan penambahan AND dinamis
 
-            // 2. Cek Filter Status
+            // 1. Filter Status
             if (cbStatus.getSelectedIndex() > 0) {
                 String statusPilih = cbStatus.getSelectedItem().toString();
                 sql.append("AND s.status = '").append(statusPilih).append("' ");
             }
 
-            // 3. Cek Filter Kategori
+            // 2. Filter Kategori (Jenis Barang)
             if (cbKategori.getSelectedIndex() > 0) {
-                String kategoriPilih = cbKategori.getSelectedItem().toString();
-                sql.append("AND s.jenis_barang = '").append(kategoriPilih).append("' ");
+                String katPilih = cbKategori.getSelectedItem().toString();
+                sql.append("AND s.jenis_barang = '").append(katPilih).append("' ");
             }
 
-            // 4. Cek Filter Tanggal
+            // 3. Filter Tanggal
             if (dtFilterdate.getDate() != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String tglPilih = sdf.format(dtFilterdate.getDate());
                 sql.append("AND s.tanggal_masuk = '").append(tglPilih).append("' ");
             }
             
-            String cari = txtCari.getText().trim(); // Pastikan variabel cari sudah didefinisikan
-            if (!cari.isEmpty()) {
-                // Gunakan .append() karena 'sql' adalah StringBuilder
-                // Gunakan alias 'p.' sesuai dengan INNER JOIN tbl_pelanggan p
-                sql.append(" AND (p.nama_pelanggan LIKE '%").append(cari)
-                   .append("%' OR p.no_hp LIKE '%").append(cari).append("%') ");
+            // 4. Filter Pencarian (txtCari)
+            String keyword = txtCari.getText().trim();
+            if (!keyword.isEmpty()) {
+                sql.append("AND (p.nama_pelanggan LIKE '%").append(keyword).append("%' ")
+                   .append("OR s.id_servis LIKE '%").append(keyword).append("%' ")
+                   .append("OR s.merek LIKE '%").append(keyword).append("%') ");
             }
             
-            // Urutkan dari yang terbaru
+            // 5. Sorting (Terbaru Paling Atas)
             sql.append("ORDER BY s.tanggal_masuk DESC");
 
-            // 5. Eksekusi Query
+            // Eksekusi
             Connection conn = Koneksi.configDB();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql.toString());
@@ -149,7 +145,7 @@ public class Teknisi extends javax.swing.JPanel {
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
-                    rs.getDate("tanggal_masuk"),
+                    rs.getString("tanggal_masuk"),
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
@@ -169,6 +165,7 @@ public class Teknisi extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

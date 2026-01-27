@@ -4,7 +4,13 @@
  */
 package mscompapp;
 
+import config.Koneksi;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,23 +20,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class pilihsparepart extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(pilihsparepart.class.getName());
     private DetailService parent;
 
-
-    /**
-     * Creates new form pilihsparepart
-     */
     public pilihsparepart(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        load_table();
-
+        load_table("");
         tQty.setModel(new SpinnerNumberModel(1, 1, 999, 1));
         this.parent = (DetailService) parent;
     }
 
-    private void load_table() {
+    private void load_table(String keyword) {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Kode Barang");
         model.addColumn("Nama Barang"); 
@@ -39,22 +39,30 @@ public class pilihsparepart extends javax.swing.JDialog {
         model.addColumn("Stok");
         model.addColumn("Keterangan");
         try {
-            String sql = "SELECT * FROM tbl_barang";
-            java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            String sql = "SELECT * FROM tbl_barang ";
+            if (!keyword.isEmpty()) {
+                sql += "WHERE kode_barang LIKE '%" + keyword + "%' " +
+                       "OR nama_barang LIKE '%" + keyword + "%' ";
+            }
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet res = stm.executeQuery(sql);
             while(res.next()){
                 model.addRow(new Object[]{
-                    res.getString(1), // kode_barang
-                    res.getString(2), // nama_barang
-                    res.getString(3), // kategori
-                    res.getInt(4),    // harga
-                    res.getInt(5),    // stok
-                    res.getString(6)  // keterangan
+                    res.getString("kode_barang"),
+                    res.getString("nama_barang"),
+                    res.getString("kategori"),
+                    res.getString("harga"),
+                    res.getInt("stok"), // Pastikan ambil sebagai int agar validasi angka akurat
+                    res.getString("keterangan")
                 });
             }
             tblBarang.setModel(model);
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) {
+            System.out.println("Error Load Barang: " + e.getMessage());
+        }
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,14 +79,20 @@ public class pilihsparepart extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         btOK = new javax.swing.JButton();
         btBatal = new javax.swing.JButton();
+        tfCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tQty.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel1.setBackground(new java.awt.Color(102, 204, 255));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 20)); // NOI18N
         jLabel1.setText("Pilih Sparepart");
+        jLabel1.setOpaque(true);
 
+        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tblBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -101,44 +115,62 @@ public class pilihsparepart extends javax.swing.JDialog {
         btBatal.setText("BATAL");
         btBatal.addActionListener(this::btBatalActionPerformed);
 
+        tfCari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCari.setText("CARI");
+        btnCari.addActionListener(this::btnCariActionPerformed);
+
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRefresh.setText("REFRSH");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 926, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnCari)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 914, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tQty, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(tQty, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(531, 531, 531)
                         .addComponent(btOK)
-                        .addGap(18, 18, 18)
-                        .addComponent(btBatal)
-                        .addGap(37, 37, 37))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btBatal))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(tQty, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btBatal)
-                    .addComponent(btOK))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel2))
+                    .addComponent(tQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         pack();
@@ -146,27 +178,44 @@ public class pilihsparepart extends javax.swing.JDialog {
 
     private void btOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOKActionPerformed
         // TODO add your handling code here:
-         int row = tblBarang.getSelectedRow();
+        int row = tblBarang.getSelectedRow();
+        if (row != -1) {
+            String kode = tblBarang.getValueAt(row, 0).toString();
+            String nama = tblBarang.getValueAt(row, 1).toString();
+            int harga = Integer.parseInt(tblBarang.getValueAt(row, 3).toString());
+            int stokTersedia = Integer.parseInt(tblBarang.getValueAt(row, 4).toString());
+            int qtyMinta = (int) tQty.getValue();
+            
+            // 1. VALIDASI STOK (Fitur Baru)
+            if (qtyMinta > stokTersedia) {
+                JOptionPane.showMessageDialog(this, 
+                    "Stok tidak mencukupi!\nStok Tersedia: " + stokTersedia + "\nPermintaan: " + qtyMinta, 
+                    "Peringatan Stok", 
+                    JOptionPane.WARNING_MESSAGE);
+                return; // Batalkan proses jika stok kurang
+            }
 
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Pilih barang terlebih dahulu!");
-        return;
-    }
-
-    int qty = (int) tQty.getValue();
-
-    if (qty <= 0) {
-        JOptionPane.showMessageDialog(this, "Jumlah tidak valid!");
-        return;
-    }
-
-    String idBarang = tblBarang.getValueAt(row, 0).toString();
-    String namaBarang = tblBarang.getValueAt(row, 1).toString();
-    int harga = Integer.parseInt(tblBarang.getValueAt(row, 3).toString());
-
-    parent.tambahSparepart(idBarang, namaBarang, harga, qty);
-
-    this.dispose(); // tutup dialog
+            try {
+                // 2. KURANGI STOK DI DATABASE
+                Connection conn = Koneksi.configDB();
+                String sqlUpdate = "UPDATE tbl_barang SET stok = stok - ? WHERE kode_barang = ?";
+                PreparedStatement ps = conn.prepareStatement(sqlUpdate);
+                ps.setInt(1, qtyMinta);
+                ps.setString(2, kode);
+                ps.executeUpdate();
+                
+                // 3. Kirim data ke Form DetailService
+                parent.tambahSparepart(kode, nama, harga, qtyMinta);
+                
+                // Tutup Popup
+                this.dispose();
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal update stok: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih barang terlebih dahulu!");
+        }
     }//GEN-LAST:event_btOKActionPerformed
 
     private void btBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBatalActionPerformed
@@ -174,6 +223,18 @@ public class pilihsparepart extends javax.swing.JDialog {
             this.dispose();
 
     }//GEN-LAST:event_btBatalActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        load_table(tfCari.getText());
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tfCari.setText("");
+        tQty.setValue(1);
+        load_table("");
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,7 +253,7 @@ public class pilihsparepart extends javax.swing.JDialog {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(pilihsparepart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -215,10 +276,13 @@ public class pilihsparepart extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBatal;
     private javax.swing.JButton btOK;
+    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner tQty;
     private javax.swing.JTable tblBarang;
+    private javax.swing.JTextField tfCari;
     // End of variables declaration//GEN-END:variables
 }
