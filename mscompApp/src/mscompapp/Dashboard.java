@@ -115,6 +115,7 @@ public class Dashboard extends javax.swing.JFrame {
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(102, 204, 255));
