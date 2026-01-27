@@ -4,17 +4,103 @@
  */
 package mscompapp;
 
+import config.Koneksi; 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Acer Aspire Lite 15
  */
-public class KategoriServis extends javax.swing.JPanel {
+public class PKatBarang extends javax.swing.JPanel {
 
     /**
      * Creates new form KategoriServis
      */
-    public KategoriServis() {
+    private boolean isEditMode = false;
+
+    public PKatBarang() {
         initComponents();
+        load_table();
+        auto_number();
+        bersihkan(); 
+    }
+    
+    // --- 1. LOGIKA AUTO NUMBER ID (tbl_kat_barang) ---
+    private void auto_number() {
+        try {
+            Connection conn = Koneksi.configDB();
+            // Mengambil ID terbesar dari tabel tbl_kat_barang
+            String sql = "SELECT MAX(id_kategori) FROM tbl_kat_barang";
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery(sql);
+            
+            if (res.next()) {
+                int maxId = res.getInt(1);
+                // ID + 1
+                tfIdKatServis.setText(String.valueOf(maxId + 1));
+            } else {
+                tfIdKatServis.setText("1");
+            }
+            
+            tfIdKatServis.setEditable(false); 
+            
+        } catch (Exception e) {
+            tfIdKatServis.setText("1");
+        }
+    }
+
+    // --- 2. LOAD TABEL ---
+    private void load_table() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("ID Kategori");
+        model.addColumn("Nama Kategori");
+        model.addColumn("Keterangan");
+
+        try {
+            String sql = "SELECT * FROM tbl_kat_barang";
+            
+            // Logika Pencarian (jTextField1 adalah kolom cari di desainmu)
+            String cari = jTextField1.getText();
+            if(!cari.isEmpty()){
+                sql += " WHERE nama_kategori LIKE '%" + cari + "%' OR keterangan LIKE '%" + cari + "%'";
+            }
+            
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet res = stm.executeQuery(sql);
+            
+            int no = 1;
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    res.getString("id_kategori"),
+                    res.getString("nama_kategori"),
+                    res.getString("keterangan")
+                });
+            }
+            // Menggunakan tblKatServis (Nama variabel tabel di desainmu)
+            tblKatServis.setModel(model);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal load data: " + e.getMessage());
+        }
+    }
+
+    // --- 3. BERSIHKAN FORM ---
+    private void bersihkan() {
+        tfNmKatServis.setText("");
+        tfKetKatServis.setText("");
+        jTextField1.setText(""); // Kolom cari
+        
+        isEditMode = false;
+        btnSimpan.setText("SIMPAN");
+        tfIdKatServis.setEditable(false);
+        auto_number(); 
     }
 
     /**
@@ -92,6 +178,7 @@ public class KategoriServis extends javax.swing.JPanel {
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnSimpan.setText("SIMPAN");
+        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,18 +260,22 @@ public class KategoriServis extends javax.swing.JPanel {
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setText("CARI");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(204, 204, 204));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton2.setText("REFRESH");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setBackground(new java.awt.Color(255, 255, 102));
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton3.setText("EDIT");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 0, 51));
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton4.setText("HAPUS");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -212,13 +303,13 @@ public class KategoriServis extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 767, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -240,6 +331,105 @@ public class KategoriServis extends javax.swing.JPanel {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        // TODO add your handling code here:
+        String nama = tfNmKatServis.getText();
+        String ket = tfKetKatServis.getText();
+        String id = tfIdKatServis.getText();
+
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Kategori tidak boleh kosong!");
+            return;
+        }
+
+        try {
+            Connection conn = Koneksi.configDB();
+            PreparedStatement pst;
+            
+            if (isEditMode) {
+                // UPDATE
+                String sql = "UPDATE tbl_kat_barang SET nama_kategori=?, keterangan=? WHERE id_kategori=?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, nama);
+                pst.setString(2, ket);
+                pst.setString(3, id);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diubah");
+            } else {
+                // INSERT
+                String sql = "INSERT INTO tbl_kat_barang (id_kategori, nama_kategori, keterangan) VALUES (?,?,?)";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, id);
+                pst.setString(2, nama);
+                pst.setString(3, ket);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
+            }
+            
+            load_table();
+            bersihkan();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        load_table();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int row = tblKatServis.getSelectedRow();
+        if (row != -1) {
+            // Ambil data dari tabel ke form
+            tfIdKatServis.setText(tblKatServis.getValueAt(row, 1).toString());
+            tfNmKatServis.setText(tblKatServis.getValueAt(row, 2).toString());
+            tfKetKatServis.setText(tblKatServis.getValueAt(row, 3).toString());
+            
+            // Ubah mode jadi EDIT
+            isEditMode = true;
+            btnSimpan.setText("UBAH");
+            tfIdKatServis.setEditable(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan diedit terlebih dahulu!");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        bersihkan();
+        load_table();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int row = tblKatServis.getSelectedRow();
+        if (row != -1) {
+            String id = tblKatServis.getValueAt(row, 1).toString();
+            int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus kategori ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    Connection conn = Koneksi.configDB();
+                    String sql = "DELETE FROM tbl_kat_barang WHERE id_kategori=?";
+                    PreparedStatement pst = conn.prepareStatement(sql);
+                    pst.setString(1, id);
+                    pst.executeUpdate();
+                    
+                    JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
+                    load_table();
+                    bersihkan();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Gagal Hapus (Mungkin data sedang digunakan): " + e.getMessage());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih baris data yang ingin dihapus terlebih dahulu");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

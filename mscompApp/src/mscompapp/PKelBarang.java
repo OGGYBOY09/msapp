@@ -4,7 +4,7 @@
  */
 package mscompapp;
 
-import config.Koneksi; // Pastikan import ini ada
+import config.Koneksi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,102 +22,106 @@ public class PKelBarang extends javax.swing.JPanel {
     /**
      * Creates new form PKelBarang
      */
-    private boolean isEditMode = false;
-    
+    private boolean isEdit = false;
+
     public PKelBarang() {
         initComponents();
-        load_table();
-        load_kategori();
-        auto_number(); 
+        resetForm();
     }
-    
-    private void load_kategori() {
-        cbKategori.removeAllItems(); 
-        cbKategori.addItem("-Pilih Kategori-");
+
+    // --- 1. RESET FORM ---
+    private void resetForm() {
+        tfNamaBarang.setText("");
+        tfHarga.setText("");
+        tfKeterangan.setText("");
+        tfCari.setText("");
+        
+        load_kategori();
+        load_table();
+        auto_number(); 
+        
+        btnSimpan.setText("SIMPAN");
+        tfKodeBarang.setEditable(false);
+        isEdit = false;
+    }
+
+    // --- 2. AUTO NUMBER (B001) ---
+    private void auto_number() {
         try {
-            String sql = "SELECT nama_kategori FROM tbl_kategori";
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet res = stm.executeQuery(sql);
-            
-            while(res.next()){
-                cbKategori.addItem(res.getString("nama_kategori"));
+            Connection conn = Koneksi.configDB();
+            String sql = "SELECT kode_barang FROM tbl_barang ORDER BY kode_barang DESC LIMIT 1";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            if (rs.next()) {
+                String id = rs.getString(1); 
+                // Asumsi ID formatnya "B001", ambil angka mulai index 1
+                int angka = Integer.parseInt(id.substring(1)); 
+                tfKodeBarang.setText(String.format("B%03d", angka + 1));
+            } else {
+                tfKodeBarang.setText("B001");
+            }
+        } catch (Exception e) {
+            tfKodeBarang.setText("B001");
+        }
+    }
+
+    // --- 3. LOAD KATEGORI (Untuk ComboBox) ---
+    private void load_kategori() {
+        cbKategori.removeAllItems();
+        cbKategori.addItem("-Pilih-");
+        try {
+            Connection conn = Koneksi.configDB();
+            Statement st = conn.createStatement();
+            // Ambil daftar nama kategori dari tabel master kategori
+            ResultSet rs = st.executeQuery("SELECT nama_kategori FROM tbl_kat_barang");
+            while (rs.next()) {
+                cbKategori.addItem(rs.getString("nama_kategori"));
             }
         } catch (Exception e) {
             System.out.println("Gagal load kategori: " + e.getMessage());
         }
     }
-    
-    // Method Menampilkan Data ke Tabel
+
+    // --- 4. LOAD TABLE (LANGSUNG DARI TBL_BARANG) ---
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Kode Barang");
-        model.addColumn("Nama Barang"); 
-        model.addColumn("Kategori"); 
+        model.addColumn("No");
+        model.addColumn("Kode");
+        model.addColumn("Nama Barang");
+        model.addColumn("Kategori");
         model.addColumn("Harga");
         model.addColumn("Stok");
-        model.addColumn("Keterangan");
+        model.addColumn("Ket");
+
         try {
-            String sql = "SELECT * FROM tbl_barang";
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            while(res.next()){
+            // TIDAK PERLU JOIN LAGI
+            // Karena nama kategori sudah tersimpan langsung di tabel barang
+            String sql = "SELECT * FROM tbl_barang ";
+            
+            if (!tfCari.getText().isEmpty()) {
+                sql += "WHERE nama_barang LIKE '%" + tfCari.getText() + "%' ";
+            }
+            
+            sql += "ORDER BY kode_barang ASC";
+
+            Connection conn = Koneksi.configDB();
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            int no = 1;
+            while (rs.next()) {
                 model.addRow(new Object[]{
-                    res.getString(1), // kode_barang
-                    res.getString(2), // nama_barang
-                    res.getString(3), // kategori
-                    res.getInt(4),    // harga
-                    res.getInt(5),    // stok
-                    res.getString(6)  // keterangan
+                    no++,
+                    rs.getString("kode_barang"),
+                    rs.getString("nama_barang"),
+                    rs.getString("kategori"), // Pastikan nama kolom di DB 'kategori'
+                    rs.getInt("harga"),
+                    rs.getInt("stok"),
+                    rs.getString("keterangan")
                 });
             }
             tblBarang.setModel(model);
-        } catch (Exception e) { System.out.println(e.getMessage()); }
-    }
-    
-    // Method Bersihkan Form
-    private void bersihkan() {
-        tfKodBarang.setText("");
-        tfNamBarang.setText("");
-        cbKategori.setSelectedIndex(0);
-        tfHarga.setText("");
-        tfKeterangan.setText("");
-        tfCari.setText("");
-        auto_number();
-        
-        tfKodBarang.setEditable(true); 
-        btnSimpan.setText("SIMPAN");
-        isEditMode = false;
-        tfKodBarang.requestFocus();
-    }
-
-    private void auto_number() {
-        try {
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            // Mengambil kode_barang paling besar
-            String sql = "SELECT kode_barang FROM tbl_barang ORDER BY kode_barang DESC LIMIT 1";
-            java.sql.ResultSet res = stm.executeQuery(sql);
-            
-            if (res.next()) {
-                String kode = res.getString("kode_barang").substring(1); 
-                int AN = Integer.parseInt(kode) + 1;
-                String nol = "";
-                
-                if (AN < 10) { nol = "000"; }
-                else if (AN < 100) { nol = "00"; }
-                else if (AN < 1000) { nol = "0"; }
-                else if (AN < 10000) { nol = ""; }
-                
-                tfKodBarang.setText("B" + nol + AN);
-            } else {
-                tfKodBarang.setText("B0001");
-            }
-            
-            tfKodBarang.setEditable(false);
-            
         } catch (Exception e) {
-            System.out.println("Error Auto Number: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Load Table: " + e.getMessage());
         }
     }
 
@@ -132,12 +136,12 @@ public class PKelBarang extends javax.swing.JPanel {
 
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        tfKodBarang = new javax.swing.JTextField();
+        tfKodeBarang = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        tfNamBarang = new javax.swing.JTextField();
+        tfNamaBarang = new javax.swing.JTextField();
         cbKategori = new javax.swing.JComboBox<>();
         tfHarga = new javax.swing.JTextField();
         tfKeterangan = new javax.swing.JTextField();
@@ -166,8 +170,8 @@ public class PKelBarang extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel3.setText("KODE BARANG :");
 
-        tfKodBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tfKodBarang.addActionListener(this::tfKodBarangActionPerformed);
+        tfKodeBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfKodeBarang.addActionListener(this::tfKodeBarangActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel4.setText("NAMA BARANG :");
@@ -181,8 +185,8 @@ public class PKelBarang extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel8.setText("KETERANGAN :");
 
-        tfNamBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tfNamBarang.addActionListener(this::tfNamBarangActionPerformed);
+        tfNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfNamaBarang.addActionListener(this::tfNamaBarangActionPerformed);
 
         cbKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -234,9 +238,9 @@ public class PKelBarang extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel4)
-                    .addComponent(tfKodBarang)
+                    .addComponent(tfKodeBarang)
                     .addComponent(jLabel3)
-                    .addComponent(tfNamBarang)
+                    .addComponent(tfNamaBarang)
                     .addComponent(tfHarga)
                     .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
@@ -249,11 +253,11 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addGap(45, 45, 45)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfKodBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfNamBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfNamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -360,12 +364,12 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,100 +395,68 @@ public class PKelBarang extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfKodBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodBarangActionPerformed
+    private void tfKodeBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeBarangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfKodBarangActionPerformed
+    }//GEN-LAST:event_tfKodeBarangActionPerformed
 
-    private void tfNamBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamBarangActionPerformed
+    private void tfNamaBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaBarangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNamBarangActionPerformed
+    }//GEN-LAST:event_tfNamaBarangActionPerformed
 
     private void tfCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCariActionPerformed
         // TODO add your handling code here:
-        btnCariActionPerformed(evt);
+        
     }//GEN-LAST:event_tfCariActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Kode Barang");
-        model.addColumn("Nama Barang"); 
-        model.addColumn("Kategori"); 
-        model.addColumn("Harga");
-        model.addColumn("Stok");
-        model.addColumn("Keterangan");
-        try {
-            // Cari di semua kolom menggunakan OR
-            String cari = tfCari.getText();
-            String sql = "SELECT * FROM tbl_barang WHERE kode_barang LIKE '%"+cari+"%' OR "
-                       + "nama_barang LIKE '%"+cari+"%' OR "
-                       + "kategori LIKE '%"+cari+"%' OR "
-                       + "keterangan LIKE '%"+cari+"%'";
-                       
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            while(res.next()){
-                model.addRow(new Object[]{
-                    res.getString(1),
-                    res.getString(2), 
-                    res.getString(3),
-                    res.getInt(4),
-                    res.getInt(5),
-                    res.getString(6)
-                });
-            }
-            tblBarang.setModel(model);
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        load_table();
     }//GEN-LAST:event_btnCariActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         try {
-            // Validasi Input
-            if(tfKodBarang.getText().isEmpty() || tfNamBarang.getText().isEmpty() || 
-               cbKategori.getSelectedIndex() == 0 || tfHarga.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mohon lengkapi Kode, Nama, Kategori, dan Harga!");
+            String kode = tfKodeBarang.getText();
+            String nama = tfNamaBarang.getText();
+            String harga = tfHarga.getText();
+            String ket = tfKeterangan.getText();
+            
+            if (cbKategori.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Pilih Kategori dulu!");
                 return;
             }
+            
+            // LANGSUNG AMBIL TEXT DARI COMBOBOX
+            String namaKategori = cbKategori.getSelectedItem().toString();
 
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            Connection conn = Koneksi.configDB();
             String sql;
-            java.sql.PreparedStatement pst;
-            
-            if(isEditMode == false) {
-                // --- MODE INSERT (TAMBAH BARU) ---
-                // Kita set Stok (kolom ke-5) menjadi 0 secara default
-                sql = "INSERT INTO tbl_barang (kode_barang, nama_barang, kategori, harga, stok, keterangan) VALUES (?, ?, ?, ?, ?, ?)";
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, tfKodBarang.getText());
-                pst.setString(2, tfNamBarang.getText());
-                pst.setString(3, cbKategori.getSelectedItem().toString());
-                pst.setInt(4, Integer.parseInt(tfHarga.getText())); 
-                pst.setInt(5, 0); // Default Stok 0
-                pst.setString(6, tfKeterangan.getText());
-                
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Barang Berhasil Ditambahkan");
-            } else {
-                // --- MODE UPDATE (EDIT) ---
-                // Hapus kolom 'stok' dari query update agar stok tidak berubah/hilang
+            PreparedStatement ps;
+
+            if (isEdit) {
+                // UPDATE: Simpan 'namaKategori' langsung ke kolom 'kategori'
                 sql = "UPDATE tbl_barang SET nama_barang=?, kategori=?, harga=?, keterangan=? WHERE kode_barang=?";
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, tfNamBarang.getText());
-                pst.setString(2, cbKategori.getSelectedItem().toString());
-                pst.setInt(3, Integer.parseInt(tfHarga.getText()));
-                pst.setString(4, tfKeterangan.getText());
-                pst.setString(5, tfKodBarang.getText()); // WHERE condition
-                
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Barang Berhasil Diubah");
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, nama);
+                ps.setString(2, namaKategori); // Masukkan String Nama (Laptop, dll)
+                ps.setString(3, harga);
+                ps.setString(4, ket);
+                ps.setString(5, kode);
+            } else {
+                // INSERT: Simpan 'namaKategori' langsung
+                sql = "INSERT INTO tbl_barang (kode_barang, nama_barang, kategori, harga, stok, keterangan) VALUES (?,?,?,?,0,?)";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, kode);
+                ps.setString(2, nama);
+                ps.setString(3, namaKategori); // Masukkan String Nama
+                ps.setString(4, harga);
+                ps.setString(5, ket);
             }
-            
-            load_table();
-            bersihkan();
-            
-        } catch (NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(this, "Harga harus berupa angka!");
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Berhasil Disimpan!");
+            resetForm();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
         }
@@ -492,68 +464,50 @@ public class PKelBarang extends javax.swing.JPanel {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
-        int baris = tblBarang.getSelectedRow();
-        if (baris != -1) {
-            // Ambil Data dari tabel
-            String kode = tblBarang.getValueAt(baris, 0).toString();
-            String nama = tblBarang.getValueAt(baris, 1).toString();
-            String kat  = tblBarang.getValueAt(baris, 2).toString();
-            String hrg  = tblBarang.getValueAt(baris, 3).toString();
-            // Stok ada di index 4, tapi kita tidak menampilkannya di form input lagi
-            String ket  = tblBarang.getValueAt(baris, 5).toString();
-
-            // Set ke Form
-            tfKodBarang.setText(kode);
-            tfNamBarang.setText(nama);
-            cbKategori.setSelectedItem(kat); 
-            tfHarga.setText(hrg);
-            tfKeterangan.setText(ket);
-            
-            // Kita TIDAK perlu set stok ke textfield/spinner karena sudah dihapus
-
-            // Set Mode Edit
-            isEditMode = true;
-            tfKodBarang.setEditable(false); // Kunci Primary Key
-            btnSimpan.setText("UBAH");
-            
-            JOptionPane.showMessageDialog(this, "Silahkan edit data di form, lalu tekan UBAH");
-        } else {
-            JOptionPane.showMessageDialog(this, "Pilih barang yang ingin diedit!");
+        int row = tblBarang.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih baris tabel dulu!");
+            return;
         }
+
+        tfKodeBarang.setText(tblBarang.getValueAt(row, 1).toString());
+        tfNamaBarang.setText(tblBarang.getValueAt(row, 2).toString());
+        
+        // Langsung set text combobox karena di tabel isinya sudah Nama Kategori
+        String kat = tblBarang.getValueAt(row, 3).toString();
+        cbKategori.setSelectedItem(kat);
+        
+        tfHarga.setText(tblBarang.getValueAt(row, 4).toString());
+        tfKeterangan.setText(tblBarang.getValueAt(row, 6).toString());
+
+        isEdit = true;
+        btnSimpan.setText("UBAH");
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-        int baris = tblBarang.getSelectedRow();
-        if (baris != -1) {
-            String kode = tblBarang.getValueAt(baris, 0).toString();
-            int confirm = JOptionPane.showConfirmDialog(this, "Hapus barang kode: " + kode + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-            
-            if(confirm == JOptionPane.YES_OPTION){
-                try {
-                    String sql = "DELETE FROM tbl_barang WHERE kode_barang=?";
-                    java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-                    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                    pst.setString(1, kode);
-                    pst.execute();
-                    
-                    JOptionPane.showMessageDialog(this, "Data Dihapus!");
-                    load_table();
-                    bersihkan();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Gagal Hapus: " + e.getMessage());
-                }
+        int row = tblBarang.getSelectedRow();
+        if (row == -1) return;
+
+        String kode = tblBarang.getValueAt(row, 1).toString();
+        int tanya = JOptionPane.showConfirmDialog(this, "Hapus " + kode + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+        if (tanya == JOptionPane.YES_OPTION) {
+            try {
+                Connection conn = Koneksi.configDB();
+                PreparedStatement ps = conn.prepareStatement("DELETE FROM tbl_barang WHERE kode_barang=?");
+                ps.setString(1, kode);
+                ps.executeUpdate();
+                resetForm();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal Hapus: " + e.getMessage());
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Pilih barang yang ingin dihapus!");
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        load_table();
-        bersihkan();
-        load_kategori();
+        resetForm();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
 
@@ -580,7 +534,7 @@ public class PKelBarang extends javax.swing.JPanel {
     private javax.swing.JTextField tfCari;
     private javax.swing.JTextField tfHarga;
     private javax.swing.JTextField tfKeterangan;
-    private javax.swing.JTextField tfKodBarang;
-    private javax.swing.JTextField tfNamBarang;
+    private javax.swing.JTextField tfKodeBarang;
+    private javax.swing.JTextField tfNamaBarang;
     // End of variables declaration//GEN-END:variables
 }

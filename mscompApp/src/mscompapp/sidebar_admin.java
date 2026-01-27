@@ -38,13 +38,14 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelolaBarang = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        lblKelolaKategori1 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
 
         lblKelolaKategori.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblKelolaKategori.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategori.png"))); // NOI18N
-        lblKelolaKategori.setText("Kategori");
+        lblKelolaKategori.setText("jenis perangkat");
         lblKelolaKategori.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblKelolaKategoriMouseClicked(evt);
@@ -111,6 +112,15 @@ public class sidebar_admin extends javax.swing.JPanel {
             }
         });
 
+        lblKelolaKategori1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblKelolaKategori1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategori.png"))); // NOI18N
+        lblKelolaKategori1.setText("Kategori barang");
+        lblKelolaKategori1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKelolaKategori1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,19 +130,28 @@ public class sidebar_admin extends javax.swing.JPanel {
                 .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 19, Short.MAX_VALUE)
+                .addGap(0, 28, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblKelStock)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblKelolaKategori, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblKelolaUser, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblKelolaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblKelStock)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblKelolaKategori1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(13, 13, 13)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,13 +164,15 @@ public class sidebar_admin extends javax.swing.JPanel {
                 .addComponent(lblKelolaBarang)
                 .addGap(18, 18, 18)
                 .addComponent(lblKelolaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(lblKelolaKategori1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblKelStock)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(89, 89, 89)
+                .addGap(47, 47, 47)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(484, Short.MAX_VALUE))
         );
@@ -159,7 +180,7 @@ public class sidebar_admin extends javax.swing.JPanel {
 
     private void lblKelolaKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaKategoriMouseClicked
         // TODO add your handling code here:
-        dashboard.switchPanel(new PKelKategori());
+        dashboard.switchPanel(new PKatService());
     }//GEN-LAST:event_lblKelolaKategoriMouseClicked
 
     private void lblKelStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelStockMouseClicked
@@ -198,6 +219,11 @@ public class sidebar_admin extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jLabel2MouseClicked
 
+    private void lblKelolaKategori1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaKategori1MouseClicked
+        // TODO add your handling code here:
+        dashboard.switchPanel(new PKatBarang());
+    }//GEN-LAST:event_lblKelolaKategori1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
@@ -207,6 +233,7 @@ public class sidebar_admin extends javax.swing.JPanel {
     private javax.swing.JLabel lblKelStock;
     private javax.swing.JLabel lblKelolaBarang;
     private javax.swing.JLabel lblKelolaKategori;
+    private javax.swing.JLabel lblKelolaKategori1;
     private javax.swing.JLabel lblKelolaUser;
     // End of variables declaration//GEN-END:variables
 }

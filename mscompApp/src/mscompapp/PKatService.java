@@ -4,7 +4,7 @@
  */
 package mscompapp;
 
-import config.Koneksi; // Import koneksi
+import config.Koneksi; 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,71 +16,91 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Acer Aspire Lite 15
  */
-public class PKelKategori extends javax.swing.JPanel {
+public class PKatService extends javax.swing.JPanel {
 
     /**
-     * Creates new form PKelKategori
+     * Creates new form PKatService
      */
     private boolean isEditMode = false;
     
-    public PKelKategori() {
+    public PKatService() {
         initComponents();
         load_table();
         auto_number();
+        bersihkan(); // Pastikan state awal bersih
     }
     
+    // --- 1. LOGIKA AUTO NUMBER ID ---
     private void auto_number() {
         try {
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery("SELECT MAX(id_kategori) FROM tbl_kategori");
+            Connection conn = Koneksi.configDB();
+            // Mengambil ID terbesar dari tabel tbl_jenis_perangkat
+            String sql = "SELECT MAX(id_kategori) FROM tbl_jenis_perangkat";
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery(sql);
+            
             if (res.next()) {
-                tfIdKatBarang.setText(String.valueOf(res.getInt(1) + 1));
+                int maxId = res.getInt(1);
+                // Jika data kosong (maxId = 0), mulai dari 1. Jika ada, tambah 1
+                tfIdKatBarang.setText(String.valueOf(maxId + 1));
             } else {
                 tfIdKatBarang.setText("1");
             }
-        } catch (Exception e) { tfIdKatBarang.setText("1"); }
+            
+            tfIdKatBarang.setEditable(false); // ID tidak boleh diedit manual
+            
+        } catch (Exception e) {
+            tfIdKatBarang.setText("1"); // Default jika error/tabel baru
+        }
     }
-    
+
+    // --- 2. LOAD TABEL (TAMPIL DATA) ---
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("Nama Kategori");
-        
+        model.addColumn("No");
+        model.addColumn("ID Jenis");
+        model.addColumn("Nama Jenis Perangkat");
+        model.addColumn("Keterangan");
+
         try {
-            int no = 1;
-            String sql = "SELECT * FROM tbl_kategori";
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet res = stm.executeQuery(sql);
+            String sql = "SELECT * FROM tbl_jenis_perangkat";
             
-            while(res.next()) {
-                model.addRow(new Object[] {
+            // Logika Pencarian
+            String cari = tf_cari.getText();
+            if(!cari.isEmpty()){
+                sql += " WHERE nama_jenis LIKE '%" + cari + "%' OR keterangan LIKE '%" + cari + "%'";
+            }
+            
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet res = stm.executeQuery(sql);
+            
+            int no = 1;
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    no++,
                     res.getString("id_kategori"),
-                    res.getString("nama_kategori"),
+                    res.getString("nama_jenis"),
+                    res.getString("keterangan")
                 });
             }
             tblKatBarang.setModel(model);
             
-            //set kolom
-            tblKatBarang.getColumnModel().getColumn(0).setPreferredWidth(50);  // Kolom No/ID jadi kecil
-            tblKatBarang.getColumnModel().getColumn(0).setMaxWidth(50);       // Mengunci lebar maksimal
-            tblKatBarang.getColumnModel().getColumn(0).setMinWidth(50);
         } catch (Exception e) {
-            System.out.println("Error Load Data: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal load data: " + e.getMessage());
         }
     }
-    
-    // [UBAH] Method bersihkan kini lebih lengkap
+
+    // --- 3. BERSIHKAN FORM ---
     private void bersihkan() {
-        tfIdKatBarang.setText("");
         tfNmKatBarang.setText("");
+        tfKetKatBarang.setText("");
         tf_cari.setText("");
         
-        tfIdKatBarang.setEditable(true); // Aktifkan lagi kolom ID
-        btnSimpan.setText("SIMPAN");     // Kembalikan teks tombol
-        isEditMode = false;              // Matikan mode edit
-        
-        tfIdKatBarang.requestFocus();
+        isEditMode = false;
+        btnSimpan.setText("SIMPAN");
+        tfIdKatBarang.setEditable(false);
+        auto_number(); // Reset ID ke auto number terbaru
     }
 
     /**
@@ -111,7 +131,7 @@ public class PKelKategori extends javax.swing.JPanel {
         tf_cari = new javax.swing.JTextField();
         btn_refresh = new javax.swing.JButton();
         btn_edit = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btn_cari = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
@@ -125,7 +145,7 @@ public class PKelKategori extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(102, 204, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("TAMBAH KATEGORI BARANG");
+        jLabel1.setText("TAMBAH KATEGORI SERVIS");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -133,7 +153,7 @@ public class PKelKategori extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 152, Short.MAX_VALUE))
+                .addGap(0, 164, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +226,7 @@ public class PKelKategori extends javax.swing.JPanel {
         jPanel4.setBackground(new java.awt.Color(102, 204, 255));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel5.setText("DAFTAR KATEGORI BARANG");
+        jLabel5.setText("DAFTAR KATEGORI SERVIS");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -251,10 +271,10 @@ public class PKelKategori extends javax.swing.JPanel {
         btn_edit.setText("Edit");
         btn_edit.addActionListener(this::btn_editActionPerformed);
 
-        jButton5.setBackground(new java.awt.Color(255, 0, 51));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton5.setText("Hapus");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
+        btnDelete.setBackground(new java.awt.Color(255, 0, 51));
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDelete.setText("Hapus");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
 
         btn_cari.setBackground(new java.awt.Color(204, 204, 204));
         btn_cari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -270,7 +290,7 @@ public class PKelKategori extends javax.swing.JPanel {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tf_cari, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                        .addComponent(tf_cari, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
@@ -278,7 +298,7 @@ public class PKelKategori extends javax.swing.JPanel {
                         .addGap(13, 13, 13)
                         .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1194, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -297,7 +317,7 @@ public class PKelKategori extends javax.swing.JPanel {
                         .addGap(17, 17, 17)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -324,40 +344,44 @@ public class PKelKategori extends javax.swing.JPanel {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
+        String nama = tfNmKatBarang.getText();
+        String ket = tfKetKatBarang.getText();
+        String id = tfIdKatBarang.getText();
+
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Jenis Perangkat tidak boleh kosong!");
+            return;
+        }
+
         try {
-            // Validasi sederhana
-            if(tfIdKatBarang.getText().equals("") || tfNmKatBarang.getText().equals("")){
-                JOptionPane.showMessageDialog(this, "ID dan Nama Kategori tidak boleh kosong!");
-                return;
-            }
+            Connection conn = Koneksi.configDB();
+            PreparedStatement pst;
             
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            String sql;
-            java.sql.PreparedStatement pst;
-            
-            if(isEditMode == false) {
-                // --- MODE SIMPAN BARU ---
-                sql = "INSERT INTO tbl_kategori (id_kategori, nama_kategori) VALUES (?, ?)";
+            if (isEditMode) {
+                // UPDATE DATA
+                String sql = "UPDATE tbl_jenis_perangkat SET nama_jenis=?, keterangan=? WHERE id_kategori=?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tfIdKatBarang.getText());
-                pst.setString(2, tfNmKatBarang.getText());
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
+                pst.setString(1, nama);
+                pst.setString(2, ket);
+                pst.setString(3, id);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diubah");
             } else {
-                // --- MODE UPDATE (EDIT) ---
-                sql = "UPDATE tbl_kategori SET nama_kategori=? WHERE id_kategori=?";
+                // INSERT DATA BARU
+                String sql = "INSERT INTO tbl_jenis_perangkat (id_kategori, nama_jenis, keterangan) VALUES (?,?,?)";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tfNmKatBarang.getText());
-                pst.setString(2, tfIdKatBarang.getText()); // Where condition
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
+                pst.setString(1, id);
+                pst.setString(2, nama);
+                pst.setString(3, ket);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
             }
             
             load_table();
             bersihkan();
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Proses Gagal: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -368,104 +392,72 @@ public class PKelKategori extends javax.swing.JPanel {
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
         // TODO add your handling code here:
-        int baris = tblKatBarang.getSelectedRow();
-        if (baris != -1) {
-            // Ambil data dari tabel
-            String id = tblKatBarang.getValueAt(baris, 0).toString();
-            String nama = tblKatBarang.getValueAt(baris, 1).toString();
+        int row = tblKatBarang.getSelectedRow();
+        if (row != -1) {
+            // Ambil data dari tabel ke form
+            tfIdKatBarang.setText(tblKatBarang.getValueAt(row, 1).toString());
+            tfNmKatBarang.setText(tblKatBarang.getValueAt(row, 2).toString());
+            tfKetKatBarang.setText(tblKatBarang.getValueAt(row, 3).toString());
             
-            // Masukkan ke Text Field
-            tfIdKatBarang.setText(id);
-            tfNmKatBarang.setText(nama);
-            
-            // Atur Mode Edit
+            // Ubah mode jadi EDIT
             isEditMode = true;
-            tfIdKatBarang.setEditable(false); // ID jangan diedit (Primary Key)
-            btnSimpan.setText("UBAH"); // Ganti teks tombol biar user sadar
-            
-            JOptionPane.showMessageDialog(this, "Silahkan ubah data di form sebelah kiri, lalu tekan tombol UBAH");
+            btnSimpan.setText("UBAH");
+            tfIdKatBarang.setEditable(false);
         } else {
-            JOptionPane.showMessageDialog(this, "Pilih baris data yang ingin diedit terlebih dahulu");
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan diedit terlebih dahulu!");
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
         // TODO add your handling code here:
-        load_table();
         bersihkan();
+        load_table();
     }//GEN-LAST:event_btn_refreshActionPerformed
 
     private void tfIdKatBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdKatBarangActionPerformed
         // TODO add your handling code here:
-        btn_cariActionPerformed(evt);
     }//GEN-LAST:event_tfIdKatBarangActionPerformed
 
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("Nama Kategori");
-        
-        try {
-            int no = 1;
-            // Mencari data yang COCOK di salah satu kolom (ID, Nama, atau Ket)
-            String sql = "SELECT * FROM tbl_kategori WHERE id_kategori LIKE '%"+tf_cari.getText()+"%' "
-                       + "OR nama_kategori LIKE '%"+tf_cari.getText()+"%' ";
-                       
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet res = stm.executeQuery(sql);
-            
-            while(res.next()) {
-                model.addRow(new Object[] {
-                    res.getString("id_kategori"),
-                    res.getString("nama_kategori"),
-                });
-            }
-            tblKatBarang.setModel(model);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error Pencarian: " + e.getMessage());
-        }
+        load_table();
     }//GEN-LAST:event_btn_cariActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int baris = tblKatBarang.getSelectedRow();
-        if (baris != -1) {
-            String id = tblKatBarang.getValueAt(baris, 1).toString();
+        int row = tblKatBarang.getSelectedRow();
+        if (row != -1) {
+            String id = tblKatBarang.getValueAt(row, 1).toString();
+            int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus kategori ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             
-            int konfirmasi = JOptionPane.showConfirmDialog(this, 
-                    "Apakah Anda yakin menghapus kategori ID: " + id + "?",
-                    "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
-            
-            if(konfirmasi == JOptionPane.YES_OPTION) {
+            if (confirm == JOptionPane.YES_OPTION) {
                 try {
-                    String sql = "DELETE FROM tbl_kategori WHERE id_kategori=?";
-                    java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-                    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                    Connection conn = Koneksi.configDB();
+                    String sql = "DELETE FROM tbl_jenis_perangkat WHERE id_kategori=?";
+                    PreparedStatement pst = conn.prepareStatement(sql);
                     pst.setString(1, id);
-                    pst.execute();
+                    pst.executeUpdate();
                     
                     JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
                     load_table();
                     bersihkan();
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Gagal Hapus: " + e.getMessage());
+                    JOptionPane.showMessageDialog(this, "Gagal Hapus (Mungkin data sedang digunakan): " + e.getMessage());
                 }
             }
         } else {
             JOptionPane.showMessageDialog(this, "Pilih baris data yang ingin dihapus terlebih dahulu");
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btn_cari;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_refresh;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -77,9 +77,9 @@
                           <Component id="cbKategori" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfKodBarang" max="32767" attributes="0"/>
+                      <Component id="tfKodeBarang" max="32767" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfNamBarang" alignment="0" max="32767" attributes="0"/>
+                      <Component id="tfNamaBarang" alignment="0" max="32767" attributes="0"/>
                       <Component id="tfHarga" alignment="0" max="32767" attributes="0"/>
                       <Component id="tfKeterangan" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -95,11 +95,11 @@
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tfKodBarang" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="tfKodeBarang" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tfNamBarang" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="tfNamaBarang" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -129,14 +129,14 @@
             <Property name="text" type="java.lang.String" value="KODE BARANG :"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodBarang">
+        <Component class="javax.swing.JTextField" name="tfKodeBarang">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodBarangActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeBarangActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -171,14 +171,14 @@
             <Property name="text" type="java.lang.String" value="KETERANGAN :"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNamBarang">
+        <Component class="javax.swing.JTextField" name="tfNamaBarang">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNamBarangActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNamaBarangActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbKategori">
@@ -315,13 +315,13 @@
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                          <Component id="btnCari" alignment="3" pref="59" max="32767" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="btnRefresh" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
                               <Component id="btnEdit" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
                               <Component id="btnHapus" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="btnCari" min="-2" pref="59" max="-2" attributes="0"/>
                       </Group>
                       <Component id="tfCari" min="-2" pref="58" max="-2" attributes="0"/>
                   </Group>

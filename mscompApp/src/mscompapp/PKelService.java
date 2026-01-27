@@ -46,14 +46,14 @@ public class PKelService extends javax.swing.JPanel {
         cbJenisBrg.addItem("- Pilih Jenis -");
 
         // 2. Query ke tbl_kategori
-        String sql = "SELECT nama_kategori FROM tbl_kategori";
+        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
         java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
         java.sql.Statement stm = conn.createStatement();
         java.sql.ResultSet res = stm.executeQuery(sql);
 
         // 3. Masukkan hasil ke ComboBox
         while (res.next()) {
-            cbJenisBrg.addItem(res.getString("nama_kategori"));
+            cbJenisBrg.addItem(res.getString("nama_jenis"));
         }
     } catch (Exception e) {
         // Ini akan membantu kita tahu kalau ada error database
@@ -80,7 +80,7 @@ public class PKelService extends javax.swing.JPanel {
         cbJenisBrg.removeAllItems();
         cbJenisBrg.addItem("- Pilih Jenis -");
         try {
-            String sql = "SELECT nama_jenis FROM jenis_perangkat";
+            String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
             java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
             java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
             while(res.next()) {
