@@ -53,11 +53,12 @@ public class LapBulanan extends javax.swing.JPanel {
         model.addColumn("Nomor Seri");
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
+        model.addColumn("Harga Servis");
         model.addColumn("Status");
 
         try {
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+                       + "s.merek, s.model, s.harga , s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -100,6 +101,7 @@ public class LapBulanan extends javax.swing.JPanel {
                     rs.getString("no_seri"),
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
+                    rs.getInt("harga"),
                     rs.getString("status")
                 });
             }

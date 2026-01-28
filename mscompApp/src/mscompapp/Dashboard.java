@@ -123,11 +123,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblWelcome.setText("Welcome");
-        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1620, 20, -1, -1));
+        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 30, -1, -1));
 
         lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         lblTanggal.setText("Tanggal");
-        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1620, 60, -1, -1));
+        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo toko.png"))); // NOI18N
         pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 421, 100));

@@ -37,7 +37,7 @@ public class PopUpPelanggan extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                     res.getString("id_pelanggan"),
                     res.getString("nama_pelanggan"),
-                    res.getString("no_telp"),
+                    res.getString("no_hp"),
                     res.getString("alamat")
                 });
             }

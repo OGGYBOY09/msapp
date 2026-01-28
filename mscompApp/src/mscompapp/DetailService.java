@@ -67,14 +67,17 @@ public class DetailService extends javax.swing.JFrame {
         txtIdService.setEditable(false);
         
         if ("Selesai".equalsIgnoreCase(status) || "Dibatalkan".equalsIgnoreCase(status)) {
-            btSelesai.setVisible(false);
-            btSimpan.setEnabled(false);
-            btnHapusBrg.setEnabled(false);
-            btPilih.setEnabled(false);
-            btnEdit.setEnabled(false); // Matikan edit juga
-        }
-
-        loadPerbaikan(idServis); 
+    // Tombol 'Selesai Service' tetap disembunyikan agar tidak double klik selesai
+    btSelesai.setVisible(false); 
+    
+    // Tombol lainnya tetap aktif agar bisa edit data
+    btSimpan.setEnabled(true);
+    btnHapusBrg.setEnabled(true);
+    btPilih.setEnabled(true);
+    btnEdit.setEnabled(true);
+}
+        loadPerbaikan(idServis);
+        loadSparepart(idServis);
     }
     
     // --- FUNGSI BARU: CATAT PERUBAHAN STOK ---
@@ -236,6 +239,34 @@ public class DetailService extends javax.swing.JFrame {
             total += Integer.parseInt(tblGanti.getValueAt(i, 5).toString());
         }
         tTotalBrg.setText(String.valueOf(total));
+        hitungBiaya();
+    }
+    
+    private void hitungBiaya(){
+        try {
+        // Ambil total sparepart dari label (pastikan tidak kosong)
+        int totalSparepart = 0;
+        String strTotalBrg = tTotalBrg.getText();
+        if (!strTotalBrg.isEmpty()) {
+            totalSparepart = Integer.parseInt(strTotalBrg);
+        }
+
+        // Ambil biaya jasa dari textfield
+        int biayaJasa = 0;
+        String strBiayaJasa = tBiayaJasa.getText();
+        if (!strBiayaJasa.isEmpty()) {
+            biayaJasa = Integer.parseInt(strBiayaJasa);
+        }
+
+        // Hitung total keseluruhan
+        int grandTotal = totalSparepart + biayaJasa;
+        
+        tBiayaTotal.setText(String.valueOf(grandTotal));
+        
+    } catch (NumberFormatException e) {
+        // Mencegah error jika user memasukkan karakter selain angka di biaya jasa
+        System.out.println("Error hitung grand total: Input biaya jasa harus angka");
+    }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -298,6 +329,8 @@ public class DetailService extends javax.swing.JFrame {
         btKembali = new javax.swing.JButton();
         btnHapusBrg = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        tBiayaTotal = new javax.swing.JTextField();
 
         jButton1.setText("jButton1");
 
@@ -545,6 +578,11 @@ public class DetailService extends javax.swing.JFrame {
         jLabel20.setText("Biaya Jasa :");
 
         tBiayaJasa.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tBiayaJasa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tBiayaJasaKeyReleased(evt);
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         jLabel21.setText("Status Service :");
@@ -576,6 +614,11 @@ public class DetailService extends javax.swing.JFrame {
         btnEdit.setText("Edit");
         btnEdit.addActionListener(this::btnEditActionPerformed);
 
+        jLabel22.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel22.setText("Total Biaya :");
+
+        tBiayaTotal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -587,21 +630,12 @@ public class DetailService extends javax.swing.JFrame {
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btSimpan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btSelesai)
-                        .addGap(18, 18, 18)
-                        .addComponent(btKembali))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel18)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(tTotalBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel20)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tTotalBrg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(226, 226, 226))
                         .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
@@ -617,8 +651,23 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(btnHapusBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btPilih, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(8, 8, 8))))
-                .addContainerGap(63, Short.MAX_VALUE))
+                            .addGap(8, 8, 8)))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel20)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel22)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(btSimpan)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btSelesai)
+                            .addGap(18, 18, 18)
+                            .addComponent(btKembali))))
+                .addContainerGap(277, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,20 +695,25 @@ public class DetailService extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
-                    .addComponent(tTotalBrg)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel20)
-                        .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(21, 21, 21)
+                    .addComponent(tTotalBrg))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
+                    .addComponent(jLabel20)
+                    .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22)
+                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addGap(6, 6, 6))
                     .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btSimpan)
                     .addComponent(btSelesai)
                     .addComponent(btKembali))
-                .addContainerGap(488, Short.MAX_VALUE))
+                .addContainerGap(525, Short.MAX_VALUE))
         );
 
         jScrollPane4.setViewportView(jPanel3);
@@ -763,10 +817,12 @@ public class DetailService extends javax.swing.JFrame {
             }
 
             String status = tStatus.getSelectedItem().toString();
-            String sql3 = "UPDATE servis SET status=? WHERE id_servis=?";
+            String totalBiaya = tBiayaTotal.getText().toString();
+            String sql3 = "UPDATE servis SET harga=?, status=? WHERE id_servis=?";
             PreparedStatement ps3 = conn.prepareStatement(sql3);
-            ps3.setString(1, status);
-            ps3.setString(2, idServis);
+            ps3.setString(1, totalBiaya); // Masuk ke kolom 'harga'
+            ps3.setString(2, status);     // Masuk ke kolom 'status'
+            ps3.setString(3, idServis);    // WHERE id_servis
             ps3.executeUpdate();
 
             conn.commit(); 
@@ -776,6 +832,7 @@ public class DetailService extends javax.swing.JFrame {
             logPerubahanStok.clear(); 
             
             JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan!");
+            tutupHalaman();
 
         } catch (Exception e) {
             try { if (conn != null) conn.rollback(); } catch (SQLException ex) {}
@@ -937,6 +994,11 @@ public class DetailService extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
+    private void tBiayaJasaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tBiayaJasaKeyReleased
+        // TODO add your handling code here:
+        hitungBiaya();
+    }//GEN-LAST:event_tBiayaJasaKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -983,6 +1045,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -999,6 +1062,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField tBiayaJasa;
+    private javax.swing.JTextField tBiayaTotal;
     private javax.swing.JComboBox<String> tStatus;
     private javax.swing.JLabel tTotalBrg;
     private javax.swing.JTable tblGanti;

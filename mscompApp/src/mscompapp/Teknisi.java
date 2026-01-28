@@ -94,13 +94,14 @@ public class Teknisi extends javax.swing.JPanel {
         model.addColumn("Nomor Seri");
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
+        model.addColumn("Harga Servis");
         model.addColumn("Status");
 
         try {
             // Query Dasar
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
-               .append("s.tanggal_masuk, s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
+               .append("s.tanggal_masuk, s.merek, s.model, s.harga, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
                .append("FROM servis s ")
                .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
                .append("WHERE 1=1 "); // 1=1 memudahkan penambahan AND dinamis
@@ -155,6 +156,7 @@ public class Teknisi extends javax.swing.JPanel {
                     rs.getString("no_seri"),
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
+                    rs.getInt("harga"),
                     rs.getString("status")
                 });
             }
