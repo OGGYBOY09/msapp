@@ -304,6 +304,8 @@ public class DetailService extends javax.swing.JFrame {
         txtModel = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtNoSeri = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        tfNamTeknisi = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -418,6 +420,11 @@ public class DetailService extends javax.swing.JFrame {
 
         txtNoSeri.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel19.setText("Teknisi :");
+
+        tfNamTeknisi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -451,14 +458,16 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(jLabel11)
                             .addComponent(jLabel12)
                             .addComponent(jLabel13)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel19))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtKeluhan)
                             .addComponent(txtKelengkapan)
                             .addComponent(txtModel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtMerek)
-                            .addComponent(txtNoSeri))))
+                            .addComponent(txtNoSeri)
+                            .addComponent(tfNamTeknisi))))
                 .addGap(16, 16, 16))
         );
         jPanel4Layout.setVerticalGroup(
@@ -505,9 +514,13 @@ public class DetailService extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(txtKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(txtKeluhan, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtKeluhan, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19)
+                    .addComponent(tfNamTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -704,9 +717,7 @@ public class DetailService extends javax.swing.JFrame {
                     .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addGap(6, 6, 6))
+                    .addComponent(jLabel21)
                     .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1042,6 +1053,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -1066,6 +1078,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> tStatus;
     private javax.swing.JLabel tTotalBrg;
     private javax.swing.JTable tblGanti;
+    private javax.swing.JTextField tfNamTeknisi;
     private javax.swing.JTextField txtAlamat;
     private javax.swing.JTextField txtIdService;
     private javax.swing.JTextField txtJnsBarang;

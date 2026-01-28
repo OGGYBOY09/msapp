@@ -7,10 +7,9 @@ package mscompapp;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import java.text.DecimalFormat;
 import java.awt.BorderLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,57 +23,70 @@ public class PKelLaporan extends javax.swing.JPanel {
     public PKelLaporan() {
         initComponents();
         
+        // 1. Pastikan Layout jPanel4 adalah BorderLayout
         jPanel4.setLayout(new BorderLayout());
         
+        // 2. Listener ComboBox
         jComboBox1.addActionListener(e -> gantiHalamanLaporan());
-        hitungTotalPendapatan(); // <--- Tambahkan pemanggilan fungsi ini
+        
+        // 3. Load Awal
+        hitungTotalPendapatan(); 
         gantiHalamanLaporan(); 
     }
     
-    private void hitungTotalPendapatan() {
-    try {
-        Connection conn = config.Koneksi.configDB();
-        // Query untuk menjumlahkan semua nilai di kolom harga
-        String sql = "SELECT SUM(harga) AS total FROM servis";
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery(sql);
+    // Method Public untuk menghitung pendapatan (Dipanggil oleh Panel Anak)
+    public void hitungTotalPendapatan() {
+        try {
+            Connection conn = config.Koneksi.configDB();
+            // Menghitung total harga dari servis yang statusnya 'Selesai'
+            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai'";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
 
-        if (rs.next()) {
-            int total = rs.getInt("total");
-            // Menampilkan hasil ke label dengan format ribuan
-            txtTotalPendapatan.setText("Rp. " + String.format("%, d", total));
+            if (rs.next()) {
+                int total = rs.getInt("total");
+                DecimalFormat df = new DecimalFormat("#,###");
+                
+                // Pastikan txtTotalPendapatan tidak null (cegah error jika belum ke-load)
+                if (txtTotalPendapatan != null) {
+                    txtTotalPendapatan.setText("Rp " + df.format(total));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Gagal hitung pendapatan: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Error hitung total pendapatan: " + e.getMessage());
-        txtTotalPendapatan.setText("Rp. 0");
     }
-}
     
-    // --- METHOD GANTI PANEL ---
+    // --- PERBAIKAN LOGIKA GANTI HALAMAN (LEBIH AMAN) ---
     private void gantiHalamanLaporan() {
-        // Hapus panel yang sedang tampil (bersihkan area)
-        jPanel4.removeAll();
-        
-        // Ambil teks yang dipilih di ComboBox
-        String pilihan = jComboBox1.getSelectedItem().toString();
-        
-        // Cek pilihan dan tambahkan panel yang sesuai
-        switch (pilihan) {
-            case "Laporan Harian":
-                jPanel4.add(new LapHarian(), BorderLayout.CENTER);
-                break;
-            case "Laporan Mingguan":
-                jPanel4.add(new LapMingguan(), BorderLayout.CENTER);
-                break;
-            case "Laporan Bulanan":
-                jPanel4.add(new LapBulanan(), BorderLayout.CENTER);
-                break;
-            default:
-                break;
+        try {
+            // Bersihkan panel lama
+            jPanel4.removeAll();
+            jPanel4.setLayout(new BorderLayout()); // Reset layout untuk memastikan
+            
+            // Ambil pilihan (Cek null safety)
+            Object selectedItem = jComboBox1.getSelectedItem();
+            String pilihan = (selectedItem != null) ? selectedItem.toString() : "";
+            
+            // Gunakan IF-ELSE dengan equalsIgnoreCase (Agar tidak peduli huruf Besar/Kecil)
+            if (pilihan.equalsIgnoreCase("Laporan harian")) {
+                jPanel4.add(new LapHarian(this), BorderLayout.CENTER);
+                
+            } else if (pilihan.equalsIgnoreCase("Laporan mingguan")) {
+                jPanel4.add(new LapMingguan(this), BorderLayout.CENTER);
+                
+            } else if (pilihan.equalsIgnoreCase("Laporan bulanan")) {
+                jPanel4.add(new LapBulanan(this), BorderLayout.CENTER);
+            }
+            
+            // Refresh Tampilan UI
+            jPanel4.revalidate();
+            jPanel4.repaint();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal memuat halaman laporan: " + e.getMessage());
         }
-        
-        jPanel4.revalidate();
-        jPanel4.repaint();
     }
     
     

@@ -13,6 +13,9 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -23,8 +26,13 @@ public class LapMingguan extends javax.swing.JPanel {
      * Creates new form LapMingguan
      */
     private boolean isUpdatingDate = false;
+    
+    // Referensi ke Induk (PKelLaporan)
+    private PKelLaporan parent;
 
-    public LapMingguan() {
+    // Constructor Menerima Parent
+    public LapMingguan(PKelLaporan parent) {
+        this.parent = parent; // Simpan referensi
         initComponents();
         loadComboStatus();
         
@@ -100,20 +108,20 @@ public class LapMingguan extends javax.swing.JPanel {
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        model.addColumn("Model/Tipe");
-        model.addColumn("Nomor Seri");
+        // Model & Seri Dihapus
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
+        model.addColumn("Total Biaya"); // Kolom Baru
         model.addColumn("Status");
 
         try {
+            // Update Query: tambah harga, hapus model & no_seri
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
 
-            // 1. Filter Rentang Tanggal
             if (tglAwal.getDate() != null && tglAkhir.getDate() != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String start = sdf.format(tglAwal.getDate());
@@ -121,7 +129,6 @@ public class LapMingguan extends javax.swing.JPanel {
                 sql += "AND s.tanggal_masuk BETWEEN '" + start + "' AND '" + end + "' ";
             }
 
-            // 2. Filter Pencarian
             String keyword = tfCari.getText();
             if (!keyword.isEmpty()) {
                 sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
@@ -129,10 +136,8 @@ public class LapMingguan extends javax.swing.JPanel {
                      + "OR s.merek LIKE '%" + keyword + "%') ";
             }
 
-            // 3. Filter Status (Hanya jika dipilih selain 'Semua')
             if (cbStatus.getSelectedIndex() > 0) {
-                String statusPilih = cbStatus.getSelectedItem().toString();
-                sql += "AND s.status = '" + statusPilih + "' ";
+                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
             
             sql += "ORDER BY s.tanggal_masuk DESC";
@@ -140,9 +145,14 @@ public class LapMingguan extends javax.swing.JPanel {
             Connection conn = Koneksi.configDB();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
+            
+            DecimalFormat df = new DecimalFormat("#,###");
 
             int no = 1;
             while (rs.next()) {
+                double hargaVal = rs.getDouble("harga");
+                String hargaFmt = "Rp " + df.format(hargaVal);
+                
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
@@ -151,10 +161,10 @@ public class LapMingguan extends javax.swing.JPanel {
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    rs.getString("model"),
-                    rs.getString("no_seri"),
+                    // Hapus Model & Seri
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
+                    hargaFmt, // Harga
                     rs.getString("status")
                 });
             }
@@ -179,6 +189,16 @@ public class LapMingguan extends javax.swing.JPanel {
                     rs.getString("merek"), rs.getString("model"), rs.getString("no_seri"),
                     rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), Session.idUser
                 );
+                
+                // --- LISTENER SAAT POPUP DITUTUP (AUTO REFRESH) ---
+                ds.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        tampilData(); // Refresh Tabel Mingguan
+                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
+                    }
+                });
+                
                 ds.setLocationRelativeTo(null);
                 ds.setVisible(true);
             }
@@ -313,6 +333,7 @@ public class LapMingguan extends javax.swing.JPanel {
         cbStatus.setSelectedIndex(0);
         resetTanggalMingguan(); // Reset ke logika Today & Today-7
         tampilData();
+        if (parent != null) parent.hitungTotalPendapatan();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed

@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -19,7 +22,11 @@ public class LapBulanan extends javax.swing.JPanel {
     /**
      * Creates new form LapBulanan
      */
-    public LapBulanan() {
+    private PKelLaporan parent;
+
+    // Constructor Menerima Parent
+    public LapBulanan(PKelLaporan parent) {
+        this.parent = parent;
         initComponents();
         loadComboStatus();
         tampilData();
@@ -27,7 +34,7 @@ public class LapBulanan extends javax.swing.JPanel {
         // Listener
         mcBulan.addPropertyChangeListener("month", e -> tampilData());
         thTahun.addPropertyChangeListener("year", e -> tampilData());
-        cbStatus.addActionListener(e -> tampilData()); // Listener Status
+        cbStatus.addActionListener(e -> tampilData()); 
     }
     
     private void loadComboStatus() {
@@ -49,36 +56,32 @@ public class LapBulanan extends javax.swing.JPanel {
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        model.addColumn("Model/Tipe");
-        model.addColumn("Nomor Seri");
+        // Model & Seri Dihapus
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
-        model.addColumn("Harga Servis");
+        model.addColumn("Total Biaya"); // Kolom Baru
         model.addColumn("Status");
 
         try {
+            // Update Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.model, s.harga , s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
 
-            // 1. Filter Bulan & Tahun
             int bulan = mcBulan.getMonth() + 1;
             int tahun = thTahun.getYear();
             sql += "AND MONTH(s.tanggal_masuk) = " + bulan + " AND YEAR(s.tanggal_masuk) = " + tahun + " ";
 
-            // 2. Filter Pencarian
             String keyword = tfCari.getText();
             if (!keyword.isEmpty()) {
                 sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
                      + "OR s.id_servis LIKE '%" + keyword + "%') ";
             }
 
-            // 3. Filter Status
             if (cbStatus.getSelectedIndex() > 0) {
-                String statusPilih = cbStatus.getSelectedItem().toString();
-                sql += "AND s.status = '" + statusPilih + "' ";
+                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
             
             sql += "ORDER BY s.tanggal_masuk DESC";
@@ -87,8 +90,13 @@ public class LapBulanan extends javax.swing.JPanel {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
 
+            DecimalFormat df = new DecimalFormat("#,###");
+            
             int no = 1;
             while (rs.next()) {
+                double hargaVal = rs.getDouble("harga");
+                String hargaFmt = "Rp " + df.format(hargaVal);
+                
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
@@ -97,11 +105,10 @@ public class LapBulanan extends javax.swing.JPanel {
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    rs.getString("model"),
-                    rs.getString("no_seri"),
+                    // Hapus Model & Seri
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
-                    rs.getInt("harga"),
+                    hargaFmt, // Harga
                     rs.getString("status")
                 });
             }
@@ -126,6 +133,16 @@ public class LapBulanan extends javax.swing.JPanel {
                     rs.getString("merek"), rs.getString("model"), rs.getString("no_seri"),
                     rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), Session.idUser
                 );
+                
+                // --- LISTENER SAAT POPUP DITUTUP ---
+                ds.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        tampilData(); // Refresh Tabel Bulanan
+                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
+                    }
+                });
+                
                 ds.setLocationRelativeTo(null);
                 ds.setVisible(true);
             }
@@ -264,6 +281,7 @@ public class LapBulanan extends javax.swing.JPanel {
         mcBulan.setMonth(cal.get(java.util.Calendar.MONTH));
         thTahun.setYear(cal.get(java.util.Calendar.YEAR));
         tampilData();
+        if (parent != null) parent.hitungTotalPendapatan();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed

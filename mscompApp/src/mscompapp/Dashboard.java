@@ -14,11 +14,11 @@ import javax.swing.JOptionPane;
  *
  * @author ASUS
  */
+
 public class Dashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
     private String userRole;
-
     // Constructor menerima dua parameter: username dan role
     public Dashboard(String username, String role) {
         this.userRole = role;
@@ -111,7 +111,6 @@ public class Dashboard extends javax.swing.JFrame {
         lblTanggal = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         pSide = new javax.swing.JPanel();
-        btLogout = new javax.swing.JButton();
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -119,6 +118,7 @@ public class Dashboard extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(102, 204, 255));
+        pNav.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -130,31 +130,22 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo toko.png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 421, 100));
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 421, 120));
 
         getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 120));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
-
-        btLogout.setBackground(new java.awt.Color(255, 51, 51));
-        btLogout.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btLogout.setText("LOGOUT");
-        btLogout.addActionListener(this::btLogoutActionPerformed);
+        pSide.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
         pSide.setLayout(pSideLayout);
         pSideLayout.setHorizontalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pSideLayout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(btLogout)
-                .addGap(53, 53, 53))
+            .addGap(0, 198, Short.MAX_VALUE)
         );
         pSideLayout.setVerticalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pSideLayout.createSequentialGroup()
-                .addGap(902, 902, 902)
-                .addComponent(btLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(0, 978, Short.MAX_VALUE)
         );
 
         getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 200, 980));
@@ -164,25 +155,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLogoutActionPerformed
-        // TODO add your handling code here:
-        int jawaban = JOptionPane.showConfirmDialog(this, 
-                "Apakah Anda yakin ingin Logout?", 
-                "Konfirmasi Keluar", 
-                JOptionPane.YES_NO_OPTION);
-        
-        if (jawaban == JOptionPane.YES_OPTION) {
-            // 2. Tutup Dashboard saat ini
-            this.dispose();
-            
-            // 3. Buka kembali halaman Login
-            Login loginPage = new Login();
-            loginPage.setVisible(true);
-            loginPage.setLocationRelativeTo(null); // Biar muncul di tengah layar
-        }
-
-    }//GEN-LAST:event_btLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +175,6 @@ public class Dashboard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Dashboard("", "").setVisible(true));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btLogout;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;

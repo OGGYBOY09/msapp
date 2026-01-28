@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -21,39 +24,30 @@ public class LapHarian extends javax.swing.JPanel {
     /**
      * Creates new form LapHarian
      */
-    public LapHarian() {
+    private PKelLaporan parent;
+
+    // --- UBAH CONSTRUCTOR MENERIMA PARENT ---
+    public LapHarian(PKelLaporan parent) {
+        this.parent = parent; // Simpan referensi
         initComponents();
         loadComboStatus();
-        
-        // Set tanggal default hari ini
         tglHarian.setDate(new Date());
-        
-        // Tampilkan data awal
         tampilData();
-        
-        // --- FITUR BARU: AUTO UPDATE SAAT FILTER BERUBAH ---
         addFilterListeners();
     }
     
     private void addFilterListeners() {
-        // 1. Saat tanggal diganti -> Refresh
         tglHarian.addPropertyChangeListener("date", e -> tampilData());
-        
-        // 2. Saat Status diganti -> Refresh
         cbStatus.addActionListener(e -> tampilData());
-        
-        // 3. Saat mengetik di kolom pencarian (Opsional, pakai KeyRelease jika mau live search)
-        // tfCari.addKeyListener(new java.awt.event.KeyAdapter() { ... });
     }
     
     private void loadComboStatus() {
         cbStatus.removeAllItems();
-        cbStatus.addItem("- Semua Status -"); // Default Index 0
+        cbStatus.addItem("- Semua Status -");
         cbStatus.addItem("Menunggu");
         cbStatus.addItem("Proses");
         cbStatus.addItem("Selesai");
         cbStatus.addItem("Dibatalkan");
-        cbStatus.setSelectedIndex(0); // Pastikan default terpilih
     }
 
     private void tampilData() {
@@ -65,15 +59,16 @@ public class LapHarian extends javax.swing.JPanel {
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        model.addColumn("Model/Tipe");
-        model.addColumn("Nomor Seri");
+        // Model dan No Seri DIHAPUS sesuai permintaan
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
+        model.addColumn("Total Biaya"); // KOLOM BARU
         model.addColumn("Status");
 
         try {
+            // Query diupdate: Tambah s.harga, Hapus s.model & s.no_seri
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.model, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -95,10 +90,9 @@ public class LapHarian extends javax.swing.JPanel {
                      + "OR s.merek LIKE '%" + keyword + "%') ";
             }
 
-            // 3. Filter Status (Hanya jika bukan "- Semua Status -")
+            // 3. Filter Status
             if (cbStatus.getSelectedIndex() > 0) {
-                String statusPilih = cbStatus.getSelectedItem().toString();
-                sql += "AND s.status = '" + statusPilih + "' ";
+                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
             
             sql += "ORDER BY s.id_servis DESC";
@@ -106,9 +100,16 @@ public class LapHarian extends javax.swing.JPanel {
             Connection conn = Koneksi.configDB();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
+            
+            // Format Rupiah
+            DecimalFormat df = new DecimalFormat("#,###");
 
             int no = 1;
             while (rs.next()) {
+                // Format Harga
+                double hargaVal = rs.getDouble("harga");
+                String hargaFmt = "Rp " + df.format(hargaVal);
+                
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
@@ -117,10 +118,10 @@ public class LapHarian extends javax.swing.JPanel {
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    rs.getString("model"),
-                    rs.getString("no_seri"),
+                    // Model & No Seri dihapus dari sini
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
+                    hargaFmt, // Masukkan Harga disini
                     rs.getString("status")
                 });
             }
@@ -145,6 +146,18 @@ public class LapHarian extends javax.swing.JPanel {
                     rs.getString("merek"), rs.getString("model"), rs.getString("no_seri"),
                     rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), Session.idUser
                 );
+                
+                // --- FITUR AUTO REFRESH SAAT POPUP DITUTUP ---
+                ds.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        // 1. Refresh Tabel Harian
+                        tampilData(); 
+                        // 2. Refresh Total Pendapatan (PKelLaporan)
+                        if (parent != null) parent.hitungTotalPendapatan();
+                    }
+                });
+                
                 ds.setLocationRelativeTo(null);
                 ds.setVisible(true);
             }
@@ -269,8 +282,11 @@ public class LapHarian extends javax.swing.JPanel {
         // TODO add your handling code here:
         tfCari.setText("");
         cbStatus.setSelectedIndex(0);
-        tglHarian.setDate(new Date()); // Reset ke hari ini
+        tglHarian.setDate(new Date());
         tampilData();
+        
+        // --- UPDATE JUGA TOTAL PENDAPATAN DI PARENT ---
+        if (parent != null) parent.hitungTotalPendapatan();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
