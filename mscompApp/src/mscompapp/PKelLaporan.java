@@ -160,9 +160,11 @@ public class PKelLaporan extends javax.swing.JPanel {
             btCetakP.setBackground(new java.awt.Color(255, 102, 102));
             btCetakP.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
             btCetakP.setText("Cetak PDF");
+            btCetakP.addActionListener(this::btCetakPActionPerformed);
 
             btCetakN.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
             btCetakN.setText("Cetak Nota");
+            btCetakN.addActionListener(this::btCetakNActionPerformed);
 
             javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
             jPanel1.setLayout(jPanel1Layout);
@@ -241,6 +243,14 @@ public class PKelLaporan extends javax.swing.JPanel {
     private void bCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCetakEActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bCetakEActionPerformed
+
+    private void btCetakPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btCetakPActionPerformed
+
+    private void btCetakNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btCetakNActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

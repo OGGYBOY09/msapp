@@ -51,21 +51,22 @@ public class LapBulanan extends javax.swing.JPanel {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
         model.addColumn("ID Servis");
+        model.addColumn("Tanggal Masuk"); // <--- KOLOM BARU DI GUI
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        // Model & Seri Dihapus
+        // Model & Seri Dihapus dari GUI agar tidak sempit
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
-        model.addColumn("Total Biaya"); // Kolom Baru
+        model.addColumn("Total Biaya"); 
         model.addColumn("Status");
 
         try {
             // Update Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk " // <-- Ambil tanggal
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -100,15 +101,16 @@ public class LapBulanan extends javax.swing.JPanel {
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
+                    rs.getString("tanggal_masuk"), // <--- Masukkan Data Tanggal
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    // Hapus Model & Seri
+                    // Hapus Model & Seri di GUI
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
-                    hargaFmt, // Harga
+                    hargaFmt, 
                     rs.getString("status")
                 });
             }
@@ -171,6 +173,10 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         thTahun = new com.toedter.calendar.JYearChooser();
         btCetakE = new javax.swing.JButton();
+        btnPdf = new javax.swing.JButton();
+        btnNota = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        cbKategori = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -211,15 +217,35 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Status :");
 
+        cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Tahun :");
 
-        btCetakE.setBackground(new java.awt.Color(102, 255, 102));
-        btCetakE.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        thTahun.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btCetakE.setBackground(new java.awt.Color(204, 204, 204));
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
+
+        btnPdf.setBackground(new java.awt.Color(204, 204, 204));
+        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnPdf.setText("PDF");
+        btnPdf.addActionListener(this::btnPdfActionPerformed);
+
+        btnNota.setBackground(new java.awt.Color(102, 255, 102));
+        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnNota.setText("Nota");
+        btnNota.addActionListener(this::btnNotaActionPerformed);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setText("Kategori :");
+
+        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -230,53 +256,64 @@ public class LapBulanan extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1682, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(189, 189, 189)
+                        .addComponent(btnDetail)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh)
+                        .addGap(129, 129, 129)
+                        .addComponent(btCetakE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPdf)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnNota)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btCetakE)
-                .addGap(218, 218, 218))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnPdf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnNota, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btCetakE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -309,19 +346,66 @@ public class LapBulanan extends javax.swing.JPanel {
 
     private void btCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakEActionPerformed
         // TODO add your handling code here:
-        ExportExcel.exportJTableToExcel(tblLapBulanan);
+        int bulanIndex = mcBulan.getMonth(); // 0 = Januari
+        String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                              "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+        String bulanText = namaBulan[bulanIndex];
+        
+        // 2. Ambil Data Tahun
+        int tahun = thTahun.getYear();
+        
+        // 3. Panggil ExportExcel dengan parameter tambahan
+        ExportExcel.exportJTableToExcel(tblLapBulanan, bulanText, tahun);
     }//GEN-LAST:event_btCetakEActionPerformed
+
+    private void btnPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfActionPerformed
+        // TODO add your handling code here:
+        int bulanIndex = mcBulan.getMonth();
+        String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                              "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+        String bulanText = namaBulan[bulanIndex];
+        int tahun = thTahun.getYear();
+        
+        // 2. Ambil Keterangan Status untuk Sub-Judul
+        // Misal: "Status: Semua Status" atau "Status: Proses"
+        String statusFilter = "Status: " + cbStatus.getSelectedItem().toString();
+        
+        // 3. Panggil Fungsi Export PDF
+        ExportPDF.exportToPDF(tblLapBulanan, bulanText, tahun, statusFilter);
+    
+    }//GEN-LAST:event_btnPdfActionPerformed
+
+    private void btnNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotaActionPerformed
+        // TODO add your handling code here:
+        int row = tblLapBulanan.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data servis yang ingin dicetak notanya!");
+            return;
+        }
+        
+        // 2. Ambil ID Servis
+        String idServis = tblLapBulanan.getValueAt(row, 1).toString();
+        
+        // 3. Panggil Class CetakStruk
+        // Parameter: ID Servis dan ID User yang sedang Login (Admin)
+        // Session.idUser didapat dari sistem login kamu
+        CetakStruk.cetakStruk(idServis, Session.idUser);
+    }//GEN-LAST:event_btnNotaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCetakE;
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDetail;
+    private javax.swing.JButton btnNota;
+    private javax.swing.JButton btnPdf;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JComboBox<String> cbKategori;
     private javax.swing.JComboBox<String> cbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private com.toedter.calendar.JMonthChooser mcBulan;
     public javax.swing.JTable tblLapBulanan;

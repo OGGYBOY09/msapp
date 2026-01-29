@@ -209,6 +209,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Cetak PDF"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCetakPActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btCetakN">
           <Properties>
@@ -217,6 +220,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Cetak Nota"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCetakNActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
