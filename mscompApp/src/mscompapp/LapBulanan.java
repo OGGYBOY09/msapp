@@ -47,7 +47,7 @@ public class LapBulanan extends javax.swing.JPanel {
         cbStatus.setSelectedIndex(0);
     }
 
-    private void tampilData() {
+    public void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
         model.addColumn("ID Servis");
@@ -170,6 +170,7 @@ public class LapBulanan extends javax.swing.JPanel {
         mcBulan = new com.toedter.calendar.JMonthChooser();
         jLabel3 = new javax.swing.JLabel();
         thTahun = new com.toedter.calendar.JYearChooser();
+        btCetakE = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -215,6 +216,11 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Tahun :");
 
+        btCetakE.setBackground(new java.awt.Color(102, 255, 102));
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btCetakE.setText("Cetak Excel");
+        btCetakE.addActionListener(this::btCetakEActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -244,6 +250,10 @@ public class LapBulanan extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btCetakE)
+                .addGap(218, 218, 218))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,8 +273,10 @@ public class LapBulanan extends javax.swing.JPanel {
                     .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btCetakE)
+                .addContainerGap(76, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -295,8 +307,14 @@ public class LapBulanan extends javax.swing.JPanel {
         bukaHalamanDetail(idServis);
     }//GEN-LAST:event_btnDetailActionPerformed
 
+    private void btCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakEActionPerformed
+        // TODO add your handling code here:
+        ExportExcel.exportJTableToExcel(tblLapBulanan);
+    }//GEN-LAST:event_btCetakEActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btCetakE;
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnRefresh;
@@ -306,7 +324,7 @@ public class LapBulanan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private com.toedter.calendar.JMonthChooser mcBulan;
-    private javax.swing.JTable tblLapBulanan;
+    public javax.swing.JTable tblLapBulanan;
     private javax.swing.JTextField tfCari;
     private com.toedter.calendar.JYearChooser thTahun;
     // End of variables declaration//GEN-END:variables

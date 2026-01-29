@@ -106,6 +106,9 @@ public class PKelLaporan extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         txtTotalPendapatan = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        bCetakE = new javax.swing.JButton();
+        btCetakP = new javax.swing.JButton();
+        btCetakN = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
@@ -126,7 +129,7 @@ public class PKelLaporan extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(1084, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,6 +152,18 @@ public class PKelLaporan extends javax.swing.JPanel {
             jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
             jLabel3.setText("Total Pendapatan :");
 
+            bCetakE.setBackground(new java.awt.Color(51, 255, 51));
+            bCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+            bCetakE.setText("Cetak Excel");
+            bCetakE.addActionListener(this::bCetakEActionPerformed);
+
+            btCetakP.setBackground(new java.awt.Color(255, 102, 102));
+            btCetakP.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+            btCetakP.setText("Cetak PDF");
+
+            btCetakN.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+            btCetakN.setText("Cetak Nota");
+
             javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
             jPanel1.setLayout(jPanel1Layout);
             jPanel1Layout.setHorizontalGroup(
@@ -157,8 +172,14 @@ public class PKelLaporan extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(57, 57, 57)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(111, 111, 111)
+                    .addComponent(bCetakE)
+                    .addGap(18, 18, 18)
+                    .addComponent(btCetakP)
+                    .addGap(18, 18, 18)
+                    .addComponent(btCetakN)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3)
@@ -169,16 +190,21 @@ public class PKelLaporan extends javax.swing.JPanel {
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(33, 33, 33)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btCetakP, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btCetakN, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(18, 18, 18)
                             .addComponent(jLabel3)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(txtTotalPendapatan)))
-                    .addGap(0, 38, Short.MAX_VALUE))
+                    .addGap(0, 32, Short.MAX_VALUE))
             );
 
             jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -193,7 +219,7 @@ public class PKelLaporan extends javax.swing.JPanel {
             );
             jPanel4Layout.setVerticalGroup(
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 760, Short.MAX_VALUE)
+                .addGap(0, 754, Short.MAX_VALUE)
             );
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -207,13 +233,20 @@ public class PKelLaporan extends javax.swing.JPanel {
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGap(18, 18, 18)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
         }// </editor-fold>//GEN-END:initComponents
 
+    private void bCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCetakEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bCetakEActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bCetakE;
+    private javax.swing.JButton btCetakN;
+    private javax.swing.JButton btCetakP;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
