@@ -297,6 +297,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Nota"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNotaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnPdf">
       <Properties>
@@ -308,6 +311,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="PDF"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPdfActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btCetakE">
       <Properties>

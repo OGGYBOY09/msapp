@@ -52,23 +52,25 @@ public class LapHarian extends javax.swing.JPanel {
 
     private void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
+        // --- STRUKTUR KOLOM DISAMAKAN DENGAN LAP BULANAN/MINGGUAN ---
         model.addColumn("No");
         model.addColumn("ID Servis"); 
+        model.addColumn("Tanggal Masuk"); // <--- Penambahan Kolom Wajib
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        // Model dan No Seri DIHAPUS sesuai permintaan
+        // Model & Seri tidak ditampilkan di tabel agar ringkas
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
-        model.addColumn("Total Biaya"); // KOLOM BARU
+        model.addColumn("Total Biaya"); 
         model.addColumn("Status");
 
         try {
-            // Query diupdate: Tambah s.harga, Hapus s.model & s.no_seri
+            // Update Query: Tambah s.tanggal_masuk
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -85,7 +87,6 @@ public class LapHarian extends javax.swing.JPanel {
             if (!keyword.isEmpty()) {
                 sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
                      + "OR p.no_hp LIKE '%" + keyword + "%' "
-                     + "OR p.alamat LIKE '%" + keyword + "%' "
                      + "OR s.id_servis LIKE '%" + keyword + "%' "
                      + "OR s.merek LIKE '%" + keyword + "%') ";
             }
@@ -101,27 +102,25 @@ public class LapHarian extends javax.swing.JPanel {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             
-            // Format Rupiah
             DecimalFormat df = new DecimalFormat("#,###");
 
             int no = 1;
             while (rs.next()) {
-                // Format Harga
                 double hargaVal = rs.getDouble("harga");
                 String hargaFmt = "Rp " + df.format(hargaVal);
                 
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
+                    rs.getString("tanggal_masuk"), // <--- Masukkan Data Tanggal
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    // Model & No Seri dihapus dari sini
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
-                    hargaFmt, // Masukkan Harga disini
+                    hargaFmt, 
                     rs.getString("status")
                 });
             }
@@ -234,10 +233,12 @@ public class LapHarian extends javax.swing.JPanel {
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNota.setText("Nota");
+        btnNota.addActionListener(this::btnNotaActionPerformed);
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
         btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnPdf.setText("PDF");
+        btnPdf.addActionListener(this::btnPdfActionPerformed);
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -347,7 +348,52 @@ public class LapHarian extends javax.swing.JPanel {
 
     private void btCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakEActionPerformed
         // TODO add your handling code here:
+        if (tglHarian.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih tanggal terlebih dahulu!");
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+        String strTanggal = sdf.format(tglHarian.getDate());
+        
+        String judul = "LAPORAN SERVIS HARIAN TANGGAL " + strTanggal;
+        
+        SimpleDateFormat sdfFile = new SimpleDateFormat("ddMMyyyy");
+        String suffix = "Harian_" + sdfFile.format(tglHarian.getDate());
+        
+        ExportExcel.exportJTableToExcelCustom(tblLapHarian, judul, suffix);
     }//GEN-LAST:event_btCetakEActionPerformed
+
+    private void btnPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfActionPerformed
+        // TODO add your handling code here:
+        if (tglHarian.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih tanggal terlebih dahulu!");
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+        String strTanggal = sdf.format(tglHarian.getDate());
+        
+        String judul = "LAPORAN SERVIS HARIAN TANGGAL " + strTanggal;
+        String statusFilter = "Status: " + cbStatus.getSelectedItem().toString();
+        
+        SimpleDateFormat sdfFile = new SimpleDateFormat("ddMMyyyy");
+        String suffix = "Harian_" + sdfFile.format(tglHarian.getDate());
+        
+        ExportPDF.exportToPDFCustom(tblLapHarian, judul, statusFilter, suffix);
+    }//GEN-LAST:event_btnPdfActionPerformed
+
+    private void btnNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotaActionPerformed
+        // TODO add your handling code here:
+        int row = tblLapHarian.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data servis yang ingin dicetak notanya!");
+            return;
+        }
+        
+        String idServis = tblLapHarian.getValueAt(row, 1).toString();
+        CetakStruk.cetakStruk(idServis, Session.idUser);
+    }//GEN-LAST:event_btnNotaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

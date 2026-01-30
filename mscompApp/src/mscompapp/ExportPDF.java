@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package mscompapp;
 
 import com.itextpdf.text.*;
@@ -21,77 +17,71 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ExportPDF {
 
+    // --- METHOD LAMA (BULANAN) ---
     public static void exportToPDF(JTable table, String bulanText, int tahun, String statusFilter) {
+        String judul = "LAPORAN SERVIS BULAN " + bulanText.toUpperCase() + " TAHUN " + tahun;
+        String filename = "Laporan_Servis_" + bulanText + "_" + tahun;
+        generatePDF(table, judul, filename, statusFilter);
+    }
+
+    // --- METHOD BARU (CUSTOM/MINGGUAN) ---
+    public static void exportToPDFCustom(JTable table, String judulLaporan, String statusFilter, String suffixFilename) {
+        String filename = "Laporan_Servis_" + suffixFilename;
+        generatePDF(table, judulLaporan, filename, statusFilter);
+    }
+
+    // --- LOGIKA INTI PDF ---
+    private static void generatePDF(JTable table, String judulLaporan, String defaultFileName, String statusFilter) {
         try {
             JFileChooser chooser = new JFileChooser();
             chooser.setDialogTitle("Simpan Laporan PDF");
-
-            // 1. Format Nama File Default
-            String defaultFileName = "Laporan_Servis_" + bulanText + "_" + tahun + ".pdf";
-            chooser.setSelectedFile(new File(defaultFileName));
+            chooser.setSelectedFile(new File(defaultFileName + ".pdf"));
 
             FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Documents", "pdf");
             chooser.setFileFilter(filter);
 
             if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 
-                // --- 2. LOGIKA AUTO RENAME (ANTI TIMPA) ---
                 File file = chooser.getSelectedFile();
                 String filePath = file.getAbsolutePath();
                 if (!filePath.toLowerCase().endsWith(".pdf")) {
                     file = new File(filePath + ".pdf");
                 }
                 
-                // Cek duplikat dan rename otomatis (misal: Laporan(1).pdf)
+                // Auto Rename
                 String parent = file.getParent();
                 String name = file.getName();
-                
-                // Handle jika file tidak punya ekstensi atau titik
-                String baseName;
-                if (name.contains(".")) {
-                    baseName = name.substring(0, name.lastIndexOf("."));
-                } else {
-                    baseName = name;
-                }
-                
-                String extension = ".pdf";
+                String baseName = name.contains(".") ? name.substring(0, name.lastIndexOf(".")) : name;
                 int counter = 1;
                 while (file.exists()) {
-                    String newName = baseName + "(" + counter + ")" + extension;
-                    file = new File(parent, newName);
+                    file = new File(parent, baseName + "(" + counter + ").pdf");
                     counter++;
                 }
 
-                // --- 3. MULAI MEMBUAT DOKUMEN PDF ---
-                // Menggunakan Landscape agar muat banyak kolom
                 Document document = new Document(PageSize.A4.rotate());
                 PdfWriter.getInstance(document, new FileOutputStream(file));
                 document.open();
 
-                // --- 4. JUDUL & SUB-JUDUL ---
+                // --- JUDUL ---
                 Font fontJudul = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
                 Font fontSub = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
                 
-                Paragraph pJudul = new Paragraph("LAPORAN SERVIS BULAN " + bulanText.toUpperCase() + " TAHUN " + tahun, fontJudul);
+                Paragraph pJudul = new Paragraph(judulLaporan.toUpperCase(), fontJudul); // Judul dari parameter
                 pJudul.setAlignment(Element.ALIGN_CENTER);
                 document.add(pJudul);
                 
-                // Keterangan Status (Sesuai Permintaan)
-                Paragraph pStatus = new Paragraph(statusFilter, fontSub); // Misal: "Menampilkan Data: Semua Status"
+                Paragraph pStatus = new Paragraph(statusFilter, fontSub);
                 pStatus.setAlignment(Element.ALIGN_CENTER);
                 document.add(pStatus);
                 
-                document.add(new Paragraph(" ")); // Spasi Kosong
+                document.add(new Paragraph(" "));
 
-                // --- 5. PERSIAPAN TABEL PDF ---
-                // Total 15 Kolom
+                // --- TABEL ---
                 PdfPTable pdfTable = new PdfPTable(15);
                 pdfTable.setWidthPercentage(100); 
-                // Lebar relatif kolom (Agar rapi)
                 float[] columnWidths = {3f, 6f, 7f, 8f, 7f, 8f, 6f, 6f, 6f, 6f, 8f, 8f, 8f, 7f, 6f};
                 pdfTable.setWidths(columnWidths);
 
-                // --- 6. HEADER TABEL ---
                 String[] headers = {
                     "No", "ID", "Tgl Masuk", "Pelanggan", "HP", 
                     "Alamat", "Jenis", "Merek", "Model", "Seri", 
@@ -108,7 +98,7 @@ public class ExportPDF {
                     pdfTable.addCell(cell);
                 }
 
-                // --- 7. ISI DATA (HYBRID: TABLE GUI + DATABASE) ---
+                // --- ISI DATA ---
                 Connection conn = Koneksi.configDB();
                 String sqlTambahan = "SELECT s.model, s.no_seri, u.nama AS nama_teknisi " +
                                      "FROM servis s " +
@@ -122,7 +112,6 @@ public class ExportPDF {
                 for (int row = 0; row < table.getRowCount(); row++) {
                     String idServis = table.getValueAt(row, 1).toString();
                     
-                    // Ambil Data DB
                     String dbModel = "-";
                     String dbNoSeri = "-";
                     String dbTeknisi = "Belum diperbaiki";
@@ -136,32 +125,32 @@ public class ExportPDF {
                         if(teknisi != null && !teknisi.isEmpty()) dbTeknisi = teknisi;
                     }
                     
-                    // Masukkan ke Sel PDF
-                    addCell(pdfTable, table.getValueAt(row, 0), fontIsi); // No
-                    addCell(pdfTable, table.getValueAt(row, 1), fontIsi); // ID
-                    addCell(pdfTable, table.getValueAt(row, 2), fontIsi); // Tgl (GUI)
-                    addCell(pdfTable, table.getValueAt(row, 3), fontIsi); // Nama
-                    addCell(pdfTable, table.getValueAt(row, 4), fontIsi); // HP
-                    addCell(pdfTable, table.getValueAt(row, 5), fontIsi); // Alamat
-                    addCell(pdfTable, table.getValueAt(row, 6), fontIsi); // Jenis
+                    // Pastikan urutan ini sesuai dengan kolom di tabel GUI
+                    addCell(pdfTable, table.getValueAt(row, 0), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 1), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 2), fontIsi); // Tanggal
+                    addCell(pdfTable, table.getValueAt(row, 3), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 4), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 5), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 6), fontIsi);
                     addCell(pdfTable, table.getValueAt(row, 7), fontIsi); // Merek
                     
-                    addCell(pdfTable, dbModel, fontIsi);   // DB Model
-                    addCell(pdfTable, dbNoSeri, fontIsi);  // DB Seri
+                    addCell(pdfTable, dbModel, fontIsi);
+                    addCell(pdfTable, dbNoSeri, fontIsi);
                     
-                    addCell(pdfTable, table.getValueAt(row, 8), fontIsi); // Keluhan
-                    addCell(pdfTable, table.getValueAt(row, 9), fontIsi); // Kelengkapan
+                    addCell(pdfTable, table.getValueAt(row, 8), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 9), fontIsi);
                     
-                    addCell(pdfTable, dbTeknisi, fontIsi); // DB Teknisi
+                    addCell(pdfTable, dbTeknisi, fontIsi);
                     
-                    addCell(pdfTable, table.getValueAt(row, 10), fontIsi); // Biaya
-                    addCell(pdfTable, table.getValueAt(row, 11), fontIsi); // Status
+                    addCell(pdfTable, table.getValueAt(row, 10), fontIsi);
+                    addCell(pdfTable, table.getValueAt(row, 11), fontIsi);
                 }
                 
                 document.add(pdfTable);
                 
-                // --- 8. FOOTER: TANGGAL CETAK ---
-                document.add(new Paragraph(" ")); // Spasi
+                // --- FOOTER ---
+                document.add(new Paragraph(" "));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm");
                 String tglCetak = sdf.format(new Date());
                 
@@ -179,7 +168,6 @@ public class ExportPDF {
         }
     }
     
-    // Helper agar tidak error saat data null
     private static void addCell(PdfPTable table, Object text, Font font) {
         String val = (text == null) ? "" : text.toString();
         PdfPCell cell = new PdfPCell(new Phrase(val, font));

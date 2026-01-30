@@ -103,21 +103,22 @@ public class LapMingguan extends javax.swing.JPanel {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
         model.addColumn("ID Servis");
+        model.addColumn("Tanggal Masuk"); // <--- PERBAIKAN 1: Tambah Kolom Ini
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        // Model & Seri Dihapus
+        // Model & Seri Dihapus agar ringkas
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
-        model.addColumn("Total Biaya"); // Kolom Baru
+        model.addColumn("Total Biaya"); 
         model.addColumn("Status");
 
         try {
-            // Update Query: tambah harga, hapus model & no_seri
+            // PERBAIKAN 2: Tambahkan s.tanggal_masuk di Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk " 
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -156,15 +157,16 @@ public class LapMingguan extends javax.swing.JPanel {
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
+                    rs.getString("tanggal_masuk"), // <--- PERBAIKAN 3: Masukkan data tanggal
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    // Hapus Model & Seri
+                    // Hapus Model & Seri di GUI
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
-                    hargaFmt, // Harga
+                    hargaFmt, 
                     rs.getString("status")
                 });
             }
@@ -278,10 +280,12 @@ public class LapMingguan extends javax.swing.JPanel {
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNota.setText("Nota");
+        btnNota.addActionListener(this::btnNotaActionPerformed);
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
         btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnPdf.setText("PDF");
+        btnPdf.addActionListener(this::btnPdfActionPerformed);
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -355,9 +359,9 @@ public class LapMingguan extends javax.swing.JPanel {
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(2, 2, 2))))
+                    .addComponent(btnNota, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNota, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                         .addComponent(btnPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27)
@@ -393,7 +397,65 @@ public class LapMingguan extends javax.swing.JPanel {
 
     private void btCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakEActionPerformed
         // TODO add your handling code here:
+        if (tglAwal.getDate() == null || tglAkhir.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih rentang tanggal terlebih dahulu!");
+            return;
+        }
+
+        // Format tanggal untuk Judul
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        String strAwal = sdf.format(tglAwal.getDate());
+        String strAkhir = sdf.format(tglAkhir.getDate());
+        
+        // Buat Judul Custom
+        String judul = "LAPORAN SERVIS PERIODE " + strAwal + " s/d " + strAkhir;
+        
+        // Buat nama file suffix (agar nama file unik)
+        SimpleDateFormat sdfFile = new SimpleDateFormat("ddMMyyyy");
+        String suffix = "Mingguan_" + sdfFile.format(tglAwal.getDate()) + "_sd_" + sdfFile.format(tglAkhir.getDate());
+        
+        // Panggil Method Export Excel Custom
+        ExportExcel.exportJTableToExcelCustom(tblLapMingguan, judul, suffix);
     }//GEN-LAST:event_btCetakEActionPerformed
+
+    private void btnPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfActionPerformed
+        // TODO add your handling code here:
+        if (tglAwal.getDate() == null || tglAkhir.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih rentang tanggal terlebih dahulu!");
+            return;
+        }
+
+        // Format tanggal
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        String strAwal = sdf.format(tglAwal.getDate());
+        String strAkhir = sdf.format(tglAkhir.getDate());
+        
+        // Judul & Status
+        String judul = "LAPORAN SERVIS PERIODE " + strAwal + " s/d " + strAkhir;
+        String statusFilter = "Status: " + cbStatus.getSelectedItem().toString();
+        
+        // Suffix filename
+        SimpleDateFormat sdfFile = new SimpleDateFormat("ddMMyyyy");
+        String suffix = "Mingguan_" + sdfFile.format(tglAwal.getDate()) + "_sd_" + sdfFile.format(tglAkhir.getDate());
+        
+        // Panggil Method Export PDF Custom
+        ExportPDF.exportToPDFCustom(tblLapMingguan, judul, statusFilter, suffix);
+    }//GEN-LAST:event_btnPdfActionPerformed
+
+    private void btnNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotaActionPerformed
+        // TODO add your handling code here:
+        int row = tblLapMingguan.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data servis yang ingin dicetak notanya!");
+            return;
+        }
+        
+        // Ambil ID Servis (Pastikan kolom ke-1 di tabel adalah ID Servis)
+        String idServis = tblLapMingguan.getValueAt(row, 1).toString();
+        
+        // Panggil CetakStruk
+        CetakStruk.cetakStruk(idServis, Session.idUser);
+    }//GEN-LAST:event_btnNotaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
