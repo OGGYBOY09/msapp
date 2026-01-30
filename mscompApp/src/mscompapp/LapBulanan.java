@@ -30,12 +30,29 @@ public class LapBulanan extends javax.swing.JPanel {
         initComponents();
         loadComboStatus();
         tampilData();
+        loadComboKategori(); // <--- Tambahkan ini
         
         // Listener
         mcBulan.addPropertyChangeListener("month", e -> tampilData());
         thTahun.addPropertyChangeListener("year", e -> tampilData());
         cbStatus.addActionListener(e -> tampilData()); 
     }
+    
+    
+    private void loadComboKategori() {
+    cbKategori.removeAllItems();
+    cbKategori.addItem("- Semua Kategori -"); // Opsi default
+    try {
+        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
+        Connection conn = Koneksi.configDB();
+        ResultSet rs = conn.createStatement().executeQuery(sql);
+        while (rs.next()) {
+            cbKategori.addItem(rs.getString("nama_jenis"));
+        }
+    } catch (Exception e) {
+        System.err.println("Error load kategori: " + e.getMessage());
+    }
+}
     
     private void loadComboStatus() {
         cbStatus.removeAllItems();
@@ -84,6 +101,11 @@ public class LapBulanan extends javax.swing.JPanel {
             if (cbStatus.getSelectedIndex() > 0) {
                 sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
+            
+            if (cbKategori.getSelectedIndex() > 0) {
+            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
+            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
+        }
             
             sql += "ORDER BY s.tanggal_masuk DESC";
 
@@ -225,8 +247,6 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Tahun :");
 
-        thTahun.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCetakE.setText("Cetak Excel");
@@ -246,6 +266,8 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel4.setText("Kategori :");
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
+        cbKategori.addActionListener(this::cbKategoriActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -253,8 +275,8 @@ public class LapBulanan extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1682, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -280,12 +302,13 @@ public class LapBulanan extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 13, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,6 +414,15 @@ public class LapBulanan extends javax.swing.JPanel {
         // Session.idUser didapat dari sistem login kamu
         CetakStruk.cetakStruk(idServis, Session.idUser);
     }//GEN-LAST:event_btnNotaActionPerformed
+
+    private void cbKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKategoriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbKategoriActionPerformed
+
+    private void cbKategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbKategoriItemStateChanged
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_cbKategoriItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

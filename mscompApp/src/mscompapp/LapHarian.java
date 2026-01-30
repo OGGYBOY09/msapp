@@ -34,6 +34,8 @@ public class LapHarian extends javax.swing.JPanel {
         tglHarian.setDate(new Date());
         tampilData();
         addFilterListeners();
+        loadComboKategori();
+        
     }
     
     private void addFilterListeners() {
@@ -49,6 +51,21 @@ public class LapHarian extends javax.swing.JPanel {
         cbStatus.addItem("Selesai");
         cbStatus.addItem("Dibatalkan");
     }
+    
+    private void loadComboKategori() {
+    cbKategori.removeAllItems();
+    cbKategori.addItem("- Semua Kategori -"); // Opsi default
+    try {
+        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
+        Connection conn = Koneksi.configDB();
+        ResultSet rs = conn.createStatement().executeQuery(sql);
+        while (rs.next()) {
+            cbKategori.addItem(rs.getString("nama_jenis"));
+        }
+    } catch (Exception e) {
+        System.err.println("Error load kategori: " + e.getMessage());
+    }
+}
 
     private void tampilData() {
         DefaultTableModel model = new DefaultTableModel();
@@ -95,6 +112,11 @@ public class LapHarian extends javax.swing.JPanel {
             if (cbStatus.getSelectedIndex() > 0) {
                 sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
+            
+            if (cbKategori.getSelectedIndex() > 0) {
+            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
+            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
+        }
             
             sql += "ORDER BY s.id_servis DESC";
 
@@ -249,6 +271,7 @@ public class LapHarian extends javax.swing.JPanel {
         jLabel4.setText("Kategori :");
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -394,6 +417,11 @@ public class LapHarian extends javax.swing.JPanel {
         String idServis = tblLapHarian.getValueAt(row, 1).toString();
         CetakStruk.cetakStruk(idServis, Session.idUser);
     }//GEN-LAST:event_btnNotaActionPerformed
+
+    private void cbKategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbKategoriItemStateChanged
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_cbKategoriItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

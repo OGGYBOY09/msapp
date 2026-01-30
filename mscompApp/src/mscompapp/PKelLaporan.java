@@ -106,9 +106,6 @@ public class PKelLaporan extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         txtTotalPendapatan = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        bCetakE = new javax.swing.JButton();
-        btCetakP = new javax.swing.JButton();
-        btCetakN = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
@@ -152,20 +149,6 @@ public class PKelLaporan extends javax.swing.JPanel {
             jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
             jLabel3.setText("Total Pendapatan :");
 
-            bCetakE.setBackground(new java.awt.Color(51, 255, 51));
-            bCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-            bCetakE.setText("Cetak Excel");
-            bCetakE.addActionListener(this::bCetakEActionPerformed);
-
-            btCetakP.setBackground(new java.awt.Color(255, 102, 102));
-            btCetakP.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-            btCetakP.setText("Cetak PDF");
-            btCetakP.addActionListener(this::btCetakPActionPerformed);
-
-            btCetakN.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-            btCetakN.setText("Cetak Nota");
-            btCetakN.addActionListener(this::btCetakNActionPerformed);
-
             javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
             jPanel1.setLayout(jPanel1Layout);
             jPanel1Layout.setHorizontalGroup(
@@ -176,12 +159,6 @@ public class PKelLaporan extends javax.swing.JPanel {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(111, 111, 111)
-                    .addComponent(bCetakE)
-                    .addGap(18, 18, 18)
-                    .addComponent(btCetakP)
-                    .addGap(18, 18, 18)
-                    .addComponent(btCetakN)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3)
@@ -197,10 +174,7 @@ public class PKelLaporan extends javax.swing.JPanel {
                             .addGap(33, 33, 33)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(bCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btCetakP, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btCetakN, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(18, 18, 18)
                             .addComponent(jLabel3)
@@ -240,23 +214,8 @@ public class PKelLaporan extends javax.swing.JPanel {
             );
         }// </editor-fold>//GEN-END:initComponents
 
-    private void bCetakEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCetakEActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bCetakEActionPerformed
-
-    private void btCetakPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btCetakPActionPerformed
-
-    private void btCetakNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCetakNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btCetakNActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bCetakE;
-    private javax.swing.JButton btCetakN;
-    private javax.swing.JButton btCetakP;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

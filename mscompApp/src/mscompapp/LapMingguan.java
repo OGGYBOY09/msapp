@@ -35,6 +35,7 @@ public class LapMingguan extends javax.swing.JPanel {
         this.parent = parent; // Simpan referensi
         initComponents();
         loadComboStatus();
+        loadComboKategori();
         
         // Set Default: Akhir = Hari ini, Awal = 7 hari lalu
         resetTanggalMingguan();
@@ -53,6 +54,21 @@ public class LapMingguan extends javax.swing.JPanel {
         tglAwal.setDate(cal.getTime()); // 7 hari lalu
         isUpdatingDate = false; // Hidupkan listener lagi
     }
+    
+    private void loadComboKategori() {
+    cbKategori.removeAllItems();
+    cbKategori.addItem("- Semua Kategori -"); // Opsi default
+    try {
+        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
+        Connection conn = Koneksi.configDB();
+        ResultSet rs = conn.createStatement().executeQuery(sql);
+        while (rs.next()) {
+            cbKategori.addItem(rs.getString("nama_jenis"));
+        }
+    } catch (Exception e) {
+        System.err.println("Error load kategori: " + e.getMessage());
+    }
+}
     
     private void setupListeners() {
         // 1. Jika Tanggal AWAL diubah -> Tanggal AKHIR otomatis +7 hari
@@ -139,7 +155,13 @@ public class LapMingguan extends javax.swing.JPanel {
 
             if (cbStatus.getSelectedIndex() > 0) {
                 sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
+            
             }
+            
+            if (cbKategori.getSelectedIndex() > 0) {
+            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
+            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
+        }
             
             sql += "ORDER BY s.tanggal_masuk DESC";
 
@@ -296,6 +318,7 @@ public class LapMingguan extends javax.swing.JPanel {
         jLabel4.setText("Kategori :");
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -456,6 +479,11 @@ public class LapMingguan extends javax.swing.JPanel {
         // Panggil CetakStruk
         CetakStruk.cetakStruk(idServis, Session.idUser);
     }//GEN-LAST:event_btnNotaActionPerformed
+
+    private void cbKategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbKategoriItemStateChanged
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_cbKategoriItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
