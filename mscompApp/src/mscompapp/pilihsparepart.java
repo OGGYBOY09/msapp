@@ -87,9 +87,10 @@ public class pilihsparepart extends javax.swing.JDialog {
 
         tQty.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel1.setBackground(new java.awt.Color(102, 204, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 20)); // NOI18N
-        jLabel1.setText("Pilih Sparepart");
+        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("PILIH SPAREPART");
         jLabel1.setOpaque(true);
 
         tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -129,7 +130,6 @@ public class pilihsparepart extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 926, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,7 +147,9 @@ public class pilihsparepart extends javax.swing.JDialog {
                         .addGap(531, 531, 531)
                         .addComponent(btOK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btBatal))))
+                        .addComponent(btBatal)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

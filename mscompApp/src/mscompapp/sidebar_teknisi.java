@@ -33,10 +33,12 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(0, 18, 51));
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wrench.png"))); // NOI18N
         jLabel1.setText("Daftar Service");
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {

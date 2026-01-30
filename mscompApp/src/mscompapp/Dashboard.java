@@ -114,44 +114,71 @@ public class Dashboard extends javax.swing.JFrame {
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pNav.setBackground(new java.awt.Color(102, 204, 255));
-        pNav.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pNav.setBackground(new java.awt.Color(4, 102, 200));
+        pNav.setForeground(new java.awt.Color(0, 24, 69));
 
-        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
         lblWelcome.setText("Welcome");
-        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 30, -1, -1));
 
         lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        lblTanggal.setForeground(new java.awt.Color(255, 255, 255));
         lblTanggal.setText("Tanggal");
-        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1420, 70, -1, -1));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo toko.png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 421, 120));
+        jLabel2.setForeground(new java.awt.Color(0, 24, 69));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ant.png"))); // NOI18N
 
-        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 120));
+        javax.swing.GroupLayout pNavLayout = new javax.swing.GroupLayout(pNav);
+        pNav.setLayout(pNavLayout);
+        pNavLayout.setHorizontalGroup(
+            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pNavLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1187, Short.MAX_VALUE)
+                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTanggal)
+                    .addComponent(lblWelcome))
+                .addGap(214, 214, 214))
+        );
+        pNavLayout.setVerticalGroup(
+            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pNavLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pNavLayout.createSequentialGroup()
+                        .addComponent(lblWelcome)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTanggal))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39))
+        );
+
+        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 140));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
-        pSide.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pSide.setForeground(new java.awt.Color(204, 204, 204));
 
         javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
         pSide.setLayout(pSideLayout);
         pSideLayout.setHorizontalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 198, Short.MAX_VALUE)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
         pSideLayout.setVerticalGroup(
             pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 978, Short.MAX_VALUE)
+            .addGap(0, 940, Short.MAX_VALUE)
         );
 
-        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 200, 980));
+        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 200, 940));
 
         pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 1720, 960));
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 1700, 880));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

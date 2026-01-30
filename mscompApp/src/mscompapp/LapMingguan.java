@@ -278,6 +278,7 @@ public class LapMingguan extends javax.swing.JPanel {
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
+        tblLapMingguan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapMingguan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -289,6 +290,7 @@ public class LapMingguan extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
             }
         ));
+        tblLapMingguan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapMingguan);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

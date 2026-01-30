@@ -220,6 +220,7 @@ public class LapBulanan extends javax.swing.JPanel {
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
+        tblLapBulanan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -231,6 +232,7 @@ public class LapBulanan extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
             }
         ));
+        tblLapBulanan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapBulanan);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
