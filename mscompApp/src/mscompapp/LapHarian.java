@@ -83,11 +83,12 @@ public class LapHarian extends javax.swing.JPanel {
         model.addColumn("Kelengkapan");
         model.addColumn("Total Biaya"); 
         model.addColumn("Status");
+        model.addColumn("Status Barang");
 
         try {
             // Update Query: Tambah s.tanggal_masuk
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk "
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk, s.status_barang "
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -143,7 +144,8 @@ public class LapHarian extends javax.swing.JPanel {
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
                     hargaFmt, 
-                    rs.getString("status")
+                    rs.getString("status"),
+                    rs.getString("status_barang")
                 });
             }
             tblLapHarian.setModel(model);
@@ -165,17 +167,15 @@ public class LapHarian extends javax.swing.JPanel {
                     rs.getString("id_servis"), rs.getString("tanggal_masuk"), rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"), rs.getString("alamat"), rs.getString("jenis_barang"),
                     rs.getString("merek"), rs.getString("model"), rs.getString("no_seri"),
-                    rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), Session.idUser
+                    rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), rs.getString("status_barang"), Session.idUser
                 );
                 
-                // --- FITUR AUTO REFRESH SAAT POPUP DITUTUP ---
+                // --- LISTENER SAAT POPUP DITUTUP ---
                 ds.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        // 1. Refresh Tabel Harian
-                        tampilData(); 
-                        // 2. Refresh Total Pendapatan (PKelLaporan)
-                        if (parent != null) parent.hitungTotalPendapatan();
+                        tampilData(); // Refresh Tabel Bulanan
+                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
                     }
                 });
                 

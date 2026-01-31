@@ -29,9 +29,56 @@ public class LapBulanan extends javax.swing.JPanel {
         this.parent = parent;
         initComponents();
         loadComboStatus();
-        tampilData();
         loadComboKategori(); // <--- Tambahkan ini
         
+        // Tambahkan ini di dalam Constructor LapBulanan
+        tblLapBulanan = new javax.swing.JTable() {
+            @Override
+            public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
+                java.awt.Component comp = super.prepareRenderer(renderer, row, column);
+
+                // Ambil data dari kolom Status (indeks kolom terakhir atau sesuai model Anda)
+                // Di tampilData() Anda, Status berada di kolom ke-11 (indeks 11)
+                Object statusValue = getValueAt(row, 11); 
+
+                if (statusValue != null) {
+                    String status = statusValue.toString();
+
+                    if (isRowSelected(row)) {
+                        comp.setBackground(getSelectionBackground());
+                    } else {
+                        switch (status) {
+                            case "Proses":
+                                comp.setBackground(java.awt.Color.YELLOW);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Selesai":
+                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Dibatalkan":
+                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Menunggu":
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            default:
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                        }
+                    }
+                }
+                return comp;
+            }
+        };
+        // Jangan lupa pindahkan tblLapBulanan ke JScrollPane jika Anda membuatnya secara manual lewat kode
+        jScrollPane1.setViewportView(tblLapBulanan);
+        
+                tampilData();
+
         // Listener
         mcBulan.addPropertyChangeListener("month", e -> tampilData());
         thTahun.addPropertyChangeListener("year", e -> tampilData());
@@ -79,11 +126,12 @@ public class LapBulanan extends javax.swing.JPanel {
         model.addColumn("Kelengkapan");
         model.addColumn("Total Biaya"); 
         model.addColumn("Status");
+        model.addColumn("Status Barang");
 
         try {
             // Update Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk " // <-- Ambil tanggal
+                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status,s.status_barang , s.harga, s.tanggal_masuk " // <-- Ambil tanggal
                        + "FROM servis s "
                        + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
                        + "WHERE 1=1 ";
@@ -133,7 +181,8 @@ public class LapBulanan extends javax.swing.JPanel {
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
                     hargaFmt, 
-                    rs.getString("status")
+                    rs.getString("status"),
+                    rs.getString("status_barang")
                 });
             }
             tblLapBulanan.setModel(model);
@@ -155,7 +204,7 @@ public class LapBulanan extends javax.swing.JPanel {
                     rs.getString("id_servis"), rs.getString("tanggal_masuk"), rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"), rs.getString("alamat"), rs.getString("jenis_barang"),
                     rs.getString("merek"), rs.getString("model"), rs.getString("no_seri"),
-                    rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), Session.idUser
+                    rs.getString("keluhan_awal"), rs.getString("kelengkapan"), rs.getString("status"), rs.getString("status_barang"), Session.idUser
                 );
                 
                 // --- LISTENER SAAT POPUP DITUTUP ---
@@ -223,13 +272,13 @@ public class LapBulanan extends javax.swing.JPanel {
         tblLapBulanan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
+                "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status", "Status Barang"
             }
         ));
         tblLapBulanan.setRowHeight(30);

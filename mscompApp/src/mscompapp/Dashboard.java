@@ -4,6 +4,7 @@
  */
 package mscompapp;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
@@ -28,6 +29,17 @@ public class Dashboard extends javax.swing.JFrame {
         
         // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
         pSide.setLayout(new java.awt.BorderLayout());
+        
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    this.setMaximizedBounds(env.getMaximumWindowBounds());
+    
+    // 2. Set state ke maximized
+    this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
+    
+    this.setResizable(true); 
+
+// Memaksa window untuk langsung dalam kondisi Maximized saat dibuka
+this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         initSidebar();
         panelutama(); // Akan memuat panel sesuai Role
@@ -115,7 +127,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
-        setPreferredSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -178,7 +189,7 @@ public class Dashboard extends javax.swing.JFrame {
         getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 200, 940));
 
         pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 1700, 880));
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 1720, 940));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

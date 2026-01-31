@@ -33,7 +33,7 @@ public class DetailService extends javax.swing.JFrame {
     public DetailService(
             String idServis, String tglMasuk, String nama, String noHp, String alamat,
             String jenis, String merek, String model, String noSeri,
-            String keluhan, String kelengkapan, String status, String idTeknisi) {
+            String keluhan, String kelengkapan, String status,String statusBarang, String idTeknisi) {
         initComponents();
         tfNamTeknisi.setEditable(false);
 
@@ -65,7 +65,9 @@ public class DetailService extends javax.swing.JFrame {
         txtKeluhan.setText(keluhan);
         txtKelengkapan.setText(kelengkapan);
         tStatus.setSelectedItem(status);
+        cbStatBarang.setSelectedItem(statusBarang);
         txtIdService.setEditable(false);
+        
 
         if ("Selesai".equalsIgnoreCase(status) || "Dibatalkan".equalsIgnoreCase(status)) {
             // Tombol 'Selesai Service' tetap disembunyikan agar tidak double klik selesai
@@ -159,6 +161,7 @@ public class DetailService extends javax.swing.JFrame {
                 txtKerusakan.setText(rs.getString("kerusakan"));
                 txtPerbaikan.setText(rs.getString("tindakan"));
                 tBiayaJasa.setText(rs.getString("biaya_jasa"));
+                tDiskon.setText(rs.getString("diskon"));
 
                 // --- FITUR TAMPIL NAMA TEKNISI ---
                 String namaTeknisi = rs.getString("nama");
@@ -281,9 +284,15 @@ public class DetailService extends javax.swing.JFrame {
             if (!strBiayaJasa.isEmpty()) {
                 biayaJasa = Integer.parseInt(strBiayaJasa);
             }
+            
+            int diskon = 0;
+            String strDiskon = tDiskon.getText();
+            if(!strDiskon.isEmpty()) {
+                diskon = Integer.parseInt(strDiskon);
+            }
 
             // Hitung total keseluruhan
-            int grandTotal = totalSparepart + biayaJasa;
+            int grandTotal = totalSparepart + biayaJasa - diskon;
 
             tBiayaTotal.setText(String.valueOf(grandTotal));
 
@@ -332,6 +341,8 @@ public class DetailService extends javax.swing.JFrame {
         txtNoSeri = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         tfNamTeknisi = new javax.swing.JTextField();
+        jLabel24 = new javax.swing.JLabel();
+        cbStatBarang = new javax.swing.JComboBox<>();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -359,6 +370,8 @@ public class DetailService extends javax.swing.JFrame {
         btnEdit = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         tBiayaTotal = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        tDiskon = new javax.swing.JTextField();
 
         jButton1.setText("jButton1");
 
@@ -452,6 +465,12 @@ public class DetailService extends javax.swing.JFrame {
 
         tfNamTeknisi.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel24.setText("Status Barang :");
+
+        cbStatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cbStatBarang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Barang di Toko", "Barang dikembalikan" }));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -486,7 +505,8 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(jLabel12)
                             .addComponent(jLabel13)
                             .addComponent(jLabel14)
-                            .addComponent(jLabel19))
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel24))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtKeluhan)
@@ -494,7 +514,10 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(txtModel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtMerek)
                             .addComponent(txtNoSeri)
-                            .addComponent(tfNamTeknisi))))
+                            .addComponent(tfNamTeknisi)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(cbStatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(16, 16, 16))
         );
         jPanel4Layout.setVerticalGroup(
@@ -548,6 +571,10 @@ public class DetailService extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel19)
                     .addComponent(tfNamTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(cbStatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -628,7 +655,7 @@ public class DetailService extends javax.swing.JFrame {
         jLabel21.setText("Status Service :");
 
         tStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan", " " }));
+        tStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btSimpan.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
@@ -659,6 +686,16 @@ public class DetailService extends javax.swing.JFrame {
 
         tBiayaTotal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        jLabel23.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel23.setText("Diskon :");
+
+        tDiskon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tDiskon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tDiskonKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -666,10 +703,6 @@ public class DetailService extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel18)
@@ -693,20 +726,32 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(btPilih, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(8, 8, 8)))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel20)
-                            .addGap(37, 37, 37)
-                            .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel22)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                             .addComponent(btSimpan)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btSelesai)
-                            .addGap(18, 18, 18)
-                            .addComponent(btKembali))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btKembali))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel20)
+                                    .addGap(37, 37, 37)
+                                    .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel21)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(88, 88, 88)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel23)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tDiskon, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel22)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(277, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -740,18 +785,20 @@ public class DetailService extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
                     .addComponent(tBiayaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23)
+                    .addComponent(tDiskon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21)
                     .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btSimpan)
                     .addComponent(btSelesai)
                     .addComponent(btKembali))
-                .addContainerGap(525, Short.MAX_VALUE))
+                .addContainerGap(580, Short.MAX_VALUE))
         );
 
         jScrollPane4.setViewportView(jPanel3);
@@ -796,6 +843,11 @@ public class DetailService extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tDiskonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tDiskonKeyReleased
+        // TODO add your handling code here:
+        hitungBiaya();
+    }//GEN-LAST:event_tDiskonKeyReleased
+
     private void btPilihActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btPilihActionPerformed
         // TODO add your handling code here:
         pilihsparepart dialog = new pilihsparepart(this, true);
@@ -810,21 +862,24 @@ public class DetailService extends javax.swing.JFrame {
             conn.setAutoCommit(false);
 
             if (currentIdPerbaikan != 0) {
-                String sqlUpdate = "UPDATE perbaikan SET kerusakan=?, tindakan=?, biaya_jasa=? WHERE id_servis=?";
+                String sqlUpdate = "UPDATE perbaikan SET kerusakan=?, tindakan=?, biaya_jasa=?, diskon=? WHERE id_servis=?";
                 PreparedStatement ps = conn.prepareStatement(sqlUpdate);
                 ps.setString(1, txtKerusakan.getText());
                 ps.setString(2, txtPerbaikan.getText());
                 ps.setInt(3, Integer.parseInt(tBiayaJasa.getText()));
-                ps.setString(4, idServis);
+                ps.setInt(4, Integer.parseInt(tDiskon.getText()));
+                ps.setString(5, idServis);
                 ps.executeUpdate();
             } else {
-                String sqlInsert = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa) VALUES (?,?,?,?,?)";
+                String sqlInsert = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa, diskon) VALUES (?,?,?,?,?,?)";
                 PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, idServis);
                 ps.setString(2, Session.idUser);
                 ps.setString(3, txtKerusakan.getText());
                 ps.setString(4, txtPerbaikan.getText());
-                ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));
+                ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));  
+                ps.setInt(6, Integer.parseInt(tDiskon.getText()));                
+
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();
@@ -855,12 +910,14 @@ public class DetailService extends javax.swing.JFrame {
             }
 
             String status = tStatus.getSelectedItem().toString();
+            String statusBarang = cbStatBarang.getSelectedItem().toString();
             String totalBiaya = tBiayaTotal.getText().toString();
-            String sql3 = "UPDATE servis SET harga=?, status=? WHERE id_servis=?";
+            String sql3 = "UPDATE servis SET harga=?, status=?, status_barang=? WHERE id_servis=?";
             PreparedStatement ps3 = conn.prepareStatement(sql3);
             ps3.setString(1, totalBiaya); // Masuk ke kolom 'harga'
             ps3.setString(2, status); // Masuk ke kolom 'status'
-            ps3.setString(3, idServis); // WHERE id_servis
+            ps3.setString(3, statusBarang);
+            ps3.setString(4, idServis); // WHERE id_servis
             ps3.executeUpdate();
 
             conn.commit();
@@ -1076,7 +1133,7 @@ public class DetailService extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(
-                () -> new DetailService("", "", "", "", "", "", "", "", "", "", "", "", "").setVisible(true));
+                () -> new DetailService("", "", "", "", "", "", "", "", "", "", "", "","", "").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1086,6 +1143,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JButton btSimpan;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapusBrg;
+    private javax.swing.JComboBox<String> cbStatBarang;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1102,6 +1160,8 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1119,6 +1179,7 @@ public class DetailService extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField tBiayaJasa;
     private javax.swing.JTextField tBiayaTotal;
+    private javax.swing.JTextField tDiskon;
     private javax.swing.JComboBox<String> tStatus;
     private javax.swing.JLabel tTotalBrg;
     private javax.swing.JTable tblGanti;

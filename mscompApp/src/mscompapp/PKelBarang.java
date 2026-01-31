@@ -167,22 +167,22 @@ public class PKelBarang extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.setPreferredSize(new java.awt.Dimension(312, 960));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel3.setText("KODE BARANG :");
 
         tfKodeBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfKodeBarang.addActionListener(this::tfKodeBarangActionPerformed);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel4.setText("NAMA BARANG :");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel5.setText("HARGA :");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel7.setText("KATEGORI :");
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel8.setText("KETERANGAN :");
 
         tfNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -196,14 +196,14 @@ public class PKelBarang extends javax.swing.JPanel {
         tfKeterangan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
         jPanel1.setBackground(new java.awt.Color(4, 102, 200));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("TAMBAH BARANG");
 
@@ -211,17 +211,17 @@ public class PKelBarang extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(62, 62, 62))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -273,7 +273,7 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addComponent(tfKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(345, Short.MAX_VALUE))
+                .addContainerGap(358, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -282,7 +282,7 @@ public class PKelBarang extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(4, 102, 200));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("DAFTAR BARANG");
 
@@ -290,17 +290,17 @@ public class PKelBarang extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(479, 479, 479))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addComponent(jLabel2)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         tblBarang.setModel(new javax.swing.table.DefaultTableModel(
@@ -319,22 +319,22 @@ public class PKelBarang extends javax.swing.JPanel {
         tfCari.addActionListener(this::tfCariActionPerformed);
 
         btnCari.setBackground(new java.awt.Color(204, 204, 204));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         btnCari.setText("CARI");
         btnCari.addActionListener(this::btnCariActionPerformed);
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         btnEdit.setText("EDIT");
         btnEdit.addActionListener(this::btnEditActionPerformed);
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
-        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         btnHapus.setText("HAPUS");
         btnHapus.addActionListener(this::btnHapusActionPerformed);
 
@@ -352,10 +352,10 @@ public class PKelBarang extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh)
+                        .addGap(49, 49, 49)
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
@@ -366,12 +366,12 @@ public class PKelBarang extends javax.swing.JPanel {
                 .addGap(29, 29, 29)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())

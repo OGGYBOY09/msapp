@@ -96,12 +96,13 @@ public class Teknisi extends javax.swing.JPanel {
         model.addColumn("Kelengkapan");
         model.addColumn("Harga Servis");
         model.addColumn("Status");
+        model.addColumn("Status Barang");
 
         try {
             // Query Dasar
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
-               .append("s.tanggal_masuk, s.merek, s.model, s.harga, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status ")
+               .append("s.tanggal_masuk, s.merek, s.model, s.harga, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status, s.status_barang ")
                .append("FROM servis s ")
                .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
                .append("WHERE 1=1 "); // 1=1 memudahkan penambahan AND dinamis
@@ -157,7 +158,8 @@ public class Teknisi extends javax.swing.JPanel {
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
                     rs.getInt("harga"),
-                    rs.getString("status")
+                    rs.getString("status"),
+                    rs.getString("status_barang")
                 });
             }
             tblServ.setModel(model);
@@ -374,11 +376,12 @@ public class Teknisi extends javax.swing.JPanel {
         String keluhan = tblServ.getValueAt(row, 10).toString();
         String kelengkapan = tblServ.getValueAt(row, 11).toString();
         String status = tblServ.getValueAt(row, 12).toString();
+        String statusBarang = tblServ.getValueAt(row, 13).toString();
         
         // Membuka DetailService
         DetailService ds = new DetailService(
                 idServis, tglMasuk, nama, noHp, alamat, jenis, merek,
-                model, noSeri, keluhan, kelengkapan, status, this.idTeknisi
+                model, noSeri, keluhan, kelengkapan, status, statusBarang, this.idTeknisi
         );
         ds.setLocationRelativeTo(null); // Agar muncul di tengah
         ds.addWindowListener(new java.awt.event.WindowAdapter() {

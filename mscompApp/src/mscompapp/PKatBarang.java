@@ -163,7 +163,7 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jPanel2.setBackground(new java.awt.Color(4, 102, 200));
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("TAMBAH KATEGORI BARANG");
 
@@ -172,35 +172,35 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(49, 49, 49)
                 .addComponent(jLabel1)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Id Kategori :");
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setText("ID Kategori :");
 
         tfIdKatServis.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         tfNmKatServis.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel4.setText("Nama Kategori :");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setText("Kerangan :");
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel5.setText("Keterangan :");
 
         tfKetKatServis.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
@@ -247,7 +247,7 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
 
         jPanel4.setBackground(new java.awt.Color(4, 102, 200));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("DAFTAR KATEGORI BARANG SPAREPART");
 
@@ -255,17 +255,17 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(340, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap(665, Short.MAX_VALUE))
+                .addGap(331, 331, 331))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(27, 27, 27)
                 .addComponent(jLabel2)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         tblKatServis.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
@@ -285,22 +285,22 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jButton1.setText("CARI");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(204, 204, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jButton2.setText("REFRESH");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setBackground(new java.awt.Color(255, 255, 102));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jButton3.setText("EDIT");
         jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 0, 51));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jButton4.setText("HAPUS");
         jButton4.addActionListener(this::jButton4ActionPerformed);
 
@@ -314,17 +314,17 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
+                        .addGap(41, 41, 41)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2)
+                        .addGap(70, 70, 70)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -338,8 +338,9 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 767, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

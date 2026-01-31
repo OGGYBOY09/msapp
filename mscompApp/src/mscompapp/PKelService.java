@@ -142,19 +142,7 @@ public class PKelService extends javax.swing.JPanel {
     }
 
     // Helper untuk menggabungkan Checkbox
-    private String getKelengkapan() {
-        StringBuilder sb = new StringBuilder();
-        if (ck1.isSelected()) sb.append("Charger, ");
-        if (ck2.isSelected()) sb.append("Mouse, ");
-        if (ck3.isSelected()) sb.append("Tas, ");
-        if (ck4.isSelected()) sb.append("Kabel, ");
-        
-        if (sb.length() > 0) {
-            return sb.substring(0, sb.length() - 2); // Hapus koma terakhir
-        }
-        return "Unit Only";
-    }
-
+    
     private void load_table_service() {
         DefaultTableModel model = new DefaultTableModel();
         // Sesuaikan urutan dengan JTable Design kamu
@@ -244,14 +232,10 @@ public class PKelService extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         tSeri = new javax.swing.JTextField();
-        ck1 = new javax.swing.JCheckBox();
-        ck2 = new javax.swing.JCheckBox();
-        ck3 = new javax.swing.JCheckBox();
-        ck4 = new javax.swing.JCheckBox();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tKeluhan = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
+        tKelengkapan = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -269,7 +253,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(3, 83, 164));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("INPUT DATA SERVICE");
 
@@ -278,19 +262,19 @@ public class PKelService extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(271, 271, 271)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel2.setText("Nomor Service :");
 
         tNomorServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -298,16 +282,16 @@ public class PKelService extends javax.swing.JPanel {
 
         tNamaAdmin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel3.setText("Admin :");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel6.setText("Tanggal :");
 
         tTgl.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         tTgl.setText("000");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel7.setText("Status :");
 
         cbStatusServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -364,25 +348,25 @@ public class PKelService extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         buttonGroup1.add(rbBaru);
-        rbBaru.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        rbBaru.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         rbBaru.setText("Pelanggan Baru");
         rbBaru.addActionListener(this::rbBaruActionPerformed);
 
         buttonGroup1.add(rbLama);
-        rbLama.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        rbLama.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         rbLama.setText("Pelangggan Lama");
         rbLama.addActionListener(this::rbLamaActionPerformed);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel4.setText("Cari No Hp / Nama :");
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel9.setText("Nama :");
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel13.setText("No Hp :");
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel14.setText("Alamat :");
 
         tNamaPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -396,7 +380,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel6.setBackground(new java.awt.Color(3, 83, 164));
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("DATA PELANGGAN");
 
@@ -405,30 +389,30 @@ public class PKelService extends javax.swing.JPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(56, 56, 56)
                 .addComponent(jLabel12)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(jLabel12)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
-        btBatal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btBatal.setText("BATAL");
         btBatal.addActionListener(this::btBatalActionPerformed);
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btSimpan.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btSimpan.setText("SIMPAN");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
         btReset.setBackground(new java.awt.Color(255, 255, 102));
-        btReset.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btReset.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btReset.setText("RESET");
         btReset.addActionListener(this::btResetActionPerformed);
 
@@ -452,32 +436,32 @@ public class PKelService extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 13, Short.MAX_VALUE)
+                                .addGap(39, 39, 39)
                                 .addComponent(btSimpan)
-                                .addGap(54, 54, 54)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(18, 18, 18)
+                                .addComponent(tAlamatPelanggan))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(rbLama, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbBaru, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(tNamaPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                                            .addComponent(tNoPelanggan))))
+                                    .addComponent(rbBaru, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addGap(18, 18, 18)
-                                .addComponent(tAlamatPelanggan)))
+                                .addComponent(jLabel13)
+                                .addGap(22, 22, 22)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tNamaPelanggan)
+                                    .addComponent(tNoPelanggan))))
                         .addGap(37, 37, 37))))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(138, 138, 138))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -503,13 +487,15 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btSimpan)
-                    .addComponent(btReset))
-                .addGap(18, 18, 18)
-                .addComponent(btBatal)
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(173, 173, 173))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -518,7 +504,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel5.setBackground(new java.awt.Color(3, 83, 164));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("DATA PERANGKAT/SERVIS");
 
@@ -527,16 +513,16 @@ public class PKelService extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(45, 45, 45)
                 .addComponent(jLabel5)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(17, 17, 17)
                 .addComponent(jLabel5)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         cbJenisBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -549,40 +535,25 @@ public class PKelService extends javax.swing.JPanel {
         tModel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tModel.addActionListener(this::tModelActionPerformed);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel8.setText("Merek :");
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel10.setText("Kelengkapan :");
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel15.setText("Jenis Barang :");
 
-        jLabel16.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel16.setText("Model / Tipe :");
 
-        jLabel17.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel17.setText("No Seri :");
 
         tSeri.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tSeri.addActionListener(this::tSeriActionPerformed);
 
-        ck1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        ck1.setText("Charger");
-        ck1.addActionListener(this::ck1ActionPerformed);
-
-        ck2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        ck2.setText("Mouse");
-        ck2.addActionListener(this::ck2ActionPerformed);
-
-        ck3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        ck3.setText("Tas");
-
-        ck4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        ck4.setText("Kabel");
-        ck4.addActionListener(this::ck4ActionPerformed);
-
-        jLabel18.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel18.setText("Keluhan :");
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -593,20 +564,22 @@ public class PKelService extends javax.swing.JPanel {
         tKeluhan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tKeluhan);
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tKelengkapan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel11.setText("Lainya :");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel11)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tKelengkapan))
                     .addComponent(jLabel8)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -620,22 +593,9 @@ public class PKelService extends javax.swing.JPanel {
                             .addComponent(tModel)
                             .addComponent(cbJenisBrg, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(tSeri)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(ck2)
-                                .addGap(34, 34, 34)
-                                .addComponent(ck4))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(ck1)
-                                .addGap(26, 26, 26)
-                                .addComponent(ck3)))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE))))
+                .addContainerGap(24, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -663,18 +623,11 @@ public class PKelService extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ck1)
-                    .addComponent(ck3)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ck2)
-                        .addComponent(ck4))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(168, Short.MAX_VALUE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -684,7 +637,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel8.setBackground(new java.awt.Color(3, 83, 164));
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 26)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("DAFTAR SERVIS");
 
@@ -692,17 +645,17 @@ public class PKelService extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel19)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(274, 274, 274))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(17, 17, 17)
                 .addComponent(jLabel19)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         tblServis.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -817,14 +770,6 @@ public class PKelService extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tSeriActionPerformed
 
-    private void ck1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ck1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ck1ActionPerformed
-
-    private void ck2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ck2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ck2ActionPerformed
-
     private void tNomorServActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNomorServActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tNomorServActionPerformed
@@ -872,7 +817,7 @@ public class PKelService extends javax.swing.JPanel {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String tgl = sdf.format(new Date()); // Tanggal hari ini
             int idAdmin = getAdminId(); // Ambil ID Admin
-            String kelengkapan = getKelengkapan();
+            String kelengkapan = tKelengkapan.getText();
 
             String sqlService = "INSERT INTO servis (id_servis, id_pelanggan, id_admin, tanggal_masuk, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             java.sql.PreparedStatement pstServ = conn.prepareStatement(sqlService);
@@ -917,10 +862,6 @@ public class PKelService extends javax.swing.JPanel {
         tModel.setText("");
         tSeri.setText("");
         tKeluhan.setText("");
-        ck1.setSelected(false);
-        ck2.setSelected(false);
-        ck3.setSelected(false);
-        ck4.setSelected(false);
         cbStatusServ.setSelectedIndex(0);
         
         auto_number_service();
@@ -951,10 +892,6 @@ public class PKelService extends javax.swing.JPanel {
         
     }//GEN-LAST:event_cbJenisBrgActionPerformed
 
-    private void ck4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ck4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ck4ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBatal;
@@ -964,10 +901,6 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbJenisBrg;
     private javax.swing.JComboBox<String> cbStatusServ;
-    private javax.swing.JCheckBox ck1;
-    private javax.swing.JCheckBox ck2;
-    private javax.swing.JCheckBox ck3;
-    private javax.swing.JCheckBox ck4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -998,10 +931,10 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JRadioButton rbBaru;
     private javax.swing.JRadioButton rbLama;
     private javax.swing.JTextField tAlamatPelanggan;
+    private javax.swing.JTextField tKelengkapan;
     private javax.swing.JTextArea tKeluhan;
     private javax.swing.JTextField tMerek;
     private javax.swing.JTextField tModel;

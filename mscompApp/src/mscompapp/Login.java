@@ -5,6 +5,7 @@
 package mscompapp;
 
 import config.Koneksi;
+import java.awt.GraphicsEnvironment;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +30,18 @@ public class Login extends javax.swing.JFrame {
         this.idUser = Session.idUser;
         this.getRootPane().setDefaultButton(btLogin);
         
+        // 1. Ambil ukuran layar yang tersedia (sudah dipotong Taskbar)
+    GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    this.setMaximizedBounds(env.getMaximumWindowBounds());
+    
+    // 2. Set state ke maximized
+    this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
+    
+    this.setResizable(true); 
+
+// Memaksa window untuk langsung dalam kondisi Maximized saat dibuka
+this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
     }
 
     /**
@@ -52,6 +65,7 @@ public class Login extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(6);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -98,7 +112,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 1030));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backlogin.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 1310, 1020));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 1310, 960));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
