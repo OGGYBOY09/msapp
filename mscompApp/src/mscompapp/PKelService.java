@@ -20,15 +20,62 @@ public class PKelService extends javax.swing.JPanel {
     public int idPelanggan = 0; 
 
     public PKelService() {
+        
         initComponents();
         auto_number_service();
         tampilkanAdmin();
         tampilTanggal();
         load_jenis_perangkat();
-        load_status();
-        load_table_service();
+        load_status();       
         tampilKategori();       // DATA KATEGORI DARI DATABASE
-        
+
+        // Tambahkan ini di dalam Constructor LapBulanan
+        tblServis = new javax.swing.JTable() {
+            @Override
+            public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
+                java.awt.Component comp = super.prepareRenderer(renderer, row, column);
+
+                // Ambil data dari kolom Status (indeks kolom terakhir atau sesuai model Anda)
+                // Di tampilData() Anda, Status berada di kolom ke-11 (indeks 11)
+                Object statusValue = getValueAt(row, 7); 
+
+                if (statusValue != null) {
+                    String status = statusValue.toString();
+
+                    if (isRowSelected(row)) {
+                        comp.setBackground(getSelectionBackground());
+                    } else {
+                        switch (status) {
+                            case "Proses":
+                                comp.setBackground(java.awt.Color.YELLOW);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Selesai":
+                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Dibatalkan":
+                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Menunggu":
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            default:
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                        }
+                    }
+                }
+                return comp;
+            }
+        };
+        jScrollPane2.setViewportView(tblServis);
+
+        load_table_service();
+
         // Default State
         rbLama.setSelected(true);
         btnCari.setEnabled(true);
@@ -145,7 +192,6 @@ public class PKelService extends javax.swing.JPanel {
     
     private void load_table_service() {
         DefaultTableModel model = new DefaultTableModel();
-        // Sesuaikan urutan dengan JTable Design kamu
         model.addColumn("No Servis");
         model.addColumn("Nama Pelanggan");
         model.addColumn("No HP");
@@ -156,13 +202,31 @@ public class PKelService extends javax.swing.JPanel {
         model.addColumn("Status");
 
         try {
+            // 1. Base Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
-                         "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
-                         "ORDER BY s.tanggal_masuk DESC";
-            
+                         "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ";
+
+            String keyword = tfCari.getText();
+
+            // 2. Tambahkan kondisi pencarian jika keyword tidak kosong
+            if (!keyword.isEmpty()) {
+                sql += " WHERE p.nama_pelanggan LIKE ? OR s.id_servis LIKE ? ";
+            }
+
+            // 3. Tambahkan Order By di akhir
+            sql += " ORDER BY s.tanggal_masuk DESC";
+
             java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+
+            // 4. Set parameter jika ada pencarian
+            if (!keyword.isEmpty()) {
+                pst.setString(1, "%" + keyword + "%");
+                pst.setString(2, "%" + keyword + "%");
+            }
+
+            java.sql.ResultSet res = pst.executeQuery();
+
             while(res.next()){
                 model.addRow(new Object[]{
                     res.getString("id_servis"),
@@ -176,8 +240,10 @@ public class PKelService extends javax.swing.JPanel {
                 });
             }
             tblServis.setModel(model);
+
         } catch (Exception e) {
             System.out.println("Error Load Table: " + e.getMessage());
+            e.printStackTrace(); // Penting untuk debugging
         }
     }
 
@@ -242,6 +308,10 @@ public class PKelService extends javax.swing.JPanel {
         jLabel19 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblServis = new javax.swing.JTable();
+        jLabel20 = new javax.swing.JLabel();
+        tfCari = new javax.swing.JTextField();
+        btRefresh = new javax.swing.JButton();
+        btEdit = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
@@ -426,11 +496,11 @@ public class PKelService extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
+                                .addGap(45, 45, 45)
                                 .addComponent(btSimpan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(18, 18, 18)
@@ -448,10 +518,10 @@ public class PKelService extends javax.swing.JPanel {
                                     .addComponent(tNamaPelanggan)
                                     .addComponent(tNoPelanggan))))
                         .addGap(37, 37, 37))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(139, 139, 139)
                 .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(138, 138, 138))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,14 +548,12 @@ public class PKelService extends javax.swing.JPanel {
                     .addComponent(jLabel14)
                     .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                     .addComponent(btReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(173, 173, 173))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -503,7 +571,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,12 +627,12 @@ public class PKelService extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tKelengkapan))
+                        .addGap(18, 18, 18)
+                        .addComponent(tKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel8)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -612,7 +680,7 @@ public class PKelService extends javax.swing.JPanel {
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(197, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -665,6 +733,24 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.getColumnModel().getColumn(8).setResizable(false);
         }
 
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel20.setText("Cari :");
+
+        tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCariKeyReleased(evt);
+            }
+        });
+
+        btRefresh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btRefresh.setText("Refresh");
+        btRefresh.addActionListener(this::btRefreshActionPerformed);
+
+        btEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btEdit.setText("Edit");
+        btEdit.addActionListener(this::btEditActionPerformed);
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -672,7 +758,16 @@ public class PKelService extends javax.swing.JPanel {
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btEdit)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -680,6 +775,14 @@ public class PKelService extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btRefresh)
+                        .addComponent(btEdit))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel20)
+                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2)
                 .addContainerGap())
         );
@@ -695,7 +798,7 @@ public class PKelService extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 821, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -704,11 +807,11 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 958, Short.MAX_VALUE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -770,60 +873,84 @@ public class PKelService extends javax.swing.JPanel {
             java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
             int finalIdPelanggan = idPelanggan;
 
-            // 2. Cek apakah Pelanggan Baru? Jika ya, simpan dulu ke tbl_pelanggan
+            // 2. Logika Pelanggan
             if (rbBaru.isSelected()) {
                 String sqlPelanggan = "INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)";
-                // Gunakan RETURN_GENERATED_KEYS untuk mengambil ID auto increment
-                java.sql.PreparedStatement pstPel = conn.prepareStatement(sqlPelanggan, Statement.RETURN_GENERATED_KEYS);
+                java.sql.PreparedStatement pstPel = conn.prepareStatement(sqlPelanggan, java.sql.Statement.RETURN_GENERATED_KEYS);
                 pstPel.setString(1, tNamaPelanggan.getText());
                 pstPel.setString(2, tNoPelanggan.getText());
                 pstPel.setString(3, tAlamatPelanggan.getText());
                 pstPel.executeUpdate();
-                
-                // Ambil ID yang baru dibuat
+
                 java.sql.ResultSet rsId = pstPel.getGeneratedKeys();
                 if (rsId.next()) {
                     finalIdPelanggan = rsId.getInt(1);
                 }
             } else {
-                // Jika pelanggan lama tapi ID masih 0 (belum pilih dari pop up)
                 if (finalIdPelanggan == 0) {
                     JOptionPane.showMessageDialog(this, "Mohon cari dan pilih data pelanggan lama!");
                     return;
                 }
+                // Opsional: Update data pelanggan lama jika ada perubahan di form
+                String updatePel = "UPDATE tbl_pelanggan SET nama_pelanggan=?, no_hp=?, alamat=? WHERE id_pelanggan=?";
+                java.sql.PreparedStatement pstUpPel = conn.prepareStatement(updatePel);
+                pstUpPel.setString(1, tNamaPelanggan.getText());
+                pstUpPel.setString(2, tNoPelanggan.getText());
+                pstUpPel.setString(3, tAlamatPelanggan.getText());
+                pstUpPel.setInt(4, finalIdPelanggan);
+                pstUpPel.executeUpdate();
             }
 
-            // 3. Simpan ke Tabel Servis
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String tgl = sdf.format(new Date()); // Tanggal hari ini
-            int idAdmin = getAdminId(); // Ambil ID Admin
-            String kelengkapan = tKelengkapan.getText();
+            // 3. Logika Simpan atau Update Tabel Servis
+            // Cek apakah ID Servis sudah ada
+            String checkSql = "SELECT COUNT(*) FROM servis WHERE id_servis = ?";
+            java.sql.PreparedStatement pstCheck = conn.prepareStatement(checkSql);
+            pstCheck.setString(1, tNomorServ.getText());
+            java.sql.ResultSet rsCheck = pstCheck.executeQuery();
+            rsCheck.next();
+            boolean isUpdate = rsCheck.getInt(1) > 0;
 
-            String sqlService = "INSERT INTO servis (id_servis, id_pelanggan, id_admin, tanggal_masuk, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sqlService;
+            if (isUpdate) {
+                // Query UPDATE
+                sqlService = "UPDATE servis SET id_pelanggan=?, jenis_barang=?, merek=?, model=?, no_seri=?, kelengkapan=?, keluhan_awal=?, status=? WHERE id_servis=?";
+            } else {
+                // Query INSERT
+                sqlService = "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            }
+
             java.sql.PreparedStatement pstServ = conn.prepareStatement(sqlService);
-            
-            pstServ.setString(1, tNomorServ.getText());
-            pstServ.setInt(2, finalIdPelanggan);
-            pstServ.setInt(3, idAdmin);
-            pstServ.setString(4, tgl);
-            pstServ.setString(5, cbJenisBrg.getSelectedItem().toString());
-            pstServ.setString(6, tMerek.getText());
-            pstServ.setString(7, tModel.getText());
-            pstServ.setString(8, tSeri.getText());
-            pstServ.setString(9, kelengkapan);
-            pstServ.setString(10, tKeluhan.getText());
-            pstServ.setString(11, cbStatusServ.getSelectedItem().toString());
-            
+
+            // Set parameter (Urutan harus sama dengan query di atas)
+            pstServ.setInt(1, finalIdPelanggan);
+            pstServ.setString(2, cbJenisBrg.getSelectedItem().toString());
+            pstServ.setString(3, tMerek.getText());
+            pstServ.setString(4, tModel.getText());
+            pstServ.setString(5, tSeri.getText());
+            pstServ.setString(6, tKelengkapan.getText());
+            pstServ.setString(7, tKeluhan.getText());
+            pstServ.setString(8, cbStatusServ.getSelectedItem().toString());
+
+            if (isUpdate) {
+                pstServ.setString(9, tNomorServ.getText());
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                pstServ.setString(9, sdf.format(new java.util.Date())); // tanggal_masuk
+                pstServ.setInt(10, getAdminId()); // id_admin
+                pstServ.setString(11, tNomorServ.getText()); // id_servis
+            }
+
             pstServ.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Data Service Berhasil Disimpan!\nNo: " + tNomorServ.getText());
-            
-            // Refresh
+            String pesan = isUpdate ? "Data Berhasil Diperbarui!" : "Data Berhasil Disimpan!";
+            JOptionPane.showMessageDialog(this, pesan + "\nNo: " + tNomorServ.getText());
+
             load_table_service();
-            btResetActionPerformed(null); // Reset Form
+            btResetActionPerformed(null);
+            tNomorServ.setEditable(true); // Aktifkan kembali ID field setelah reset
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Proses: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_btSimpanActionPerformed
@@ -872,9 +999,75 @@ public class PKelService extends javax.swing.JPanel {
         
     }//GEN-LAST:event_cbJenisBrgActionPerformed
 
+    private void tfCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCariKeyReleased
+        // TODO add your handling code here:
+        load_table_service();
+    }//GEN-LAST:event_tfCariKeyReleased
+
+    private void btRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRefreshActionPerformed
+        // TODO add your handling code here:
+        tfCari.setText("");
+        load_table_service();
+    }//GEN-LAST:event_btRefreshActionPerformed
+
+    private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
+        // TODO add your handling code here:
+        int baris = tblServis.getSelectedRow();
+        
+        if (baris != -1) {
+            // 1. Ambil ID Servis dari baris yang diklik sebagai kunci pencarian
+            String id_servis = tblServis.getValueAt(baris, 0).toString();
+
+            try {
+                // 2. Query lengkap untuk mengambil data dari tabel servis dan pelanggan
+                String sql = "SELECT s.*, p.* FROM servis s " +
+                             "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
+                             "WHERE s.id_servis = '" + id_servis + "'";
+
+                java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+                java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+
+                if (res.next()) {
+                    idPelanggan = res.getInt("id_pelanggan");
+                    // --- BAGIAN INPUT DATA SERVIS ---
+                    tNomorServ.setText(res.getString("id_servis"));
+                    // Mengatur ComboBox Status & Jenis
+                    cbStatusServ.setSelectedItem(res.getString("status"));
+                    cbJenisBrg.setSelectedItem(res.getString("jenis_barang"));
+
+                    tMerek.setText(res.getString("merek"));
+                    tModel.setText(res.getString("model"));
+                    tSeri.setText(res.getString("no_seri"));
+                    tKeluhan.setText(res.getString("keluhan_awal"));
+                    tKelengkapan.setText(res.getString("kelengkapan"));
+
+                    // --- BAGIAN DATA PELANGGAN ---
+                    tNamaPelanggan.setText(res.getString("nama_pelanggan"));
+                    tNoPelanggan.setText(res.getString("no_hp"));
+                    tAlamatPelanggan.setText(res.getString("alamat"));
+
+                    // --- PENGATURAN RADIO BUTTON ---
+                    // Set ke "Pelanggan Lama" secara otomatis
+                    rbLama.setSelected(true);
+
+                    // Kunci ID Servis agar tidak bisa diubah saat mode edit
+                    tNomorServ.setEditable(false);
+
+                    System.out.println("Data berhasil dimuat dari database.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal mengambil data: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih baris di tabel lebih dulu!");
+        }
+    }//GEN-LAST:event_btEditActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBatal;
+    private javax.swing.JButton btEdit;
+    private javax.swing.JButton btRefresh;
     private javax.swing.JButton btReset;
     private javax.swing.JButton btSimpan;
     private javax.swing.JButton btnCari;
@@ -893,6 +1086,7 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -925,5 +1119,6 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JTextField tSeri;
     private javax.swing.JLabel tTgl;
     private javax.swing.JTable tblServis;
+    private javax.swing.JTextField tfCari;
     // End of variables declaration//GEN-END:variables
 }

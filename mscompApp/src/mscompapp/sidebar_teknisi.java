@@ -56,7 +56,7 @@ public class sidebar_teknisi extends javax.swing.JPanel {
             public void mouseExited(MouseEvent e) {
                 // Saat mouse keluar: Kembalikan jadi Putih (atau warna asal)
                 Component c = e.getComponent();
-                c.setBackground(new Color(0, 18, 51));
+                c.setBackground(new Color(238,242,247));
             }
         });
     }
@@ -74,13 +74,12 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(0, 18, 51));
+        setBackground(new java.awt.Color(238, 242, 247));
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
 
-        jLabel1.setBackground(new java.awt.Color(0, 18, 51));
+        jLabel1.setBackground(new java.awt.Color(238, 242, 247));
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wrench.png"))); // NOI18N
         jLabel1.setText("Daftar Service");
         jLabel1.setOpaque(true);
