@@ -45,12 +45,15 @@ public class DafServisAnda extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(1720, 750));
         setName(""); // NOI18N
 
-        jPanel1.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(3, 83, 164));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Daftar Servis Yang Anda Kerjakan");
 
         lblNmTeknisi.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        lblNmTeknisi.setForeground(new java.awt.Color(255, 255, 255));
         lblNmTeknisi.setText("Nama Teknisi");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -69,9 +72,11 @@ public class DafServisAnda extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNmTeknisi))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblNmTeknisi)
+                        .addGap(0, 31, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -97,6 +102,7 @@ public class DafServisAnda extends javax.swing.JPanel {
         cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        tblSerAnda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblSerAnda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -108,6 +114,7 @@ public class DafServisAnda extends javax.swing.JPanel {
                 "No", "Id Servis", "Tanggal Masuk", "Nama", "Jenis Barang", "Keluhan", "Kelengkapan", "Harga Servis", "Status"
             }
         ));
+        tblSerAnda.setRowHeight(35);
         jScrollPane1.setViewportView(tblSerAnda);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

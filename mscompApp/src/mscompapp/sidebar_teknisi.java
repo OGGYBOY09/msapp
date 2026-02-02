@@ -4,6 +4,12 @@
  */
 package mscompapp;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
 /**
  *
  * @author ASUS
@@ -19,7 +25,42 @@ public class sidebar_teknisi extends javax.swing.JPanel {
     public sidebar_teknisi(Dashboard dashboard) {
         this.dashboard = dashboard;
         initComponents();
+        
+        JLabel[] menuLabels = {
+            jLabel1,
+        };
+        
+        setHoverEffect(menuLabels);
     }
+    
+    public void setHoverEffect(JLabel[] daftarLabel) {
+    
+    // Loop untuk setiap label yang ada di daftar
+    for (JLabel label : daftarLabel) {
+        
+        // 1. Pastikan label bisa berubah warna (Opaque harus true)
+        label.setOpaque(true);
+        
+        // 2. Tambahkan pendengar (Listener) mouse
+        label.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Saat mouse masuk: Ubah jadi Abu-abu & Ganti kursor jadi tangan
+                Component c = e.getComponent(); // Mengambil komponen yang disentuh
+                c.setBackground(new Color(4, 102, 200)); 
+                c.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Saat mouse keluar: Kembalikan jadi Putih (atau warna asal)
+                Component c = e.getComponent();
+                c.setBackground(new Color(0, 18, 51));
+            }
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,10 +78,13 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
 
+        jLabel1.setBackground(new java.awt.Color(0, 18, 51));
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wrench.png"))); // NOI18N
         jLabel1.setText("Daftar Service");
+        jLabel1.setOpaque(true);
+        jLabel1.setVerifyInputWhenFocusTarget(false);
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);

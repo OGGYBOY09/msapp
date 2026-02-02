@@ -190,6 +190,8 @@ public class LapBulanan extends javax.swing.JPanel {
         } catch (Exception e) {
             System.err.println("Error tampil data bulanan: " + e.getMessage());
         }
+        
+        hitungDanKirimPendapatan();
     }
     
     private void bukaHalamanDetail(String idServis) {
@@ -211,8 +213,7 @@ public class LapBulanan extends javax.swing.JPanel {
                 ds.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        tampilData(); // Refresh Tabel Bulanan
-                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
+                        tampilData(); 
                     }
                 });
                 
@@ -220,6 +221,41 @@ public class LapBulanan extends javax.swing.JPanel {
                 ds.setVisible(true);
             }
         } catch (Exception e) {}
+    }
+    
+    private void hitungDanKirimPendapatan() {
+        if (parent == null) return;
+        
+        try {
+            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' ";
+            
+            int bulan = mcBulan.getMonth() + 1;
+            int tahun = thTahun.getYear();
+            sql += "AND MONTH(tanggal_masuk) = " + bulan + " AND YEAR(tanggal_masuk) = " + tahun + " ";
+            
+            if (cbKategori.getSelectedIndex() > 0) {
+                sql += "AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+            }
+
+            Connection conn = Koneksi.configDB();
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            
+            int total = 0;
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+            
+            // Nama Bulan untuk Judul
+            String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                                  "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+            String bulanStr = namaBulan[mcBulan.getMonth()];
+            
+            // KIRIM KE PARENT
+            parent.setInfoPendapatan("Pendapatan Bulan " + bulanStr + " " + tahun + " :", total);
+            
+        } catch (Exception e) {
+            System.out.println("Err Bulanan: " + e.getMessage());
+        }
     }
 
     /**
@@ -281,8 +317,23 @@ public class LapBulanan extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status", "Status Barang"
             }
         ));
-        tblLapBulanan.setRowHeight(30);
+        tblLapBulanan.setRowHeight(35);
         jScrollPane1.setViewportView(tblLapBulanan);
+        if (tblLapBulanan.getColumnModel().getColumnCount() > 0) {
+            tblLapBulanan.getColumnModel().getColumn(0).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(1).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(2).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(3).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(4).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(5).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(6).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(7).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(8).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(9).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(10).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(11).setResizable(false);
+            tblLapBulanan.getColumnModel().getColumn(12).setResizable(false);
+        }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Bulan :");
@@ -404,7 +455,7 @@ public class LapBulanan extends javax.swing.JPanel {
         mcBulan.setMonth(cal.get(java.util.Calendar.MONTH));
         thTahun.setYear(cal.get(java.util.Calendar.YEAR));
         tampilData();
-        if (parent != null) parent.hitungTotalPendapatan();
+        
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed

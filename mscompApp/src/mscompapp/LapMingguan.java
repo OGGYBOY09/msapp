@@ -244,6 +244,8 @@ public class LapMingguan extends javax.swing.JPanel {
         } catch (Exception e) {
             System.err.println("Error tampil data mingguan: " + e.getMessage());
         }
+        
+        hitungDanKirimPendapatan();
     }
     
     private void bukaHalamanDetail(String idServis) {
@@ -266,7 +268,7 @@ public class LapMingguan extends javax.swing.JPanel {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         tampilData(); // Refresh Tabel Mingguan
-                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
+                        
                     }
                 });
                 
@@ -276,6 +278,45 @@ public class LapMingguan extends javax.swing.JPanel {
         } catch (Exception e) {}
     }
     
+    private void hitungDanKirimPendapatan() {
+        if (parent == null) return;
+        
+        try {
+            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' ";
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String start = "", end = "";
+            
+            if (tglAwal.getDate() != null && tglAkhir.getDate() != null) {
+                start = sdf.format(tglAwal.getDate());
+                end = sdf.format(tglAkhir.getDate());
+                sql += "AND tanggal_masuk BETWEEN '" + start + "' AND '" + end + "' ";
+            }
+            
+            if (cbKategori.getSelectedIndex() > 0) {
+                sql += "AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+            }
+
+            Connection conn = Koneksi.configDB();
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            
+            int total = 0;
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+            
+            // Format Judul
+            SimpleDateFormat sdfView = new SimpleDateFormat("dd MMM yyyy");
+            String startV = (tglAwal.getDate() != null) ? sdfView.format(tglAwal.getDate()) : "-";
+            String endV = (tglAkhir.getDate() != null) ? sdfView.format(tglAkhir.getDate()) : "-";
+            
+            // KIRIM KE PARENT
+            parent.setInfoPendapatan("Pendapatan Periode " + startV + " s/d " + endV + " :", total);
+            
+        } catch (Exception e) {
+            System.out.println("Err Mingguan: " + e.getMessage());
+        }
+    }
     
 
     /**
@@ -337,7 +378,7 @@ public class LapMingguan extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
             }
         ));
-        tblLapMingguan.setRowHeight(30);
+        tblLapMingguan.setRowHeight(35);
         jScrollPane1.setViewportView(tblLapMingguan);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -453,7 +494,7 @@ public class LapMingguan extends javax.swing.JPanel {
         cbStatus.setSelectedIndex(0);
         resetTanggalMingguan(); // Reset ke logika Today & Today-7
         tampilData();
-        if (parent != null) parent.hitungTotalPendapatan();
+        
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed

@@ -19,9 +19,8 @@ public class sidebar_admin extends javax.swing.JPanel {
     /**
      * Creates new form sidebar_admin
      */
-    private Dashboard dashboard; // Tambahkan variabel Dashboard
-
-    // Konstruktor menerima parameter Dashboard
+    private Dashboard dashboard;
+    
     public sidebar_admin(Dashboard dashboard) {
         this.dashboard = dashboard;
         initComponents();

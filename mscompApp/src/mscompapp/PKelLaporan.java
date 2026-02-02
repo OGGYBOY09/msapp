@@ -23,69 +23,44 @@ public class PKelLaporan extends javax.swing.JPanel {
     public PKelLaporan() {
         initComponents();
         
-        // 1. Pastikan Layout jPanel4 adalah BorderLayout
         jPanel4.setLayout(new BorderLayout());
-        
-        // 2. Listener ComboBox
         jComboBox1.addActionListener(e -> gantiHalamanLaporan());
         
-        // 3. Load Awal
-        hitungTotalPendapatan(); 
         gantiHalamanLaporan(); 
     }
     
-    // Method Public untuk menghitung pendapatan (Dipanggil oleh Panel Anak)
-    public void hitungTotalPendapatan() {
-        try {
-            Connection conn = config.Koneksi.configDB();
-            // Menghitung total harga dari servis yang statusnya 'Selesai'
-            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai'";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            if (rs.next()) {
-                int total = rs.getInt("total");
-                DecimalFormat df = new DecimalFormat("#,###");
-                
-                // Pastikan txtTotalPendapatan tidak null (cegah error jika belum ke-load)
-                if (txtTotalPendapatan != null) {
-                    txtTotalPendapatan.setText("Rp " + df.format(total));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Gagal hitung pendapatan: " + e.getMessage());
-        }
+    
+    public void setInfoPendapatan(String labelJudul, int totalUang) {
+        // 1. Update Label Judul (jLabel3)
+        jLabel3.setText(labelJudul);
+        
+        // 2. Update Label Total Uang (txtTotalPendapatan)
+        DecimalFormat df = new DecimalFormat("#,###");
+        txtTotalPendapatan.setText("Rp " + df.format(totalUang));
     }
     
-    // --- PERBAIKAN LOGIKA GANTI HALAMAN (LEBIH AMAN) ---
+    // Method Public untuk menghitung pendapatan (Dipanggil oleh Panel Anak)
     private void gantiHalamanLaporan() {
         try {
-            // Bersihkan panel lama
             jPanel4.removeAll();
-            jPanel4.setLayout(new BorderLayout()); // Reset layout untuk memastikan
+            jPanel4.setLayout(new BorderLayout()); 
             
-            // Ambil pilihan (Cek null safety)
             Object selectedItem = jComboBox1.getSelectedItem();
             String pilihan = (selectedItem != null) ? selectedItem.toString() : "";
             
-            // Gunakan IF-ELSE dengan equalsIgnoreCase (Agar tidak peduli huruf Besar/Kecil)
             if (pilihan.equalsIgnoreCase("Laporan harian")) {
                 jPanel4.add(new LapHarian(this), BorderLayout.CENTER);
-                
             } else if (pilihan.equalsIgnoreCase("Laporan mingguan")) {
                 jPanel4.add(new LapMingguan(this), BorderLayout.CENTER);
-                
             } else if (pilihan.equalsIgnoreCase("Laporan bulanan")) {
                 jPanel4.add(new LapBulanan(this), BorderLayout.CENTER);
             }
             
-            // Refresh Tampilan UI
             jPanel4.revalidate();
             jPanel4.repaint();
             
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal memuat halaman laporan: " + e.getMessage());
         }
     }
     
@@ -116,8 +91,9 @@ public class PKelLaporan extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(4, 102, 200));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LAPORAN DATA SERVICE");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -126,15 +102,15 @@ public class PKelLaporan extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N

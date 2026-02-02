@@ -153,6 +153,8 @@ public class LapHarian extends javax.swing.JPanel {
         } catch (Exception e) {
             System.err.println("Error tampil data harian: " + e.getMessage());
         }
+        
+        hitungDanKirimPendapatan();
     }
     
     private void bukaHalamanDetail(String idServis) {
@@ -175,7 +177,6 @@ public class LapHarian extends javax.swing.JPanel {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         tampilData(); // Refresh Tabel Bulanan
-                        if (parent != null) parent.hitungTotalPendapatan(); // Refresh Total Uang
                     }
                 });
                 
@@ -183,6 +184,46 @@ public class LapHarian extends javax.swing.JPanel {
                 ds.setVisible(true);
             }
         } catch (Exception e) {}
+    }
+    
+    private void hitungDanKirimPendapatan() {
+        if (parent == null) return;
+        
+        try {
+            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' ";
+            
+            // Filter Tanggal
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tgl = "";
+            if (tglHarian.getDate() != null) {
+                tgl = sdf.format(tglHarian.getDate());
+                sql += "AND DATE(tanggal_masuk) = '" + tgl + "' ";
+            }
+            
+            // Filter Kategori (Jika ada)
+            if (cbKategori.getSelectedIndex() > 0) {
+                sql += "AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+            }
+
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            
+            int total = 0;
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+            
+            // Format Tanggal untuk Judul (agar lebih cantik dibaca)
+            SimpleDateFormat sdfView = new SimpleDateFormat("dd MMMM yyyy");
+            String tglView = (tglHarian.getDate() != null) ? sdfView.format(tglHarian.getDate()) : "-";
+            
+            // KIRIM KE PARENT
+            parent.setInfoPendapatan("Pendapatan Tanggal " + tglView + " :", total);
+            
+        } catch (Exception e) {
+            System.out.println("Err Harian: " + e.getMessage());
+        }
     }
     
     /**
@@ -231,6 +272,7 @@ public class LapHarian extends javax.swing.JPanel {
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
+        tblLapHarian.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapHarian.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -242,6 +284,7 @@ public class LapHarian extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
             }
         ));
+        tblLapHarian.setRowHeight(35);
         jScrollPane1.setViewportView(tblLapHarian);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -353,9 +396,6 @@ public class LapHarian extends javax.swing.JPanel {
         cbStatus.setSelectedIndex(0);
         tglHarian.setDate(new Date());
         tampilData();
-        
-        // --- UPDATE JUGA TOTAL PENDAPATAN DI PARENT ---
-        if (parent != null) parent.hitungTotalPendapatan();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed

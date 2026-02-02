@@ -88,12 +88,13 @@ public class pilihsparepart extends javax.swing.JDialog {
         tQty.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("PILIH SPAREPART");
         jLabel1.setOpaque(true);
 
-        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -105,6 +106,7 @@ public class pilihsparepart extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblBarang.setRowHeight(35);
         jScrollPane1.setViewportView(tblBarang);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
