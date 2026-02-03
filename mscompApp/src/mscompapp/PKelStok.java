@@ -107,7 +107,11 @@ public class PKelStok extends javax.swing.JPanel {
     }
 
     private void loadData(){
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
         model.addColumn("No");
         model.addColumn("ID Pembelian"); 
         model.addColumn("Tanggal");

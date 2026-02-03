@@ -19,8 +19,11 @@ public class PopUpBarang extends javax.swing.JFrame {
     }
 
     private void load_table() {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Kode Barang");
+DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};        model.addColumn("Kode Barang");
         model.addColumn("Nama Barang");
         model.addColumn("Kategori");
         model.addColumn("Harga");

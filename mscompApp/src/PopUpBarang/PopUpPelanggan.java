@@ -16,8 +16,11 @@ public class PopUpPelanggan extends javax.swing.JFrame {
     }
 
     private void load_table() {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
+DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};        model.addColumn("ID");
         model.addColumn("Nama Pelanggan");
         model.addColumn("No Telp");
         model.addColumn("Alamat");

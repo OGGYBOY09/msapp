@@ -123,16 +123,13 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     // Ubah ke PUBLIC agar bisa diakses dari file Sidebar
     public void switchPanel(javax.swing.JPanel panel) {
     // 1. Matikan timer lama jika masih jalan (biar gak tabrakan)
-    if (timerAnimasi != null && timerAnimasi.isRunning()) {
-        timerAnimasi.stop();
-    }
+    
 
     // 2. Bersihkan pMain
     pMain.removeAll();
     
     // 3. MATIKAN LAYOUT MANAGER (PENTING!)
     // Agar panel bisa kita gerakkan manual (animasi), layout harus null dulu.
-    pMain.setLayout(null);  // <--- INI YANG KURANG DI KODE SEBELUMNYA
     
     // 4. Siapkan Ukuran & Posisi Awal
     int width = pMain.getWidth();
@@ -145,35 +142,7 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     pMain.repaint(); // Gambar ulang pMain agar kosong sebentar
     
     // 5. Mulai Animasi Naik
-    timerAnimasi = new Timer(5, new ActionListener() {
-        int speed = 100; // Kecepatan gerak
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int currentY = panel.getY();
-            
-            // Logika Animasi
-            if (currentY > 0) {
-                // Geser panel ke atas
-                panel.setLocation(0, currentY - speed);
-                pMain.repaint(); // Paksa gambar ulang setiap pergeseran
-            } else {
-                // STOP ANIMASI (Sudah sampai atas)
-                ((Timer)e.getSource()).stop();
-                panel.setLocation(0, 0); 
-                
-                // 6. KEMBALIKAN KE BORDER LAYOUT (SANGAT PENTING)
-                // Agar responsif lagi kalau window dibesarkan/dikecilkan
-                pMain.setLayout(new java.awt.BorderLayout());
-                pMain.add(panel, java.awt.BorderLayout.CENTER);
-                pMain.revalidate();
-                pMain.repaint();
-            }
-        }
-    });
-    
-    timerAnimasi.start();
-}
+    }
     
     // --- FITUR 1: LOGIKA HALAMAN UTAMA BERDASARKAN ROLE ---
     private void panelutama() {

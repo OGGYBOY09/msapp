@@ -113,7 +113,11 @@ public class LapBulanan extends javax.swing.JPanel {
     }
 
     public void tampilData() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+            }};        
         model.addColumn("No");
         model.addColumn("ID Servis");
         model.addColumn("Tanggal Masuk"); // <--- KOLOM BARU DI GUI

@@ -75,7 +75,11 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
 
     // --- 2. LOAD TABEL ---
     private void load_table() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
         model.addColumn("No");
         model.addColumn("ID Kategori");
         model.addColumn("Nama Kategori");

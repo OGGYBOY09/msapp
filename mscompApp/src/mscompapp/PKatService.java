@@ -56,7 +56,11 @@ public class PKatService extends javax.swing.JPanel {
 
     // --- 2. LOAD TABEL (TAMPIL DATA) ---
     private void load_table() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
         model.addColumn("No");
         model.addColumn("ID Jenis");
         model.addColumn("Nama Jenis Perangkat");

@@ -27,7 +27,11 @@ public class PKelUser extends javax.swing.JPanel {
     }
     
     private void load_table() {
-    DefaultTableModel model = new DefaultTableModel();
+    DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
     model.addColumn("ID"); model.addColumn("Username"); 
     model.addColumn("Password"); model.addColumn("Nama"); model.addColumn("Role");
     try {

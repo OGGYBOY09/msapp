@@ -456,6 +456,7 @@ public class DetailService extends javax.swing.JFrame {
         tfNamTeknisi = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         cbStatBarang = new javax.swing.JComboBox<>();
+        btKembali = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -478,7 +479,6 @@ public class DetailService extends javax.swing.JFrame {
         tStatus = new javax.swing.JComboBox<>();
         btSimpan = new javax.swing.JButton();
         btSelesai = new javax.swing.JButton();
-        btKembali = new javax.swing.JButton();
         btnHapusBrg = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
@@ -584,12 +584,17 @@ public class DetailService extends javax.swing.JFrame {
         cbStatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatBarang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Barang di Toko", "Barang dikembalikan" }));
 
+        btKembali.setBackground(new java.awt.Color(255, 51, 51));
+        btKembali.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        btKembali.setText("Kembali");
+        btKembali.addActionListener(this::btKembaliActionPerformed);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -599,10 +604,10 @@ public class DetailService extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtAlamat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                            .addComponent(txtAlamat, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtNohp, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtNama, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtIdService)))
+                            .addComponent(txtIdService, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -631,12 +636,17 @@ public class DetailService extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(cbStatBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(16, 16, 16))
+                .addGap(17, 17, 17))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btKembali)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addComponent(btKembali)
+                .addGap(12, 12, 12)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtIdService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
@@ -780,11 +790,6 @@ public class DetailService extends javax.swing.JFrame {
         btSelesai.setText("Selesai Service [shift + enter}");
         btSelesai.addActionListener(this::btSelesaiActionPerformed);
 
-        btKembali.setBackground(new java.awt.Color(255, 51, 51));
-        btKembali.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
-        btKembali.setText("Kembali");
-        btKembali.addActionListener(this::btKembaliActionPerformed);
-
         btnHapusBrg.setBackground(new java.awt.Color(255, 51, 51));
         btnHapusBrg.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         btnHapusBrg.setText("Hapus Barang");
@@ -859,11 +864,10 @@ public class DetailService extends javax.swing.JFrame {
                                     .addComponent(jLabel22)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btKembali)))
-                    .addComponent(btSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(btSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(221, 221, 221)))
+                    .addComponent(btSelesai))
                 .addContainerGap(277, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -906,9 +910,7 @@ public class DetailService extends javax.swing.JFrame {
                     .addComponent(jLabel21)
                     .addComponent(tStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btSimpan)
-                    .addComponent(btKembali))
+                .addComponent(btSimpan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btSelesai)
                 .addContainerGap(588, Short.MAX_VALUE))
@@ -931,7 +933,7 @@ public class DetailService extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())

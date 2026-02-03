@@ -31,7 +31,11 @@ public class pilihsparepart extends javax.swing.JDialog {
     }
 
     private void load_table(String keyword) {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
         model.addColumn("Kode Barang");
         model.addColumn("Nama Barang"); 
         model.addColumn("Kategori"); 

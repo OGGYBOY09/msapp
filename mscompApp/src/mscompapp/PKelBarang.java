@@ -85,7 +85,11 @@ public class PKelBarang extends javax.swing.JPanel {
 
     // --- 4. LOAD TABLE (LANGSUNG DARI TBL_BARANG) ---
     private void load_table() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
+    }};
         model.addColumn("No");
         model.addColumn("Kode");
         model.addColumn("Nama Barang");
@@ -320,6 +324,12 @@ public class PKelBarang extends javax.swing.JPanel {
         tblBarang.setRowHeight(35);
         jScrollPane1.setViewportView(tblBarang);
 
+        tfCari.setText("Cari....");
+        tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfCariFocusGained(evt);
+            }
+        });
         tfCari.addActionListener(this::tfCariActionPerformed);
 
         btnCari.setBackground(new java.awt.Color(204, 204, 204));
@@ -514,6 +524,10 @@ public class PKelBarang extends javax.swing.JPanel {
         // TODO add your handling code here:
         resetForm();
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void tfCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCariFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCariFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
