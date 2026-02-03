@@ -11,6 +11,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -27,7 +34,59 @@ public class PKatService extends javax.swing.JPanel {
         initComponents();
         load_table();
         auto_number();
-        bersihkan(); // Pastikan state awal bersih
+        bersihkan(); 
+        initKeyShortcuts();
+    }
+    
+    private void initKeyShortcuts() {
+        InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getActionMap();
+
+        // ENTER -> btnSimpan
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "cmdSimpan");
+        am.put("cmdSimpan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnSimpan.isEnabled()) btnSimpan.doClick();
+            }
+        });
+
+        // F1 -> btn_edit
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "cmdEdit");
+        am.put("cmdEdit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btn_edit.isEnabled()) btn_edit.doClick();
+            }
+        });
+
+        // DEL -> btnDelete
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "cmdDelete");
+        am.put("cmdDelete", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnDelete.isEnabled()) btnDelete.doClick();
+            }
+        });
+
+        // F2 -> btn_cari
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCari");
+        am.put("cmdCari", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tf_cari.requestFocus();
+                if (btn_cari.isEnabled()) btn_cari.doClick();
+            }
+        });
+
+        // F3 -> btn_refresh
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "cmdRefresh");
+        am.put("cmdRefresh", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btn_refresh.isEnabled()) btn_refresh.doClick();
+            }
+        });
     }
     
     // --- 1. LOGIKA AUTO NUMBER ID ---
@@ -183,8 +242,8 @@ public class PKatService extends javax.swing.JPanel {
         tfNmKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 24)); // NOI18N
-        btnSimpan.setText("SIMPAN");
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
+        btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
@@ -277,22 +336,22 @@ public class PKatService extends javax.swing.JPanel {
 
         btn_refresh.setBackground(new java.awt.Color(204, 204, 204));
         btn_refresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btn_refresh.setText("Refresh");
+        btn_refresh.setText("Refresh [F3]");
         btn_refresh.addActionListener(this::btn_refreshActionPerformed);
 
         btn_edit.setBackground(new java.awt.Color(255, 255, 102));
         btn_edit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btn_edit.setText("Edit");
+        btn_edit.setText("Edit [F1]");
         btn_edit.addActionListener(this::btn_editActionPerformed);
 
         btnDelete.setBackground(new java.awt.Color(255, 0, 51));
         btnDelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btnDelete.setText("Hapus");
+        btnDelete.setText("Hapus [Del]");
         btnDelete.addActionListener(this::btnDeleteActionPerformed);
 
         btn_cari.setBackground(new java.awt.Color(204, 204, 204));
         btn_cari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btn_cari.setText("Cari");
+        btn_cari.setText("Cari [F2]");
         btn_cari.addActionListener(this::btn_cariActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -303,17 +362,17 @@ public class PKatService extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(49, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1107, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)
                         .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_refresh)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
                         .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDelete)))
                 .addGap(46, 46, 46))
         );
         jPanel2Layout.setVerticalGroup(
@@ -350,44 +409,58 @@ public class PKatService extends javax.swing.JPanel {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
-        String nama = tfNmKatBarang.getText();
-        String ket = tfKetKatBarang.getText();
-        String id = tfIdKatBarang.getText();
-
-        if (nama.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama Jenis Perangkat tidak boleh kosong!");
-            return;
-        }
-
         try {
+            // Validasi Input Kosong
+            if (tfNmKatBarang.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nama Kategori tidak boleh kosong!");
+                return;
+            }
+
             Connection conn = Koneksi.configDB();
             PreparedStatement pst;
-            
+            String sql;
+
             if (isEditMode) {
-                // UPDATE DATA
-                String sql = "UPDATE tbl_jenis_perangkat SET nama_jenis=?, keterangan=? WHERE id_kategori=?";
+                // --- PERBAIKAN UTAMA DISINI ---
+                // JANGAN update kolom 'id_kategori' di bagian SET.
+                // Cukup update Nama & Keterangan. ID hanya untuk WHERE.
+                sql = "UPDATE tbl_jenis_perangkat SET nama_jenis=?, keterangan=? WHERE id_kategori=?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, nama);
-                pst.setString(2, ket);
-                pst.setString(3, id);
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Data Berhasil Diubah");
+                pst.setString(1, tfNmKatBarang.getText());
+                pst.setString(2, tfKetKatBarang.getText());
+                pst.setInt(3, Integer.parseInt(tfIdKatBarang.getText())); // WHERE ID = ...
+                
             } else {
-                // INSERT DATA BARU
-                String sql = "INSERT INTO tbl_jenis_perangkat (id_kategori, nama_jenis, keterangan) VALUES (?,?,?)";
+                // LOGIKA INSERT (Data Baru)
+                // Cek apakah ID sudah ada (menghindari duplikat jika auto number meleset)
+                String cekSql = "SELECT count(*) FROM tbl_jenis_perangkat WHERE id_kategori = ?";
+                PreparedStatement pstCek = conn.prepareStatement(cekSql);
+                pstCek.setString(1, tfIdKatBarang.getText());
+                ResultSet rsCek = pstCek.executeQuery();
+                rsCek.next();
+                if (rsCek.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(this, "ID Kategori sudah ada, silakan Refresh!");
+                    return;
+                }
+
+                sql = "INSERT INTO tbl_jenis_perangkat (id_kategori, nama_jenis, keterangan) VALUES (?, ?, ?)";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, id);
-                pst.setString(2, nama);
-                pst.setString(3, ket);
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
+                pst.setInt(1, Integer.parseInt(tfIdKatBarang.getText()));
+                pst.setString(2, tfNmKatBarang.getText());
+                pst.setString(3, tfKetKatBarang.getText());
             }
+
+            // Eksekusi Query
+            pst.executeUpdate();
             
-            load_table();
-            bersihkan();
+            String pesan = isEditMode ? "Data Berhasil Diperbarui" : "Data Berhasil Disimpan";
+            JOptionPane.showMessageDialog(this, pesan);
             
+            bersihkan(); // Reset form kembali ke kondisi awal
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Proses: " + e.getMessage());
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -398,19 +471,27 @@ public class PKatService extends javax.swing.JPanel {
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
         // TODO add your handling code here:
-        int row = tblKatBarang.getSelectedRow();
-        if (row != -1) {
-            // Ambil data dari tabel ke form
-            tfIdKatBarang.setText(tblKatBarang.getValueAt(row, 1).toString());
-            tfNmKatBarang.setText(tblKatBarang.getValueAt(row, 2).toString());
-            tfKetKatBarang.setText(tblKatBarang.getValueAt(row, 3).toString());
+        int baris = tblKatBarang.getSelectedRow();
+        
+        if (baris != -1) {
+            // Ambil data dari tabel ke textfield
+            tfIdKatBarang.setText(tblKatBarang.getValueAt(baris, 1).toString());
+            tfNmKatBarang.setText(tblKatBarang.getValueAt(baris, 2).toString());
             
-            // Ubah mode jadi EDIT
+            // Handle kemungkinan Keterangan null
+            Object ketObj = tblKatBarang.getValueAt(baris, 3);
+            tfKetKatBarang.setText(ketObj != null ? ketObj.toString() : "");
+
+            // Masuk Mode Edit
             isEditMode = true;
-            btnSimpan.setText("UBAH");
-            tfIdKatBarang.setEditable(false);
+            btnSimpan.setText("UBAH"); // Ubah teks tombol agar user sadar sedang mode edit
+            
+            // KUNCI ID AGAR TIDAK BISA DIUBAH (Mencegah Error Foreign Key)
+            tfIdKatBarang.setEditable(false); 
+            tfNmKatBarang.requestFocus(); // Fokus ke nama
+            
         } else {
-            JOptionPane.showMessageDialog(this, "Pilih data yang akan diedit terlebih dahulu!");
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel terlebih dahulu!");
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
@@ -431,28 +512,40 @@ public class PKatService extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int row = tblKatBarang.getSelectedRow();
-        if (row != -1) {
-            String id = tblKatBarang.getValueAt(row, 1).toString();
-            int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus kategori ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+        int baris = tblKatBarang.getSelectedRow();
+        
+        if (baris != -1) {
+            String id = tblKatBarang.getValueAt(baris, 1).toString();
+            String nama = tblKatBarang.getValueAt(baris, 2).toString();
             
-            if (confirm == JOptionPane.YES_OPTION) {
+            int konfirmasi = JOptionPane.showConfirmDialog(this, 
+                    "Apakah Anda yakin menghapus kategori: " + nama + "?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION);
+            
+            if (konfirmasi == JOptionPane.YES_OPTION) {
                 try {
-                    Connection conn = Koneksi.configDB();
                     String sql = "DELETE FROM tbl_jenis_perangkat WHERE id_kategori=?";
+                    Connection conn = Koneksi.configDB();
                     PreparedStatement pst = conn.prepareStatement(sql);
                     pst.setString(1, id);
                     pst.executeUpdate();
                     
                     JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
-                    load_table();
                     bersihkan();
+                    
+                } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                    // Tangkap Error jika data sedang dipakai di tabel lain
+                    JOptionPane.showMessageDialog(this, 
+                        "Gagal Hapus! Kategori ini sedang digunakan pada Data Barang atau Servis.",
+                        "Error Relasi Data",
+                        JOptionPane.ERROR_MESSAGE);
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Gagal Hapus (Mungkin data sedang digunakan): " + e.getMessage());
+                    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Pilih baris data yang ingin dihapus terlebih dahulu");
+            JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 

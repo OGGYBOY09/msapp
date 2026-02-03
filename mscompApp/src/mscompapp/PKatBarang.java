@@ -11,6 +11,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -27,6 +34,7 @@ public class PKatBarang extends javax.swing.JPanel {
         load_table();
         auto_number();
         bersihkan(); 
+        initKeyShortcuts();
         
         // Contoh pengaturan manual untuk JTable (misal namanya tblKategori)
 // Mengatur tinggi baris agar teks tidak sesak
@@ -48,6 +56,60 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
 // gunakan baris ini untuk memaksa perataan dan warna:
 ((javax.swing.table.DefaultTableCellRenderer)tblKatServis.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(javax.swing.JLabel.CENTER);    }
+    
+    
+    private void initKeyShortcuts() {
+        // Menggunakan WHEN_IN_FOCUSED_WINDOW agar shortcut jalan dimanapun fokus kursor berada
+        InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getActionMap();
+
+        // 1. ENTER -> Button Simpan
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "cmdSimpan");
+        am.put("cmdSimpan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnSimpan.isEnabled()) btnSimpan.doClick();
+            }
+        });
+
+        // 2. F2 -> Button Cari
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCari");
+        am.put("cmdCari", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Opsional: Fokuskan ke textfield cari juga agar UX lebih enak
+                jTextField1.requestFocus();
+                if (jButton1.isEnabled()) jButton1.doClick();
+            }
+        });
+
+        // 3. F3 -> Button Refresh
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "cmdRefresh");
+        am.put("cmdRefresh", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jButton2.isEnabled()) jButton2.doClick();
+            }
+        });
+
+        // 4. F1 -> Button Edit
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "cmdEdit");
+        am.put("cmdEdit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jButton3.isEnabled()) jButton3.doClick();
+            }
+        });
+
+        // 5. DELETE (DEL) -> Button Hapus
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "cmdHapus");
+        am.put("cmdHapus", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jButton4.isEnabled()) jButton4.doClick();
+            }
+        });
+    }
     
     // --- 1. LOGIKA AUTO NUMBER ID (tbl_kat_barang) ---
     private void auto_number() {
@@ -206,7 +268,7 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
-        btnSimpan.setText("SIMPAN");
+        btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -293,22 +355,22 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
 
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
         jButton1.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jButton1.setText("CARI");
+        jButton1.setText("CARI [F2]");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(204, 204, 204));
         jButton2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jButton2.setText("REFRESH");
+        jButton2.setText("REFRESH [F3]");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setBackground(new java.awt.Color(255, 255, 102));
         jButton3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jButton3.setText("EDIT");
+        jButton3.setText("EDIT [F1]");
         jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 0, 51));
         jButton4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jButton4.setText("HAPUS");
+        jButton4.setText("HAPUS [Del]");
         jButton4.addActionListener(this::jButton4ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -323,13 +385,13 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -339,12 +401,14 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(13, 13, 13)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 772, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

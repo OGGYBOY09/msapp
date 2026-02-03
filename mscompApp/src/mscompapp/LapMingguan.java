@@ -361,7 +361,7 @@ public class LapMingguan extends javax.swing.JPanel {
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCari.setText("CARI");
+        btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
@@ -371,7 +371,7 @@ public class LapMingguan extends javax.swing.JPanel {
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnRefresh.setText("REFRESH");
+        btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         tblLapMingguan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -432,8 +432,8 @@ public class LapMingguan extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDetail)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65)
+                        .addComponent(btnRefresh)
+                        .addGap(32, 32, 32)
                         .addComponent(btCetakE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPdf)

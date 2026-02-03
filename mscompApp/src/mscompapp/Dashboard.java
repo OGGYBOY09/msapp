@@ -30,8 +30,6 @@ public class Dashboard extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
     private String userRole;
     private int currentPanelIndex = 0;
-    private Timer timerAnimasi;
-    
     // Constructor menerima dua parameter: username dan role
     public Dashboard(String username, String role) {
         this.userRole = role;
@@ -41,7 +39,6 @@ public class Dashboard extends javax.swing.JFrame {
         
         // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
         pSide.setLayout(new java.awt.BorderLayout());
-        
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     this.setMaximizedBounds(env.getMaximumWindowBounds());
@@ -122,26 +119,10 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     
     // Ubah ke PUBLIC agar bisa diakses dari file Sidebar
     public void switchPanel(javax.swing.JPanel panel) {
-    // 1. Matikan timer lama jika masih jalan (biar gak tabrakan)
-    
-
-    // 2. Bersihkan pMain
-    pMain.removeAll();
-    
-    // 3. MATIKAN LAYOUT MANAGER (PENTING!)
-    // Agar panel bisa kita gerakkan manual (animasi), layout harus null dulu.
-    
-    // 4. Siapkan Ukuran & Posisi Awal
-    int width = pMain.getWidth();
-    int height = pMain.getHeight();
-    
-    panel.setSize(width, height);
-    panel.setLocation(0, height); // Taruh di bawah layar (tersembunyi)
-    
-    pMain.add(panel);
-    pMain.repaint(); // Gambar ulang pMain agar kosong sebentar
-    
-    // 5. Mulai Animasi Naik
+        pMain.removeAll();
+        pMain.add(panel);
+        pMain.repaint();
+        pMain.revalidate();
     }
     
     // --- FITUR 1: LOGIKA HALAMAN UTAMA BERDASARKAN ROLE ---

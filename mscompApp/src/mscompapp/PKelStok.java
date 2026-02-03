@@ -13,6 +13,13 @@ import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
 import java.awt.event.KeyAdapter; // Import baru untuk event ngetik
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -32,6 +39,7 @@ public class PKelStok extends javax.swing.JPanel {
         initComponents();
         loadData();
         loadKategori(); 
+        initKeyShortcuts();
         JTanggal.setDate(new java.util.Date());
         
         tKodeBrg.setEditable(false);
@@ -45,6 +53,49 @@ public class PKelStok extends javax.swing.JPanel {
                 hitungTotal();
             }
         });
+    }
+    
+    private void initKeyShortcuts() {
+        InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getActionMap();
+
+        // ENTER -> btnSimpan
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "cmdSimpan");
+        am.put("cmdSimpan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btSimpan.isEnabled()) btSimpan.doClick();
+            }
+        });
+
+        // F1 -> btn_edit
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "cmdEdit");
+        am.put("cmdEdit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnedit.isEnabled()) btnedit.doClick();
+            }
+        });
+
+        // DEL -> btnDelete
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "cmdDelete");
+        am.put("cmdDelete", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btndelete.isEnabled()) btndelete.doClick();
+            }
+        });
+
+        // F2 -> btn_cari
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCari");
+        am.put("cmdCari", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btCari.isEnabled()) btCari.doClick();
+            }
+        });
+
+        
     }
     
     public void itemTerpilih(String kode, String nama, String kat, String harga) {

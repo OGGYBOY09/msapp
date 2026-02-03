@@ -12,6 +12,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -29,7 +36,8 @@ public class LapBulanan extends javax.swing.JPanel {
         this.parent = parent;
         initComponents();
         loadComboStatus();
-        loadComboKategori(); // <--- Tambahkan ini
+        loadComboKategori();
+        initKeyShortcuts();// <--- Tambahkan ini
         
         // Tambahkan ini di dalam Constructor LapBulanan
         tblLapBulanan = new javax.swing.JTable() {
@@ -85,7 +93,38 @@ public class LapBulanan extends javax.swing.JPanel {
         thTahun.addPropertyChangeListener("year", e -> tampilData());
         cbStatus.addActionListener(e -> tampilData()); 
     }
-    
+    private void initKeyShortcuts() {
+        // Menggunakan WHEN_IN_FOCUSED_WINDOW agar shortcut jalan dimanapun fokus kursor berada
+        InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getActionMap();
+
+        // 1. ENTER -> Button Simpan
+        
+        // 2. F2 -> Button Cari
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCari");
+        am.put("cmdCari", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Opsional: Fokuskan ke textfield cari juga agar UX lebih enak
+                tfCari.requestFocus();
+                if (btnCari.isEnabled()) btnCari.doClick();
+            }
+        });
+
+        // 3. F3 -> Button Refresh
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "cmdRefresh");
+        am.put("cmdRefresh", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnRefresh.isEnabled()) btnRefresh.doClick();
+            }
+        });
+
+        // 4. F1 -> Button Edit
+        
+
+
+    }
     
     private void loadComboKategori() {
     cbKategori.removeAllItems();
@@ -297,7 +336,7 @@ public class LapBulanan extends javax.swing.JPanel {
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCari.setText("CARI");
+        btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
@@ -307,7 +346,7 @@ public class LapBulanan extends javax.swing.JPanel {
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnRefresh.setText("REFRESH");
+        btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         tblLapBulanan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -322,23 +361,8 @@ public class LapBulanan extends javax.swing.JPanel {
                 "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status", "Status Barang"
             }
         ));
-        tblLapBulanan.setRowHeight(35);
+        tblLapBulanan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapBulanan);
-        if (tblLapBulanan.getColumnModel().getColumnCount() > 0) {
-            tblLapBulanan.getColumnModel().getColumn(0).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(1).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(2).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(3).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(4).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(5).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(6).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(7).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(8).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(9).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(10).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(11).setResizable(false);
-            tblLapBulanan.getColumnModel().getColumn(12).setResizable(false);
-        }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Bulan :");
@@ -414,7 +438,7 @@ public class LapBulanan extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 13, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

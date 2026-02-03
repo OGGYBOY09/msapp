@@ -40,6 +40,52 @@ public class Teknisi extends javax.swing.JPanel {
         
         // 3. Tambahkan Event Listener
         addFilterListeners();
+        
+        tblServ = new javax.swing.JTable() {
+            {
+        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
+        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
+    }
+            @Override
+            public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
+                java.awt.Component comp = super.prepareRenderer(renderer, row, column);
+                Object statusValue = getValueAt(row, 11); 
+
+                if (statusValue != null) {
+                    String status = statusValue.toString();
+
+                    if (isRowSelected(row)) {
+                        comp.setBackground(getSelectionBackground());
+                    } else {
+                        switch (status) {
+                            case "Proses":
+                                comp.setBackground(java.awt.Color.YELLOW);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Selesai":
+                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Dibatalkan":
+                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            case "Menunggu":
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                            default:
+                                comp.setBackground(java.awt.Color.WHITE);
+                                comp.setForeground(java.awt.Color.BLACK);
+                                break;
+                        }
+                    }
+                }
+                return comp;
+            }
+        };
+        // Jangan lupa pindahkan tblLapBulanan ke JScrollPane jika Anda membuatnya secara manual lewat kode
+        jScrollPane1.setViewportView(tblServ);
     }
     
     // --- LISTENER FILTER ---
@@ -243,7 +289,8 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel2.setText(" Status :");
 
         btnRefresh.setBackground(new java.awt.Color(102, 255, 102));
-        btnRefresh.setText("REFRESH");
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -313,8 +360,8 @@ public class Teknisi extends javax.swing.JPanel {
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                                .addGap(31, 31, 31)
-                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(btnRefresh)
                                 .addGap(11, 11, 11)))))
                 .addGap(28, 28, 28))
         );

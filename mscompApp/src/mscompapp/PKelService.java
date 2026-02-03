@@ -40,6 +40,10 @@ public class PKelService extends javax.swing.JPanel {
 
         // Custom Renderer untuk Tabel
         tblServis = new javax.swing.JTable() {
+            {
+        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
+        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
+    }
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
@@ -81,8 +85,6 @@ public class PKelService extends javax.swing.JPanel {
         tNoPelanggan.setEditable(false);
         tAlamatPelanggan.setEditable(false);
         
-        // --- PANGGIL FUNGSI SHORTCUT DISINI ---
-        initKeyShortcuts();
     }
     
     // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---

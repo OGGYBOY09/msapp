@@ -4,6 +4,7 @@
  */
 package mscompapp;
 
+
 /**
  *
  * @author Acer Aspire Lite 15
@@ -81,14 +82,18 @@ public class DafServisAnda extends javax.swing.JPanel {
 
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        btnCari.setBackground(new java.awt.Color(255, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCari.setText("Cari");
+        btnCari.setText("Cari[F2]");
 
+        btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDetail.setText("Detail");
+        btnDetail.addActionListener(this::btnDetailActionPerformed);
 
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
+        btnRefresh.setText("Refresh [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -133,8 +138,8 @@ public class DafServisAnda extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 520, Short.MAX_VALUE)
+                        .addComponent(btnRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 492, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,6 +176,10 @@ public class DafServisAnda extends javax.swing.JPanel {
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDetailActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
