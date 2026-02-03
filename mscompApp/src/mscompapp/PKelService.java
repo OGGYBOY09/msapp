@@ -35,7 +35,8 @@ public class PKelService extends javax.swing.JPanel {
         tampilTanggal();
         load_jenis_perangkat();
         load_status();       
-        tampilKategori();       
+        tampilKategori();  
+        initKeyShortcuts();
 
         // Custom Renderer untuk Tabel
         tblServis = new javax.swing.JTable() {
@@ -68,6 +69,7 @@ public class PKelService extends javax.swing.JPanel {
                 return comp;
             }
         };
+        javax.swing.SwingUtilities.invokeLater(() -> this.requestFocusInWindow());
         jScrollPane2.setViewportView(tblServis);
 
         load_table_service();
@@ -85,8 +87,8 @@ public class PKelService extends javax.swing.JPanel {
     
     // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---
     private void initKeyShortcuts() {
-        // Mengambil InputMap dari JPanel ini
-        InputMap im = this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        // PERBAIKAN DISINI: Ganti WHEN_ANCESTOR_OF_FOCUSED_COMPONENT menjadi WHEN_IN_FOCUSED_WINDOW
+        InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = this.getActionMap();
 
         // 1. btSimpan = SHIFT + ENTER
@@ -158,7 +160,8 @@ public class PKelService extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cbStatusServ.requestFocus();
-                cbStatusServ.showPopup(); // Membuka dropdown otomatis
+                // Opsional: Langsung buka popup dropdown
+                try { cbStatusServ.showPopup(); } catch (Exception ex) {} 
             }
         });
 
@@ -168,7 +171,8 @@ public class PKelService extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cbJenisBrg.requestFocus();
-                cbJenisBrg.showPopup(); // Membuka dropdown otomatis
+                // Opsional: Langsung buka popup dropdown
+                try { cbJenisBrg.showPopup(); } catch (Exception ex) {}
             }
         });
     }
