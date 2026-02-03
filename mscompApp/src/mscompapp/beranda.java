@@ -6,13 +6,16 @@ package mscompapp;
 
 
 import config.Koneksi;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -35,6 +38,76 @@ public class Beranda extends javax.swing.JPanel {
         
         tampilPendapatan();
         tampilStatusServis();
+        
+        initNavigation();
+    }
+    
+    private void initNavigation() {
+        // Mapping: Panel -> Target Halaman (dan index shortcut navigasi)
+        
+        // 1. Jumlah User -> Kelola User
+        setupPanelAction(jPanel1, new PKelUser(), 7);
+        
+        // 2. Jumlah Barang -> Kelola Barang
+        setupPanelAction(jPanel4, new PKelBarang(), 3);
+        
+        // 3. Jumlah Service -> Kelola Laporan (Sesuai request)
+        setupPanelAction(jPanel5, new PKelLaporan(), 1);
+        
+        // 4. Total Stock -> Kelola Barang (Sesuai request)
+        setupPanelAction(jPanel6, new PKelBarang(), 3);
+        
+        // 5. Pendapatan Harian -> Kelola Laporan
+        setupPanelAction(jPanel7, new PKelLaporan(), 1);
+        
+        // 6. Pendapatan Bulanan -> Kelola Laporan
+        setupPanelAction(jPanel8, new PKelLaporan(), 1);
+        
+        // 7. Servis Selesai -> Kelola Laporan
+        setupPanelAction(jPanel9, new PKelLaporan(), 1);
+        
+        // 8. Servis Proses -> Kelola Laporan
+        setupPanelAction(jPanel11, new PKelLaporan(), 1);
+    }
+    
+    private void setupPanelAction(JPanel sourcePanel, JPanel targetPanel, int dashboardIndex) {
+        // Efek Hover (Visual)
+        sourcePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        sourcePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Mencari Parent Dashboard secara otomatis
+                Dashboard dash = (Dashboard) SwingUtilities.getWindowAncestor(sourcePanel);
+                
+                if (dash != null) {
+                    // Pindah panel
+                    dash.switchPanel(targetPanel);
+                    // Update index agar shortcut Alt+Angka tetap sinkron
+                    dash.setPanelIndex(dashboardIndex); 
+                }
+            }
+
+            // Efek Hover: Ubah warna sedikit saat mouse masuk
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                sourcePanel.setBackground(new Color(220, 220, 220)); // Sedikit lebih gelap dari putih/abu
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Kembalikan ke warna asal (sesuaikan dengan warna di desainmu)
+                // jPanel1-11 di desainmu sepertinya menggunakan warna background yang berbeda-beda
+                // Logika di bawah untuk mengembalikan warna default panel masing-masing
+                if (sourcePanel == jPanel2) {
+                     sourcePanel.setBackground(new Color(4, 102, 200));
+                } else if (sourcePanel == jPanel3) {
+                     sourcePanel.setBackground(new Color(255, 255, 255));
+                } else {
+                     sourcePanel.setBackground(new Color(204, 204, 204)); // Warna default panel kartu
+                }
+            }
+        });
     }
     
     // --- HELPER: FORMAT ANGKA (Titik per 3 nol) ---

@@ -35,8 +35,63 @@ public class LapHarian extends javax.swing.JPanel {
         tampilData();
         addFilterListeners();
         loadComboKategori();
+        aturWarnaBarisTabel();
         
     }
+    
+    private void aturWarnaBarisTabel() {
+    // 1. Mengatur tinggi baris agar lebih lega
+    tblLapHarian.setRowHeight(35); 
+    
+    // 2. Menerapkan logic pewarnaan cell (Renderer)
+    tblLapHarian.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+        
+        @Override
+        public java.awt.Component getTableCellRendererComponent(
+                javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            
+            // Mengambil komponen dasar (teks, font, dll)
+            java.awt.Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            
+            // Cek nilai status pada Kolom ke-11 (Ingat hitungan kolom mulai dari 0)
+            // Di method tampilData(), kolom "Status" adalah kolom ke-12, jadi indexnya 11.
+            Object statusObj = table.getValueAt(row, 11);
+            String status = (statusObj != null) ? statusObj.toString() : "";
+
+            // Logika Ganti Warna
+            if (isSelected) {
+                // Jika baris dipilih, gunakan warna seleksi biru (bawaan sistem)
+                comp.setBackground(table.getSelectionBackground());
+                comp.setForeground(table.getSelectionForeground());
+            } else {
+                // Jika tidak dipilih, warnai berdasarkan status
+                switch (status) {
+                    case "Proses":
+                        comp.setBackground(new java.awt.Color(255, 255, 204)); // Kuning Kalem
+                        comp.setForeground(java.awt.Color.BLACK);
+                        break;
+                    case "Selesai":
+                        comp.setBackground(new java.awt.Color(204, 255, 204)); // Hijau Kalem
+                        comp.setForeground(java.awt.Color.BLACK);
+                        break;
+                    case "Dibatalkan":
+                        comp.setBackground(new java.awt.Color(255, 204, 204)); // Merah Kalem
+                        comp.setForeground(java.awt.Color.BLACK);
+                        break;
+                    case "Menunggu":
+                        comp.setBackground(java.awt.Color.WHITE);
+                        comp.setForeground(java.awt.Color.BLACK);
+                        break;
+                    default:
+                        comp.setBackground(java.awt.Color.WHITE);
+                        comp.setForeground(java.awt.Color.BLACK);
+                        break;
+                }
+            }
+            return comp;
+        }
+    });
+}
     
     private void addFilterListeners() {
         tglHarian.addPropertyChangeListener("date", e -> tampilData());

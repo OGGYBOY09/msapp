@@ -4,13 +4,22 @@
  */
 package mscompapp;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import java.awt.event.ActionEvent;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 /**
  *
  * @author ASUS
@@ -20,6 +29,9 @@ public class Dashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
     private String userRole;
+    private int currentPanelIndex = 0;
+    private Timer timerAnimasi;
+    
     // Constructor menerima dua parameter: username dan role
     public Dashboard(String username, String role) {
         this.userRole = role;
@@ -29,6 +41,7 @@ public class Dashboard extends javax.swing.JFrame {
         
         // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
         pSide.setLayout(new java.awt.BorderLayout());
+        
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     this.setMaximizedBounds(env.getMaximumWindowBounds());
@@ -43,16 +56,56 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         initSidebar();
         panelutama(); // Akan memuat panel sesuai Role
+        initKeyShortcuts();
         
         Timer timer = new Timer(1000, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-                String waktuSekarang = sdf.format(new Date());
-                lblTanggal.setText(waktuSekarang);
+                lblTanggal.setText(sdf.format(new Date()));
             }
         });
         timer.start();
+    }
+    
+    private void initKeyShortcuts() {
+        InputMap im = pMain.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = pMain.getActionMap();
+
+        // Mendaftarkan Alt + 1 sampai Alt + 8
+        for (int i = 1; i <= 8; i++) {
+            String key = "alt " + i;
+            final int index = i - 1; // Index panel dimulai dari 0
+            
+            im.put(KeyStroke.getKeyStroke(key), key);
+            am.put(key, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if ("admin".equalsIgnoreCase(userRole)) {
+                        jumpToPanel(index);
+                    }
+                }
+            });
+        }
+    }
+
+    public void setPanelIndex(int index) {
+        this.currentPanelIndex = index;
+    }
+
+    // Fungsi untuk melompat ke halaman berdasarkan angka shortcut
+    private void jumpToPanel(int index) {
+        setPanelIndex(index);
+        switch (index) {
+            case 0: switchPanel(new Beranda()); break;      // Alt + 1
+            case 1: switchPanel(new PKelLaporan()); break;  // Alt + 2
+            case 2: switchPanel(new PKelService()); break;  // Alt + 3
+            case 3: switchPanel(new PKelBarang()); break;   // Alt + 4
+            case 4: switchPanel(new PKatService()); break;  // Alt + 5
+            case 5: switchPanel(new PKatBarang()); break;   // Alt + 6
+            case 6: switchPanel(new PKelStok()); break;     // Alt + 7
+            case 7: switchPanel(new PKelUser()); break;     // Alt + 8
+        }
     }
 
     // Fungsi untuk memasang sidebar sesuai role
@@ -69,11 +122,58 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     
     // Ubah ke PUBLIC agar bisa diakses dari file Sidebar
     public void switchPanel(javax.swing.JPanel panel) {
-        pMain.removeAll();
-        pMain.add(panel);
-        pMain.repaint();
-        pMain.revalidate();
+    // 1. Matikan timer lama jika masih jalan (biar gak tabrakan)
+    if (timerAnimasi != null && timerAnimasi.isRunning()) {
+        timerAnimasi.stop();
     }
+
+    // 2. Bersihkan pMain
+    pMain.removeAll();
+    
+    // 3. MATIKAN LAYOUT MANAGER (PENTING!)
+    // Agar panel bisa kita gerakkan manual (animasi), layout harus null dulu.
+    pMain.setLayout(null);  // <--- INI YANG KURANG DI KODE SEBELUMNYA
+    
+    // 4. Siapkan Ukuran & Posisi Awal
+    int width = pMain.getWidth();
+    int height = pMain.getHeight();
+    
+    panel.setSize(width, height);
+    panel.setLocation(0, height); // Taruh di bawah layar (tersembunyi)
+    
+    pMain.add(panel);
+    pMain.repaint(); // Gambar ulang pMain agar kosong sebentar
+    
+    // 5. Mulai Animasi Naik
+    timerAnimasi = new Timer(5, new ActionListener() {
+        int speed = 100; // Kecepatan gerak
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int currentY = panel.getY();
+            
+            // Logika Animasi
+            if (currentY > 0) {
+                // Geser panel ke atas
+                panel.setLocation(0, currentY - speed);
+                pMain.repaint(); // Paksa gambar ulang setiap pergeseran
+            } else {
+                // STOP ANIMASI (Sudah sampai atas)
+                ((Timer)e.getSource()).stop();
+                panel.setLocation(0, 0); 
+                
+                // 6. KEMBALIKAN KE BORDER LAYOUT (SANGAT PENTING)
+                // Agar responsif lagi kalau window dibesarkan/dikecilkan
+                pMain.setLayout(new java.awt.BorderLayout());
+                pMain.add(panel, java.awt.BorderLayout.CENTER);
+                pMain.revalidate();
+                pMain.repaint();
+            }
+        }
+    });
+    
+    timerAnimasi.start();
+}
     
     // --- FITUR 1: LOGIKA HALAMAN UTAMA BERDASARKAN ROLE ---
     private void panelutama() {

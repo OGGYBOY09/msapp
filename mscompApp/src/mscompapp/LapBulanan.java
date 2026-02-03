@@ -33,12 +33,13 @@ public class LapBulanan extends javax.swing.JPanel {
         
         // Tambahkan ini di dalam Constructor LapBulanan
         tblLapBulanan = new javax.swing.JTable() {
+            {
+        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
+        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
+    }
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
-
-                // Ambil data dari kolom Status (indeks kolom terakhir atau sesuai model Anda)
-                // Di tampilData() Anda, Status berada di kolom ke-11 (indeks 11)
                 Object statusValue = getValueAt(row, 11); 
 
                 if (statusValue != null) {

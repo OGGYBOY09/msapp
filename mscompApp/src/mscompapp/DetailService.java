@@ -9,10 +9,23 @@ import config.Koneksi;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JFrame;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JComboBox;
+import java.util.Vector;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -21,36 +34,61 @@ import java.util.Map;
 public class DetailService extends javax.swing.JFrame {
 
     private String idServis;
-    private String idTeknisi;
+    private String selectedIdTeknisi; 
     private int currentIdPerbaikan = 0;
 
-    // --- FITUR BARU: BUKU CATATAN PERUBAHAN STOK ---
-    // Key: Kode Barang, Value: Jumlah Perubahan (Negatif = Berkurang, Positif =
-    // Bertambah)
     private HashMap<String, Integer> logPerubahanStok = new HashMap<>();
-    private boolean isDataSaved = false; // Penanda apakah data sudah disimpan
+    private boolean isDataSaved = false; 
+
+    private class UserItem {
+        String id;
+        String nama;
+        String role;
+
+        public UserItem(String id, String nama, String role) {
+            this.id = id;
+            this.nama = nama;
+            this.role = role;
+        }
+
+        @Override
+        public String toString() {
+            return nama + " (" + role + ")";
+        }
+    }
 
     public DetailService(
             String idServis, String tglMasuk, String nama, String noHp, String alamat,
             String jenis, String merek, String model, String noSeri,
             String keluhan, String kelengkapan, String status,String statusBarang, String idTeknisi) {
         initComponents();
+        
+        this.idServis = idServis;
+        this.selectedIdTeknisi = Session.idUser; 
+        
+        // --- SETTING UI ---
         tfNamTeknisi.setEditable(false);
+        if ("admin".equalsIgnoreCase(Session.level)) {
+            tfNamTeknisi.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            tfNamTeknisi.setToolTipText("Klik untuk mengubah teknisi");
+        }
 
-        // --- 1. SETTING TOMBOL X (CLOSE) ---
-        // Ubah default close operation agar kita bisa mencegat event penutupannya
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-        // Tambahkan Listener saat jendela ditutup
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                tutupHalaman(); // Panggil fungsi custom kita
+                tutupHalaman(); 
             }
         });
-
-        this.idServis = idServis;
-        this.idTeknisi = Session.idUser;
+        
+        tfNamTeknisi.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if ("admin".equalsIgnoreCase(Session.level)) {
+                    gantiTeknisiAction();
+                }
+            }
+        });
 
         // Set Data ke Textfield
         txtIdService.setText(idServis);
@@ -68,47 +106,136 @@ public class DetailService extends javax.swing.JFrame {
         cbStatBarang.setSelectedItem(statusBarang);
         txtIdService.setEditable(false);
         
-
         if ("Selesai".equalsIgnoreCase(status) || "Dibatalkan".equalsIgnoreCase(status)) {
-            // Tombol 'Selesai Service' tetap disembunyikan agar tidak double klik selesai
             btSelesai.setVisible(false);
-
-            // Tombol lainnya tetap aktif agar bisa edit data
             btSimpan.setEnabled(true);
             btnHapusBrg.setEnabled(true);
             btPilih.setEnabled(true);
             btnEdit.setEnabled(true);
         }
+        
+        // --- PANGGIL FUNGSI SHORTCUT DISINI ---
+        initKeyShortcuts();
+        
         loadPerbaikan(idServis);
         loadSparepart(idServis);
     }
+    
+    // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---
+    private void initKeyShortcuts() {
+        // Mengambil InputMap dan ActionMap dari RootPane (Jendela Utama)
+        // Agar shortcut bisa jalan dimanapun fokus kursor berada
+        InputMap im = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getRootPane().getActionMap();
 
-    // --- FUNGSI BARU: CATAT PERUBAHAN STOK ---
-    // Dipanggil setiap kali ada interaksi DB (Tambah/Hapus/Edit)
+        // 1. Shortcut SHIFT + ENTER -> Tombol SELESAI
+        KeyStroke shiftEnter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK);
+        im.put(shiftEnter, "shortcutSelesai");
+        am.put("shortcutSelesai", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Hanya jalankan jika tombol Selesai aktif dan terlihat
+                if (btSelesai.isEnabled() && btSelesai.isVisible()) {
+                    btSelesai.doClick();
+                }
+            }
+        });
+
+        // 2. Shortcut ENTER Biasa -> Tombol SIMPAN
+        // Note: Ini mungkin akan override fungsi Enter di TextArea (baris baru), 
+        // tapi sesuai permintaanmu fungsinya untuk Simpan.
+        KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        im.put(enter, "shortcutSimpan");
+        am.put("shortcutSimpan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btSimpan.isEnabled()) {
+                    btSimpan.doClick();
+                }
+            }
+        });
+    }
+
+    // --- FUNGSI LOGIKA LAINNYA TETAP SAMA ---
+    
+    private void gantiTeknisiAction() {
+        String idBaru = pilihTeknisiDialog();
+        if (idBaru != null) {
+            this.selectedIdTeknisi = idBaru;
+            updateNamaTeknisiUI(idBaru);
+        }
+    }
+    
+    private void updateNamaTeknisiUI(String idUser) {
+        try {
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT nama FROM tbl_user WHERE id_user='" + idUser + "'");
+            if (rs.next()) {
+                tfNamTeknisi.setText(rs.getString("nama"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String pilihTeknisiDialog() {
+        Vector<UserItem> listUser = new Vector<>();
+        try {
+            Connection conn = Koneksi.configDB();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT id_user, nama, role FROM tbl_user ORDER BY role DESC, nama ASC");
+            
+            while(rs.next()) {
+                listUser.add(new UserItem(
+                    rs.getString("id_user"), 
+                    rs.getString("nama"),
+                    rs.getString("role")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        JComboBox<UserItem> cbUser = new JComboBox<>(listUser);
+        
+        for (int i = 0; i < listUser.size(); i++) {
+            if (listUser.get(i).id.equals(selectedIdTeknisi)) {
+                cbUser.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        int result = JOptionPane.showConfirmDialog(this, 
+                cbUser, 
+                "Pilih Teknisi Penanggung Jawab", 
+                JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            UserItem selected = (UserItem) cbUser.getSelectedItem();
+            return selected.id;
+        } else {
+            return null; 
+        }
+    }
+
     private void catatLogStok(String kodeBarang, int perubahan) {
-        // Ambil perubahan sebelumnya (jika ada)
         int currentVal = logPerubahanStok.getOrDefault(kodeBarang, 0);
-        // Tambahkan dengan perubahan baru
         logPerubahanStok.put(kodeBarang, currentVal + perubahan);
     }
 
-    // --- FUNGSI BARU: ROLLBACK / KEMBALIKAN STOK ---
     private void rollbackStok() {
-        if (logPerubahanStok.isEmpty())
-            return; // Tidak ada yang perlu dikembalikan
+        if (logPerubahanStok.isEmpty()) return; 
 
         try {
             Connection conn = Koneksi.configDB();
             PreparedStatement ps = conn.prepareStatement("UPDATE tbl_barang SET stok = stok - ? WHERE kode_barang = ?");
 
-            // Loop semua catatan di buku log
             for (Map.Entry<String, Integer> entry : logPerubahanStok.entrySet()) {
                 String kode = entry.getKey();
                 int perubahanDilakukan = entry.getValue();
-
-                // Logika Pembalik:
-                // Jika tadi stok berkurang (-5), maka dikurangi -5 = Ditambah 5 (Kembali)
-                // Jika tadi stok bertambah (+5 / hapus item), maka dikurangi 5 (Balik ke awal)
 
                 if (perubahanDilakukan != 0) {
                     ps.setInt(1, perubahanDilakukan);
@@ -117,16 +244,13 @@ public class DetailService extends javax.swing.JFrame {
                 }
             }
             System.out.println("Rollback stok berhasil dilakukan.");
-
         } catch (Exception e) {
             System.out.println("Gagal Rollback: " + e.getMessage());
         }
     }
 
-    // --- FUNGSI BARU: LOGIKA TUTUP HALAMAN ---
     private void tutupHalaman() {
         if (!isDataSaved && !logPerubahanStok.isEmpty()) {
-            // Jika belum disimpan TAPI ada perubahan stok -> Konfirmasi
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Anda belum menyimpan perubahan.\nData sparepart akan direset dan stok dikembalikan.\nLanjutkan keluar?",
                     "Konfirmasi Batal",
@@ -134,18 +258,16 @@ public class DetailService extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                rollbackStok(); // KEMBALIKAN STOK
+                rollbackStok(); 
                 this.dispose();
             }
         } else {
-            // Jika sudah save atau tidak ada perubahan, langsung tutup
             this.dispose();
         }
     }
 
     private void loadPerbaikan(String idServis) {
         try {
-            // Query JOIN untuk mengambil data perbaikan + nama teknisi
             String sql = "SELECT p.*, u.nama " +
                     "FROM perbaikan p " +
                     "LEFT JOIN tbl_user u ON p.id_teknisi = u.id_user " +
@@ -158,30 +280,27 @@ public class DetailService extends javax.swing.JFrame {
 
             if (rs.next()) {
                 currentIdPerbaikan = rs.getInt("id_perbaikan");
+                selectedIdTeknisi = rs.getString("id_teknisi"); 
+                
                 txtKerusakan.setText(rs.getString("kerusakan"));
                 txtPerbaikan.setText(rs.getString("tindakan"));
                 tBiayaJasa.setText(rs.getString("biaya_jasa"));
                 tDiskon.setText(rs.getString("diskon"));
 
-                // --- FITUR TAMPIL NAMA TEKNISI ---
                 String namaTeknisi = rs.getString("nama");
-                // Cek null safety (jika user teknisi sudah dihapus di db tapi id nya masih ada
-                // di history)
-                if (namaTeknisi != null) {
-                    tfNamTeknisi.setText(namaTeknisi);
-                } else {
-                    tfNamTeknisi.setText("Teknisi Tidak Dikenal");
-                }
+                tfNamTeknisi.setText(namaTeknisi != null ? namaTeknisi : "Teknisi Tidak Dikenal");
 
-                loadSparepart(idServis);
             } else {
-                // --- JIKA DATA PERBAIKAN BELUM ADA ---
                 currentIdPerbaikan = 0;
-                tfNamTeknisi.setText("Belum diperbaiki");
-
-                // Opsional: Jika status "Menunggu/Proses", mungkin kamu ingin menampilkan nama
-                // user yang sedang login
-                // tfNamTeknisi.setText(Session.namaUser + " (Anda)");
+                
+                // AUTO FILL
+                tBiayaJasa.setText("10000");
+                tDiskon.setText("0");
+                
+                updateNamaTeknisiUI(Session.idUser);
+                selectedIdTeknisi = Session.idUser;
+                
+                hitungBiaya();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal load perbaikan: " + e.getMessage());
@@ -224,13 +343,11 @@ public class DetailService extends javax.swing.JFrame {
         }
     }
 
-    // Dipanggil dari PopUp Sparepart
     public void tambahSparepart(String idBarang, String namaBarang, int harga, int qty) {
         DefaultTableModel model = (DefaultTableModel) tblGanti.getModel();
         boolean ditemukan = false;
 
-        // --- CATAT PENGURANGAN STOK ---
-        catatLogStok(idBarang, -qty); // Catat: Stok berkurang X
+        catatLogStok(idBarang, -qty); 
 
         for (int i = 0; i < model.getRowCount(); i++) {
             String idTabel = model.getValueAt(i, 1).toString();
@@ -271,14 +388,12 @@ public class DetailService extends javax.swing.JFrame {
 
     private void hitungBiaya() {
         try {
-            // Ambil total sparepart dari label (pastikan tidak kosong)
             int totalSparepart = 0;
             String strTotalBrg = tTotalBrg.getText();
             if (!strTotalBrg.isEmpty()) {
                 totalSparepart = Integer.parseInt(strTotalBrg);
             }
 
-            // Ambil biaya jasa dari textfield
             int biayaJasa = 0;
             String strBiayaJasa = tBiayaJasa.getText();
             if (!strBiayaJasa.isEmpty()) {
@@ -291,13 +406,11 @@ public class DetailService extends javax.swing.JFrame {
                 diskon = Integer.parseInt(strDiskon);
             }
 
-            // Hitung total keseluruhan
             int grandTotal = totalSparepart + biayaJasa - diskon;
 
             tBiayaTotal.setText(String.valueOf(grandTotal));
 
         } catch (NumberFormatException e) {
-            // Mencegah error jika user memasukkan karakter selain angka di biaya jasa
             System.out.println("Error hitung grand total: Input biaya jasa harus angka");
         }
     }
@@ -659,12 +772,12 @@ public class DetailService extends javax.swing.JFrame {
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btSimpan.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
-        btSimpan.setText("Simpan Perbaikan");
+        btSimpan.setText("Simpan Perbaikan [enter]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
         btSelesai.setBackground(new java.awt.Color(102, 255, 102));
         btSelesai.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
-        btSelesai.setText("Selesai Service");
+        btSelesai.setText("Selesai Service [shift + enter}");
         btSelesai.addActionListener(this::btSelesaiActionPerformed);
 
         btKembali.setBackground(new java.awt.Color(255, 51, 51));
@@ -703,36 +816,30 @@ public class DetailService extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel18)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(tTotalBrg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(226, 226, 226))
-                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel7)
+                        .addComponent(jLabel2)
+                        .addComponent(jScrollPane1)
+                        .addComponent(jLabel15)
+                        .addComponent(jScrollPane2)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel16)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel17)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
                             .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnHapusBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btPilih, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(8, 8, 8)))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(btSimpan)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel18)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btSelesai)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btKembali))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(tTotalBrg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(99, 99, 99))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jLabel20)
@@ -751,7 +858,12 @@ public class DetailService extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jLabel22)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(tBiayaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btKembali)))
+                    .addComponent(btSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(277, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -776,7 +888,7 @@ public class DetailService extends javax.swing.JFrame {
                     .addComponent(btnHapusBrg)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
@@ -796,9 +908,10 @@ public class DetailService extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btSimpan)
-                    .addComponent(btSelesai)
                     .addComponent(btKembali))
-                .addContainerGap(580, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btSelesai)
+                .addContainerGap(588, Short.MAX_VALUE))
         );
 
         jScrollPane4.setViewportView(jPanel3);
@@ -858,23 +971,26 @@ public class DetailService extends javax.swing.JFrame {
         // TODO add your handling code here:
         Connection conn = null;
         try {
+            String idTeknisiToSave = (selectedIdTeknisi != null) ? selectedIdTeknisi : Session.idUser;
+
             conn = Koneksi.configDB();
             conn.setAutoCommit(false);
 
             if (currentIdPerbaikan != 0) {
-                String sqlUpdate = "UPDATE perbaikan SET kerusakan=?, tindakan=?, biaya_jasa=?, diskon=? WHERE id_servis=?";
+                String sqlUpdate = "UPDATE perbaikan SET id_teknisi=?, kerusakan=?, tindakan=?, biaya_jasa=?, diskon=? WHERE id_servis=?";
                 PreparedStatement ps = conn.prepareStatement(sqlUpdate);
-                ps.setString(1, txtKerusakan.getText());
-                ps.setString(2, txtPerbaikan.getText());
-                ps.setInt(3, Integer.parseInt(tBiayaJasa.getText()));
-                ps.setInt(4, Integer.parseInt(tDiskon.getText()));
-                ps.setString(5, idServis);
+                ps.setString(1, idTeknisiToSave);
+                ps.setString(2, txtKerusakan.getText());
+                ps.setString(3, txtPerbaikan.getText());
+                ps.setInt(4, Integer.parseInt(tBiayaJasa.getText()));
+                ps.setInt(5, Integer.parseInt(tDiskon.getText()));
+                ps.setString(6, idServis);
                 ps.executeUpdate();
             } else {
                 String sqlInsert = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa, diskon) VALUES (?,?,?,?,?,?)";
                 PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, idServis);
-                ps.setString(2, Session.idUser);
+                ps.setString(2, idTeknisiToSave); 
                 ps.setString(3, txtKerusakan.getText());
                 ps.setString(4, txtPerbaikan.getText());
                 ps.setInt(5, Integer.parseInt(tBiayaJasa.getText()));  
@@ -914,15 +1030,14 @@ public class DetailService extends javax.swing.JFrame {
             String totalBiaya = tBiayaTotal.getText().toString();
             String sql3 = "UPDATE servis SET harga=?, status=?, status_barang=? WHERE id_servis=?";
             PreparedStatement ps3 = conn.prepareStatement(sql3);
-            ps3.setString(1, totalBiaya); // Masuk ke kolom 'harga'
-            ps3.setString(2, status); // Masuk ke kolom 'status'
+            ps3.setString(1, totalBiaya); 
+            ps3.setString(2, status); 
             ps3.setString(3, statusBarang);
-            ps3.setString(4, idServis); // WHERE id_servis
+            ps3.setString(4, idServis); 
             ps3.executeUpdate();
 
             conn.commit();
 
-            // --- BERSIHKAN LOG KARENA SUDAH DISIMPAN ---
             isDataSaved = true;
             logPerubahanStok.clear();
 
@@ -962,21 +1077,20 @@ public class DetailService extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             tStatus.setSelectedItem("Selesai");
-            btSimpanActionPerformed(evt); // Simpan dulu
+            btSimpanActionPerformed(evt); 
 
-            try {
-                Connection conn = Koneksi.configDB();
-                String sql = "UPDATE perbaikan SET tanggal_selesai = CURDATE() WHERE id_servis=?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, idServis);
-                ps.executeUpdate();
+            if (currentIdPerbaikan != 0) {
+                try {
+                    Connection conn = Koneksi.configDB();
+                    String sql = "UPDATE perbaikan SET tanggal_selesai = CURDATE() WHERE id_servis=?";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, idServis);
+                    ps.executeUpdate();
 
-                // Pastikan isDataSaved true agar tidak rollback saat dispose
-                isDataSaved = true;
-                this.dispose();
-
-            } catch (Exception e) {
-                System.out.println("Gagal update tanggal selesai: " + e.getMessage());
+                    isDataSaved = true;
+                } catch (Exception e) {
+                    System.out.println("Gagal update tanggal selesai: " + e.getMessage());
+                }
             }
         }
     }// GEN-LAST:event_btSelesaiActionPerformed

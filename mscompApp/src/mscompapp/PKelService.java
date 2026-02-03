@@ -11,6 +11,14 @@ import java.util.Date;
 import java.sql.*;
 import config.Koneksi;
 import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -27,45 +35,33 @@ public class PKelService extends javax.swing.JPanel {
         tampilTanggal();
         load_jenis_perangkat();
         load_status();       
-        tampilKategori();       // DATA KATEGORI DARI DATABASE
+        tampilKategori();       
 
-        // Tambahkan ini di dalam Constructor LapBulanan
+        // Custom Renderer untuk Tabel
         tblServis = new javax.swing.JTable() {
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
-
-                // Ambil data dari kolom Status (indeks kolom terakhir atau sesuai model Anda)
-                // Di tampilData() Anda, Status berada di kolom ke-11 (indeks 11)
                 Object statusValue = getValueAt(row, 7); 
 
                 if (statusValue != null) {
                     String status = statusValue.toString();
-
                     if (isRowSelected(row)) {
                         comp.setBackground(getSelectionBackground());
                     } else {
                         switch (status) {
                             case "Proses":
                                 comp.setBackground(java.awt.Color.YELLOW);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
+                                comp.setForeground(java.awt.Color.BLACK); break;
                             case "Selesai":
-                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
+                                comp.setBackground(new java.awt.Color(144, 238, 144)); 
+                                comp.setForeground(java.awt.Color.BLACK); break;
                             case "Dibatalkan":
-                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Menunggu":
+                                comp.setBackground(new java.awt.Color(255, 182, 193)); 
+                                comp.setForeground(java.awt.Color.BLACK); break;
+                            default: // Menunggu
                                 comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            default:
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
+                                comp.setForeground(java.awt.Color.BLACK); break;
                         }
                     }
                 }
@@ -82,35 +78,121 @@ public class PKelService extends javax.swing.JPanel {
         tNamaPelanggan.setEditable(false);
         tNoPelanggan.setEditable(false);
         tAlamatPelanggan.setEditable(false);
+        
+        // --- PANGGIL FUNGSI SHORTCUT DISINI ---
+        initKeyShortcuts();
+    }
+    
+    // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---
+    private void initKeyShortcuts() {
+        // Mengambil InputMap dari JPanel ini
+        InputMap im = this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        ActionMap am = this.getActionMap();
+
+        // 1. btSimpan = SHIFT + ENTER
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK), "cmdSimpan");
+        am.put("cmdSimpan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btSimpan.isEnabled()) btSimpan.doClick();
+            }
+        });
+
+        // 2. btBatal = DELETE
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "cmdBatal");
+        am.put("cmdBatal", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btBatal.isEnabled()) btBatal.doClick();
+            }
+        });
+
+        // 3. btReset = F4
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "cmdReset");
+        am.put("cmdReset", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btReset.isEnabled()) btReset.doClick();
+            }
+        });
+
+        // 4. btnCari (Pelanggan) = F2
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCariPelanggan");
+        am.put("cmdCariPelanggan", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btnCari.isEnabled()) btnCari.doClick();
+            }
+        });
+
+        // 5. btRefresh = F3
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "cmdRefresh");
+        am.put("cmdRefresh", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btRefresh.isEnabled()) btRefresh.doClick();
+            }
+        });
+
+        // 6. btEdit = F1
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "cmdEdit");
+        am.put("cmdEdit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(btEdit.isEnabled()) btEdit.doClick();
+            }
+        });
+
+        // 7. tfCari (Fokus Pencarian) = F6
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "focusCari");
+        am.put("focusCari", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tfCari.requestFocus();
+            }
+        });
+
+        // 8. cbStatusServ (Fokus & Buka) = F7
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "focusStatus");
+        am.put("focusStatus", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cbStatusServ.requestFocus();
+                cbStatusServ.showPopup(); // Membuka dropdown otomatis
+            }
+        });
+
+        // 9. cbJenisBrg (Fokus & Buka) = F8
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0), "focusJenis");
+        am.put("focusJenis", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cbJenisBrg.requestFocus();
+                cbJenisBrg.showPopup(); // Membuka dropdown otomatis
+            }
+        });
     }
     
     // --- LOAD DATA & HELPER METHODS ---
     
     private void tampilKategori() {
     try {
-        // 1. Bersihkan dulu agar tidak double
         cbJenisBrg.removeAllItems();
         cbJenisBrg.addItem("- Pilih Jenis -");
-
-        // 2. Query ke tbl_kategori
         String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
         java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
         java.sql.Statement stm = conn.createStatement();
         java.sql.ResultSet res = stm.executeQuery(sql);
-
-        // 3. Masukkan hasil ke ComboBox
         while (res.next()) {
             cbJenisBrg.addItem(res.getString("nama_jenis"));
         }
     } catch (Exception e) {
-        // Ini akan membantu kita tahu kalau ada error database
         System.out.println("Error tampil kategori: " + e.getMessage());
     }
 }
     
     private void tampilkanAdmin() {
         try {
-            // Pastikan di Login.java sudah ada: public static String namaUser;
             String namaLog = Login.namaUser; 
             if (namaLog != null && !namaLog.isEmpty()) {
                 tNamaAdmin.setText(namaLog);
@@ -173,7 +255,6 @@ public class PKelService extends javax.swing.JPanel {
         tTgl.setText(df.format(new Date()));
     }
     
-    // Helper untuk mengambil ID Admin dari tabel User berdasarkan Nama di Textfield
     private int getAdminId() {
         try {
             String sql = "SELECT id_user FROM tbl_user WHERE username = ?";
@@ -185,11 +266,9 @@ public class PKelService extends javax.swing.JPanel {
                 return res.getInt("id_user");
             }
         } catch (Exception e) { e.printStackTrace(); }
-        return 1; // Default jika gagal (pastikan ID 1 ada di tbl_user)
+        return 1; 
     }
 
-    // Helper untuk menggabungkan Checkbox
-    
     private void load_table_service() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No Servis");
@@ -202,24 +281,20 @@ public class PKelService extends javax.swing.JPanel {
         model.addColumn("Status");
 
         try {
-            // 1. Base Query
             String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
                          "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ";
 
             String keyword = tfCari.getText();
 
-            // 2. Tambahkan kondisi pencarian jika keyword tidak kosong
             if (!keyword.isEmpty()) {
                 sql += " WHERE p.nama_pelanggan LIKE ? OR s.id_servis LIKE ? ";
             }
 
-            // 3. Tambahkan Order By di akhir
             sql += " ORDER BY s.tanggal_masuk DESC";
 
             java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 
-            // 4. Set parameter jika ada pencarian
             if (!keyword.isEmpty()) {
                 pst.setString(1, "%" + keyword + "%");
                 pst.setString(2, "%" + keyword + "%");
@@ -243,7 +318,7 @@ public class PKelService extends javax.swing.JPanel {
 
         } catch (Exception e) {
             System.out.println("Error Load Table: " + e.getMessage());
-            e.printStackTrace(); // Penting untuk debugging
+            e.printStackTrace();
         }
     }
 
@@ -357,7 +432,7 @@ public class PKelService extends javax.swing.JPanel {
         tTgl.setText("000");
 
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jLabel7.setText("Status :");
+        jLabel7.setText("Status [F7] :");
 
         cbStatusServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
@@ -463,21 +538,21 @@ public class PKelService extends javax.swing.JPanel {
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
         btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        btBatal.setText("BATAL");
+        btBatal.setText("BATAL [DEL]");
         btBatal.addActionListener(this::btBatalActionPerformed);
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        btSimpan.setText("SIMPAN");
+        btSimpan.setText("SIMPAN [SHIFT+ENTER]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
         btReset.setBackground(new java.awt.Color(255, 255, 102));
         btReset.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        btReset.setText("RESET");
+        btReset.setText("RESET [F4]");
         btReset.addActionListener(this::btResetActionPerformed);
 
         btnCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnCari.setText("Cari...");
+        btnCari.setText("Cari... [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -489,22 +564,25 @@ public class PKelService extends javax.swing.JPanel {
                 .addGap(52, 52, 52)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(btSimpan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(18, 18, 18)
                                 .addComponent(tAlamatPelanggan))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(22, 22, 22)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tNamaPelanggan)
+                                    .addComponent(tNoPelanggan)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,16 +590,10 @@ public class PKelService extends javax.swing.JPanel {
                                     .addComponent(rbBaru, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tNamaPelanggan)
-                                    .addComponent(tNoPelanggan))))
+                                .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(37, 37, 37))))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(139, 139, 139)
-                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,12 +619,12 @@ public class PKelService extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                    .addComponent(btReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -571,7 +643,7 @@ public class PKelService extends javax.swing.JPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -595,7 +667,7 @@ public class PKelService extends javax.swing.JPanel {
         jLabel10.setText("Kelengkapan :");
 
         jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        jLabel15.setText("Jenis Barang :");
+        jLabel15.setText("Jenis Barang [F8] :");
 
         jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel16.setText("Model / Tipe :");
@@ -618,6 +690,7 @@ public class PKelService extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tKeluhan);
 
         tKelengkapan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tKelengkapan.addActionListener(this::tKelengkapanActionPerformed);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -703,7 +776,9 @@ public class PKelService extends javax.swing.JPanel {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tblServis.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -734,7 +809,7 @@ public class PKelService extends javax.swing.JPanel {
         }
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel20.setText("Cari :");
+        jLabel20.setText("Cari [F6] :");
 
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -744,11 +819,11 @@ public class PKelService extends javax.swing.JPanel {
         });
 
         btRefresh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btRefresh.setText("Refresh");
+        btRefresh.setText("Refresh [F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
 
         btEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btEdit.setText("Edit");
+        btEdit.setText("Edit [F1]");
         btEdit.addActionListener(this::btEditActionPerformed);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -762,12 +837,12 @@ public class PKelService extends javax.swing.JPanel {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(90, 90, 90)
                         .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btRefresh)
+                        .addComponent(btRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btEdit)))
+                        .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1062,6 +1137,10 @@ public class PKelService extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Pilih baris di tabel lebih dulu!");
         }
     }//GEN-LAST:event_btEditActionPerformed
+
+    private void tKelengkapanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tKelengkapanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tKelengkapanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
