@@ -32,8 +32,9 @@ public class sidebar_admin extends javax.swing.JPanel {
             lblKelolaBarang,
             lblKelolaKategori,
             lblKelolaKategori1,
-            lblKelStock,
-            lblKelolaUser
+            lblKelPlgn,
+            lblKelolaUser,
+            lblKelStock
         };
         
         setHoverEffect(menuLabels);
@@ -78,7 +79,7 @@ public class sidebar_admin extends javax.swing.JPanel {
     private void initComponents() {
 
         lblKelolaKategori = new javax.swing.JLabel();
-        lblKelStock = new javax.swing.JLabel();
+        lblKelPlgn = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblKelolaUser = new javax.swing.JLabel();
@@ -88,6 +89,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelolaKategori1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        lblKelStock = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 18, 51));
         setForeground(new java.awt.Color(51, 65, 92));
@@ -109,18 +111,18 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
         add(lblKelolaKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 210, 43));
 
-        lblKelStock.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        lblKelStock.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
-        lblKelStock.setText("Kelola Stock");
-        lblKelStock.setOpaque(true);
-        lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
+        lblKelPlgn.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
+        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
+        lblKelPlgn.setText("Kelola Pelanggan");
+        lblKelPlgn.setOpaque(true);
+        lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelStockMouseClicked(evt);
+                lblKelPlgnMouseClicked(evt);
             }
         });
-        add(lblKelStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 210, 43));
+        add(lblKelPlgn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 210, 43));
 
         jLabel3.setBackground(new java.awt.Color(0, 18, 51));
         jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
@@ -217,6 +219,19 @@ public class sidebar_admin extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("_____________________________________________");
         add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 74, -1, -1));
+
+        lblKelStock.setBackground(new java.awt.Color(0, 18, 51));
+        lblKelStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelStock.setForeground(new java.awt.Color(255, 255, 255));
+        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
+        lblKelStock.setText("Kelola Stock");
+        lblKelStock.setOpaque(true);
+        lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKelStockMouseClicked(evt);
+            }
+        });
+        add(lblKelStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 210, 43));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblKelolaKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelolaKategoriMouseClicked
@@ -225,11 +240,11 @@ public class sidebar_admin extends javax.swing.JPanel {
         dashboard.setPanelIndex(4);
     }//GEN-LAST:event_lblKelolaKategoriMouseClicked
 
-    private void lblKelStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelStockMouseClicked
+    private void lblKelPlgnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelPlgnMouseClicked
         // TODO add your handling code here:
-        dashboard.switchPanel(new PKelStok());
+        dashboard.switchPanel(new PKelPelanggan());
         dashboard.setPanelIndex(6);
-    }//GEN-LAST:event_lblKelStockMouseClicked
+    }//GEN-LAST:event_lblKelPlgnMouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
@@ -273,6 +288,12 @@ public class sidebar_admin extends javax.swing.JPanel {
         dashboard.setPanelIndex(5);
     }//GEN-LAST:event_lblKelolaKategori1MouseClicked
 
+    private void lblKelStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelStockMouseClicked
+        // TODO add your handling code here:
+        dashboard.switchPanel(new PKelStok());
+        dashboard.setPanelIndex(5);
+    }//GEN-LAST:event_lblKelStockMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
@@ -281,6 +302,7 @@ public class sidebar_admin extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblKelPlgn;
     private javax.swing.JLabel lblKelStock;
     private javax.swing.JLabel lblKelolaBarang;
     private javax.swing.JLabel lblKelolaKategori;

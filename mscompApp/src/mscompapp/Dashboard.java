@@ -70,7 +70,7 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         ActionMap am = pMain.getActionMap();
 
         // Mendaftarkan Alt + 1 sampai Alt + 8
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 9; i++) {
             String key = "alt " + i;
             final int index = i - 1; // Index panel dimulai dari 0
             
@@ -102,6 +102,8 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
             case 5: switchPanel(new PKatBarang()); break;   // Alt + 6
             case 6: switchPanel(new PKelStok()); break;     // Alt + 7
             case 7: switchPanel(new PKelUser()); break;     // Alt + 8
+            case 8: switchPanel(new PKelPelanggan()); break;     // Alt + 9
+
         }
     }
 
