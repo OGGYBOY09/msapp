@@ -4,22 +4,18 @@
  */
 package mscompapp;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import java.awt.event.ActionEvent;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 /**
  *
  * @author ASUS
@@ -30,29 +26,29 @@ public class Dashboard extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
     private String userRole;
     private int currentPanelIndex = 0;
-    // Constructor menerima dua parameter: username dan role
+
     public Dashboard(String username, String role) {
         this.userRole = role;
         Login.namaUser = username;        
         initComponents();
         lblWelcome.setText("Selamat Datang, " + username);
         
-        // Memastikan pSide menggunakan BorderLayout agar sidebar mengisi penuh panel
         pSide.setLayout(new java.awt.BorderLayout());
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    this.setMaximizedBounds(env.getMaximumWindowBounds());
-    
-    // 2. Set state ke maximized
-    this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
-    
-    this.setResizable(true); 
+        this.setMaximizedBounds(env.getMaximumWindowBounds());
+        this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
+        this.setResizable(true); 
 
-// Memaksa window untuk langsung dalam kondisi Maximized saat dibuka
-this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        
         initSidebar();
-        panelutama(); // Akan memuat panel sesuai Role
+        
+        // Load Halaman Awal Berdasarkan Role
+        if ("admin".equalsIgnoreCase(userRole)) {
+            switchPanel(new Beranda());
+        } else {
+            switchPanel(new Teknisi()); // Halaman awal teknisi
+        }
+        
         initKeyShortcuts();
         
         Timer timer = new Timer(1000, new ActionListener() {
@@ -65,12 +61,26 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         timer.start();
     }
     
+    // --- 1. INISIALISASI SIDEBAR BERDASARKAN ROLE ---
+    private void initSidebar() {
+        pSide.removeAll();
+        if ("admin".equalsIgnoreCase(userRole)) {
+            pSide.add(new sidebar_admin(this)); 
+        } else {
+            // Memuat Sidebar Teknisi
+            pSide.add(new sidebar_teknisi(this));
+        }
+        pSide.revalidate();
+        pSide.repaint();
+    }
+    
+    // --- 2. INISIALISASI SHORTCUT KEYBOARD ---
     private void initKeyShortcuts() {
         InputMap im = pMain.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = pMain.getActionMap();
 
-        // Mendaftarkan Alt + 1 sampai Alt + 8
-        for (int i = 1; i <= 9; i++) {
+        // Loop Alt+1 sampai Alt+8
+        for (int i = 1; i <= 8; i++) {
             String key = "alt " + i;
             final int index = i - 1; // Index panel dimulai dari 0
             
@@ -78,11 +88,41 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
             am.put(key, new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if ("admin".equalsIgnoreCase(userRole)) {
-                        jumpToPanel(index);
-                    }
+                    jumpToPanel(index);
                 }
             });
+        }
+    }
+
+    // --- 3. LOGIKA PINDAH HALAMAN (Admin vs Teknisi) ---
+    private void jumpToPanel(int index) {
+        // Cek Role dulu, baru tentukan halaman mana yang dibuka
+        if ("admin".equalsIgnoreCase(userRole)) {
+            // --- MENU ADMIN ---
+            // Batasi index agar tidak error jika tekan Alt+9
+            if (index > 7) return; 
+            
+            setPanelIndex(index);
+            switch (index) {
+                case 0: switchPanel(new Beranda()); break;      // Alt + 1
+                case 1: switchPanel(new PKelLaporan()); break;  // Alt + 2
+                case 2: switchPanel(new PKelService()); break;  // Alt + 3
+                case 3: switchPanel(new PKelBarang()); break;   // Alt + 4
+                case 4: switchPanel(new PKatService()); break;  // Alt + 5
+                case 5: switchPanel(new PKatBarang()); break;   // Alt + 6
+                case 6: switchPanel(new PKelStok()); break;     // Alt + 7
+                case 7: switchPanel(new PKelUser()); break;     // Alt + 8
+            }
+        } else {
+            // --- MENU TEKNISI ---
+            // Teknisi cuma punya 2 menu saat ini, batasi index
+            if (index > 1) return;
+            
+            setPanelIndex(index);
+            switch (index) {
+                case 0: switchPanel(new Teknisi()); break;       // Alt + 1 (Daftar Servis Masuk)
+                case 1: switchPanel(new DafServisAnda()); break; // Alt + 2 (Tugas Saya)
+            }
         }
     }
 
@@ -90,36 +130,6 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.currentPanelIndex = index;
     }
 
-    // Fungsi untuk melompat ke halaman berdasarkan angka shortcut
-    private void jumpToPanel(int index) {
-        setPanelIndex(index);
-        switch (index) {
-            case 0: switchPanel(new Beranda()); break;      // Alt + 1
-            case 1: switchPanel(new PKelLaporan()); break;  // Alt + 2
-            case 2: switchPanel(new PKelService()); break;  // Alt + 3
-            case 3: switchPanel(new PKelBarang()); break;   // Alt + 4
-            case 4: switchPanel(new PKatService()); break;  // Alt + 5
-            case 5: switchPanel(new PKatBarang()); break;   // Alt + 6
-            case 6: switchPanel(new PKelStok()); break;     // Alt + 7
-            case 7: switchPanel(new PKelUser()); break;     // Alt + 8
-            case 8: switchPanel(new PKelPelanggan()); break;     // Alt + 9
-
-        }
-    }
-
-    // Fungsi untuk memasang sidebar sesuai role
-    private void initSidebar() {
-        pSide.removeAll();
-        if ("admin".equalsIgnoreCase(userRole)) {
-            pSide.add(new sidebar_admin(this)); 
-        } else if ("teknisi".equalsIgnoreCase(userRole)) {
-            pSide.add(new sidebar_teknisi(this));
-        }
-        pSide.repaint();
-        pSide.revalidate();
-    }
-    
-    // Ubah ke PUBLIC agar bisa diakses dari file Sidebar
     public void switchPanel(javax.swing.JPanel panel) {
         pMain.removeAll();
         pMain.add(panel);
@@ -127,37 +137,12 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         pMain.revalidate();
     }
     
-    // --- FITUR 1: LOGIKA HALAMAN UTAMA BERDASARKAN ROLE ---
-    private void panelutama() {
-        pMain.removeAll();
-        
-        if ("teknisi".equalsIgnoreCase(userRole)) {
-            // Jika Teknisi -> Buka Panel Teknisi
-            pMain.add(new Teknisi());
-        } else {
-            // Jika Admin (atau lainnya) -> Buka Beranda
-            pMain.add(new Beranda());
-        }
-        
-        pMain.repaint();
-        pMain.revalidate();
-    }
-    
-    // --- FITUR 2: LOGOUT (Public agar bisa dipanggil Sidebar) ---
     public void logout() {
-        int jawaban = JOptionPane.showConfirmDialog(this, 
-                "Apakah Anda yakin ingin Logout?", 
-                "Konfirmasi Keluar", 
-                JOptionPane.YES_NO_OPTION);
-        
-        if (jawaban == JOptionPane.YES_OPTION) {
-            this.dispose(); // Tutup Dashboard
-            Session.idUser = null;
-            Session.namaUser = null;
-            // Buka kembali halaman Login
-            Login loginPage = new Login();
-            loginPage.setVisible(true);
-            loginPage.setLocationRelativeTo(null);
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Apakah Anda yakin ingin logout?", "Logout", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            new Login().setVisible(true);
+            this.dispose();
         }
     }
 

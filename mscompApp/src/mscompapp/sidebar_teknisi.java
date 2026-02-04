@@ -19,48 +19,38 @@ public class sidebar_teknisi extends javax.swing.JPanel {
     /**
      * Creates new form sidebar_admin
      */
-    private Dashboard dashboard; // Tambahkan variabel Dashboard
+    private Dashboard dashboard; 
 
-    // Konstruktor menerima parameter Dashboard
     public sidebar_teknisi(Dashboard dashboard) {
         this.dashboard = dashboard;
         initComponents();
         
         JLabel[] menuLabels = {
-            jLabel1,
+            jLabel1, // Daftar Servis Masuk
+            jLabel2  // Tugas Saya (Servis Anda)
         };
         
         setHoverEffect(menuLabels);
     }
     
     public void setHoverEffect(JLabel[] daftarLabel) {
-    
-    // Loop untuk setiap label yang ada di daftar
-    for (JLabel label : daftarLabel) {
-        
-        // 1. Pastikan label bisa berubah warna (Opaque harus true)
-        label.setOpaque(true);
-        
-        // 2. Tambahkan pendengar (Listener) mouse
-        label.addMouseListener(new MouseAdapter() {
-            
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // Saat mouse masuk: Ubah jadi Abu-abu & Ganti kursor jadi tangan
-                Component c = e.getComponent(); // Mengambil komponen yang disentuh
-                c.setBackground(new Color(4, 102, 200)); 
-                c.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
+        for (JLabel label : daftarLabel) {
+            label.setOpaque(true);
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    label.setBackground(new Color(4,102,200)); 
+                    label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // Saat mouse keluar: Kembalikan jadi Putih (atau warna asal)
-                Component c = e.getComponent();
-                c.setBackground(new Color(238,242,247));
-            }
-        });
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    label.setBackground(new Color(0,18,51));  
+                    label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+            });
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,14 +63,16 @@ public class sidebar_teknisi extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(238, 242, 247));
+        setBackground(new java.awt.Color(0, 18, 51));
         setMinimumSize(new java.awt.Dimension(200, 980));
         setPreferredSize(new java.awt.Dimension(200, 980));
 
-        jLabel1.setBackground(new java.awt.Color(238, 242, 247));
+        jLabel1.setBackground(new java.awt.Color(0, 18, 51));
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wrench.png"))); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png"))); // NOI18N
         jLabel1.setText("Daftar Service");
         jLabel1.setOpaque(true);
         jLabel1.setVerifyInputWhenFocusTarget(false);
@@ -92,35 +84,56 @@ public class sidebar_teknisi extends javax.swing.JPanel {
 
         btnLogout.setBackground(new java.awt.Color(255, 0, 0));
         btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("LOG OUT");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
+
+        jLabel2.setBackground(new java.awt.Color(0, 18, 51));
+        jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png"))); // NOI18N
+        jLabel2.setText("Daftar Anda");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        jLabel2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel2KeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addGap(378, 378, 378)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(321, 321, 321)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(496, Short.MAX_VALUE))
+                .addContainerGap(483, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
+        dashboard.setPanelIndex(0); // Set Index 0 agar sinkron dengan Alt+1
         dashboard.switchPanel(new Teknisi());
     }//GEN-LAST:event_jLabel1MouseClicked
 
@@ -129,9 +142,21 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         dashboard.logout();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    private void jLabel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel2KeyPressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jLabel2KeyPressed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // TODO add your handling code here:
+        dashboard.setPanelIndex(1); // Set Index 1 agar sinkron dengan Alt+2
+        dashboard.switchPanel(new DafServisAnda());
+    }//GEN-LAST:event_jLabel2MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
