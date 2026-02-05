@@ -22,80 +22,69 @@ public class Teknisi extends javax.swing.JPanel {
     private String idTeknisi;
 
     public Teknisi() {
+        // 1. Inisialisasi komponen GUI dari NetBeans
         initComponents();
         
-        // Proteksi Null Pointer Session
+        // 2. Proteksi Session
         if (Session.idUser != null) {
             this.idTeknisi = Session.idUser;
         } else {
             this.idTeknisi = "0"; 
         }        
         
-        // 1. Load Data ComboBox
+        // 3. Setup Custom Table Renderer (Agar warna status tetap jalan)
+        setupTableProperties();
+        
+        // 4. Load Data ComboBox
         loadComboStatus();
         loadComboKategori();
         
-        // 2. Tampilkan Data Awal
+        // 5. AUTO-DISPLAY: Panggil tampilData() saat inisialisasi selesai
         tampilData();
         
-        // 3. Tambahkan Event Listener
+        // 6. Tambahkan Event Listener untuk filter otomatis
         addFilterListeners();
-        
-        tblServ = new javax.swing.JTable() {
-            {
-        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
-        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
     }
+    
+    private void setupTableProperties() {
+        tblServ.setRowHeight(30); //
+        tblServ.getTableHeader().setReorderingAllowed(false); //
+        
+        // Renderer untuk warna baris berdasarkan status
+        tblServ.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
-            public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
-                java.awt.Component comp = super.prepareRenderer(renderer, row, column);
-                Object statusValue = getValueAt(row, 11); 
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                // Ambil nilai dari kolom Status (Index 13 berdasarkan tampilData)
+                Object statusValue = table.getValueAt(row, 13); 
 
-                if (statusValue != null) {
+                if (statusValue != null && !isSelected) {
                     String status = statusValue.toString();
-
-                    if (isRowSelected(row)) {
-                        comp.setBackground(getSelectionBackground());
-                    } else {
-                        switch (status) {
-                            case "Proses":
-                                comp.setBackground(java.awt.Color.YELLOW);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Selesai":
-                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Dibatalkan":
-                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Menunggu":
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            default:
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                        }
+                    switch (status) {
+                        case "Proses": comp.setBackground(java.awt.Color.YELLOW); break;
+                        case "Selesai": comp.setBackground(new java.awt.Color(144, 238, 144)); break;
+                        case "Dibatalkan": comp.setBackground(new java.awt.Color(255, 182, 193)); break;
+                        case "Menunggu": comp.setBackground(java.awt.Color.WHITE); break;
+                        default: comp.setBackground(java.awt.Color.WHITE); break;
                     }
+                    comp.setForeground(java.awt.Color.BLACK);
+                } else if (isSelected) {
+                    comp.setBackground(table.getSelectionBackground());
+                    comp.setForeground(table.getSelectionForeground());
                 }
                 return comp;
             }
-        };
-        // Jangan lupa pindahkan tblLapBulanan ke JScrollPane jika Anda membuatnya secara manual lewat kode
-        jScrollPane1.setViewportView(tblServ);
+        });
     }
-    
-    // --- LISTENER FILTER ---
+
     private void addFilterListeners() {
+        // Otomatis refresh saat filter diganti
         cbStatus.addActionListener(e -> tampilData());
         cbKategori.addActionListener(e -> tampilData());
         dtFilterdate.addPropertyChangeListener("date", e -> tampilData());
     }
 
-    // --- LOAD COMBO STATUS ---
     private void loadComboStatus() {
         cbStatus.removeAllItems();
         cbStatus.addItem("- Semua Status -");
@@ -105,18 +94,14 @@ public class Teknisi extends javax.swing.JPanel {
         cbStatus.addItem("Dibatalkan");
     }
 
-    // --- LOAD COMBO KATEGORI (DARI tbl_jenis_perangkat) ---
     private void loadComboKategori() {
         cbKategori.removeAllItems();
         cbKategori.addItem("- Semua Kategori -");
-        
         try {
             Connection conn = Koneksi.configDB();
             Statement stm = conn.createStatement();
-            // Mengambil nama_jenis dari tabel master jenis perangkat
             String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat ORDER BY nama_jenis ASC";
             ResultSet rs = stm.executeQuery(sql);
-            
             while (rs.next()) {
                 cbKategori.addItem(rs.getString("nama_jenis"));
             }
@@ -125,58 +110,38 @@ public class Teknisi extends javax.swing.JPanel {
         }
     }
 
-    // --- TAMPILKAN DATA (FILTER & SORTING) ---
     public void tampilData() {
-        DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-    }};
-        model.addColumn("No");
-        model.addColumn("ID Servis");
-        model.addColumn("Tanggal Masuk");
-        model.addColumn("Nama");
-        model.addColumn("Nomor HP");
-        model.addColumn("Alamat");
-        model.addColumn("Jenis Barang");
-        model.addColumn("Merek");
-        model.addColumn("Model/Tipe");
-        model.addColumn("Nomor Seri");
-        model.addColumn("Keluhan");
-        model.addColumn("Kelengkapan");
-        model.addColumn("Harga Servis");
-        model.addColumn("Status");
-        model.addColumn("Status Barang");
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        
+        model.addColumn("No"); model.addColumn("ID Servis"); model.addColumn("Tanggal Masuk");
+        model.addColumn("Nama"); model.addColumn("Nomor HP"); model.addColumn("Alamat");
+        model.addColumn("Jenis Barang"); model.addColumn("Merek"); model.addColumn("Model/Tipe");
+        model.addColumn("Nomor Seri"); model.addColumn("Keluhan"); model.addColumn("Kelengkapan");
+        model.addColumn("Harga Servis"); model.addColumn("Status"); model.addColumn("Status Barang");
 
         try {
-            // Query Dasar
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, ")
                .append("s.tanggal_masuk, s.merek, s.model, s.harga, s.no_seri, s.keluhan_awal, s.kelengkapan, s.status, s.status_barang ")
                .append("FROM servis s ")
                .append("INNER JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ")
-               .append("WHERE 1=1 "); // 1=1 memudahkan penambahan AND dinamis
+               .append("WHERE 1=1 ");
 
-            // 1. Filter Status
             if (cbStatus.getSelectedIndex() > 0) {
-                String statusPilih = cbStatus.getSelectedItem().toString();
-                sql.append("AND s.status = '").append(statusPilih).append("' ");
+                sql.append("AND s.status = '").append(cbStatus.getSelectedItem().toString()).append("' ");
             }
-
-            // 2. Filter Kategori (Jenis Barang)
             if (cbKategori.getSelectedIndex() > 0) {
-                String katPilih = cbKategori.getSelectedItem().toString();
-                sql.append("AND s.jenis_barang = '").append(katPilih).append("' ");
+                sql.append("AND s.jenis_barang = '").append(cbKategori.getSelectedItem().toString()).append("' ");
             }
-
-            // 3. Filter Tanggal
             if (dtFilterdate.getDate() != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String tglPilih = sdf.format(dtFilterdate.getDate());
-                sql.append("AND s.tanggal_masuk = '").append(tglPilih).append("' ");
+                sql.append("AND s.tanggal_masuk = '").append(new SimpleDateFormat("yyyy-MM-dd").format(dtFilterdate.getDate())).append("' ");
             }
             
-            // 4. Filter Pencarian (txtCari)
             String keyword = txtCari.getText().trim();
             if (!keyword.isEmpty()) {
                 sql.append("AND (p.nama_pelanggan LIKE '%").append(keyword).append("%' ")
@@ -184,10 +149,8 @@ public class Teknisi extends javax.swing.JPanel {
                    .append("OR s.merek LIKE '%").append(keyword).append("%') ");
             }
             
-            // 5. Sorting (Terbaru Paling Atas)
             sql.append("ORDER BY s.tanggal_masuk DESC");
 
-            // Eksekusi
             Connection conn = Koneksi.configDB();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql.toString());
@@ -195,28 +158,16 @@ public class Teknisi extends javax.swing.JPanel {
             int no = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    no++,
-                    rs.getString("id_servis"),
-                    rs.getString("tanggal_masuk"),
-                    rs.getString("nama_pelanggan"),
-                    rs.getString("no_hp"),
-                    rs.getString("alamat"),
-                    rs.getString("jenis_barang"),
-                    rs.getString("merek"),
-                    rs.getString("model"),
-                    rs.getString("no_seri"),
-                    rs.getString("keluhan_awal"),
-                    rs.getString("kelengkapan"),
-                    rs.getInt("harga"),
-                    rs.getString("status"),
-                    rs.getString("status_barang")
+                    no++, rs.getString("id_servis"), rs.getString("tanggal_masuk"),
+                    rs.getString("nama_pelanggan"), rs.getString("no_hp"), rs.getString("alamat"),
+                    rs.getString("jenis_barang"), rs.getString("merek"), rs.getString("model"),
+                    rs.getString("no_seri"), rs.getString("keluhan_awal"), rs.getString("kelengkapan"),
+                    rs.getInt("harga"), rs.getString("status"), rs.getString("status_barang")
                 });
             }
             tblServ.setModel(model);
-
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Gagal memuat data: " + e.getMessage());
         }
     }
     
@@ -478,6 +429,7 @@ public class Teknisi extends javax.swing.JPanel {
 
     private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
         // TODO add your handling code here:
+       
     }//GEN-LAST:event_txtCariActionPerformed
 
     private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased

@@ -37,6 +37,8 @@ public class PKelPelanggan extends javax.swing.JPanel {
         initKeyShortcuts();
     }
     
+    
+    
     private void initKeyShortcuts() {
         // Menggunakan WHEN_IN_FOCUSED_WINDOW agar shortcut jalan dimanapun fokus kursor berada
         InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
