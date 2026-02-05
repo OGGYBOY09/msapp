@@ -114,7 +114,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
         lblKelPlgn.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
+        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-32.png"))); // NOI18N
         lblKelPlgn.setText("Kelola Pelanggan");
         lblKelPlgn.setOpaque(true);
         lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -182,7 +182,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("LOG OUT");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
-        add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 610, 180, 50));
+        add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 610, 180, 50));
 
         jLabel2.setBackground(new java.awt.Color(0, 18, 51));
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
