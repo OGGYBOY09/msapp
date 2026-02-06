@@ -67,15 +67,15 @@ public class LapHarian extends javax.swing.JPanel {
                 // Jika tidak dipilih, warnai berdasarkan status
                 switch (status) {
                     case "Proses":
-                        comp.setBackground(new java.awt.Color(255, 255, 204)); // Kuning Kalem
+                        comp.setBackground(java.awt.Color.YELLOW);
                         comp.setForeground(java.awt.Color.BLACK);
                         break;
                     case "Selesai":
-                        comp.setBackground(new java.awt.Color(204, 255, 204)); // Hijau Kalem
+                        comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
                         comp.setForeground(java.awt.Color.BLACK);
                         break;
                     case "Dibatalkan":
-                        comp.setBackground(new java.awt.Color(255, 204, 204)); // Merah Kalem
+                        comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
                         comp.setForeground(java.awt.Color.BLACK);
                         break;
                     case "Menunggu":

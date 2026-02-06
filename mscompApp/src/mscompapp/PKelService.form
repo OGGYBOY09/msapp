@@ -310,14 +310,10 @@
                   </Group>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="25" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="btReset" min="-2" pref="147" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="btBatal" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="btSimpan" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
+                      <Component id="btSimpan" pref="300" max="32767" attributes="0"/>
+                      <Component id="btBatal" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
@@ -353,10 +349,7 @@
                   <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                   <Component id="btSimpan" min="-2" pref="41" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btReset" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
-                      <Component id="btBatal" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="btBatal" min="-2" pref="41" max="-2" attributes="0"/>
                   <EmptySpace pref="177" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -515,20 +508,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSimpanActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btReset">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Swis721 WGL4 BT" size="18" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="RESET [F4]"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btResetActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCari">

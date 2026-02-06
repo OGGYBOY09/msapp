@@ -111,15 +111,7 @@ public class PKelService extends javax.swing.JPanel {
             }
         });
 
-        // 3. btReset = F4
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "cmdReset");
-        am.put("cmdReset", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(btReset.isEnabled()) btReset.doClick();
-            }
-        });
-
+        
         // 4. btnCari (Pelanggan) = F2
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "cmdCariPelanggan");
         am.put("cmdCariPelanggan", new AbstractAction() {
@@ -372,7 +364,6 @@ public class PKelService extends javax.swing.JPanel {
         jLabel12 = new javax.swing.JLabel();
         btBatal = new javax.swing.JButton();
         btSimpan = new javax.swing.JButton();
-        btReset = new javax.swing.JButton();
         btnCari = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -559,11 +550,6 @@ public class PKelService extends javax.swing.JPanel {
         btSimpan.setText("SIMPAN [SHIFT+ENTER]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
 
-        btReset.setBackground(new java.awt.Color(255, 255, 102));
-        btReset.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        btReset.setText("RESET [F4]");
-        btReset.addActionListener(this::btResetActionPerformed);
-
         btnCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnCari.setText("Cari... [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
@@ -601,13 +587,10 @@ public class PKelService extends javax.swing.JPanel {
                             .addComponent(jLabel9))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(btBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(btBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(37, 37, 37))
         );
         jPanel3Layout.setVerticalGroup(
@@ -637,9 +620,7 @@ public class PKelService extends javax.swing.JPanel {
                 .addGap(52, 52, 52)
                 .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btReset, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(177, Short.MAX_VALUE))
         );
 
@@ -1034,7 +1015,7 @@ public class PKelService extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, pesan + "\nNo: " + tNomorServ.getText());
 
             load_table_service();
-            btResetActionPerformed(null);
+            btBatalActionPerformed(null);
             tNomorServ.setEditable(true); // Aktifkan kembali ID field setelah reset
 
         } catch (Exception e) {
@@ -1047,21 +1028,6 @@ public class PKelService extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tMerekActionPerformed
 
-    private void btResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetActionPerformed
-        // TODO add your handling code here:
-        btBatalActionPerformed(null); // Panggil fungsi batal untuk form pelanggan
-        
-        // Reset Form Barang
-        cbJenisBrg.setSelectedIndex(0);
-        tMerek.setText("");
-        tModel.setText("");
-        tSeri.setText("");
-        tKeluhan.setText("");
-        cbStatusServ.setSelectedIndex(0);
-        
-        auto_number_service();
-    }//GEN-LAST:event_btResetActionPerformed
-
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
         PopUpPelanggan popup = new PopUpPelanggan();
@@ -1072,14 +1038,27 @@ public class PKelService extends javax.swing.JPanel {
     private void btBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBatalActionPerformed
         // TODO add your handling code here:
         tNamaPelanggan.setText("");
-        tNoPelanggan.setText("");
-        tAlamatPelanggan.setText("");
-        rbLama.setSelected(true);
-        btnCari.setEnabled(true);
-        tNamaPelanggan.setEditable(false);
-        tNoPelanggan.setEditable(false);
-        tAlamatPelanggan.setEditable(false);
-        idPelanggan = 0;
+    tNoPelanggan.setText("");
+    tAlamatPelanggan.setText("");
+    rbLama.setSelected(true);
+    btnCari.setEnabled(true);
+    tNamaPelanggan.setEditable(false);
+    tNoPelanggan.setEditable(false);
+    tAlamatPelanggan.setEditable(false);
+    idPelanggan = 0;
+
+    // 2. Membersihkan Data Perangkat/Servis
+    cbJenisBrg.setSelectedIndex(0);
+    tMerek.setText("");
+    tModel.setText("");
+    tSeri.setText("");
+    tKelengkapan.setText("");
+    tKeluhan.setText("");
+    cbStatusServ.setSelectedIndex(0);
+
+    // 3. Mengatur ulang ID Service ke Auto Number terbaru
+    auto_number_service();
+    tNomorServ.setEditable(false);
     }//GEN-LAST:event_btBatalActionPerformed
 
     private void cbJenisBrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbJenisBrgActionPerformed
@@ -1160,7 +1139,6 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JButton btBatal;
     private javax.swing.JButton btEdit;
     private javax.swing.JButton btRefresh;
-    private javax.swing.JButton btReset;
     private javax.swing.JButton btSimpan;
     private javax.swing.JButton btnCari;
     private javax.swing.ButtonGroup buttonGroup1;

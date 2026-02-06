@@ -736,7 +736,7 @@ public class PKelPelanggan extends javax.swing.JPanel {
 
             if (isEdit) {
                 // UPDATE: Simpan 'namaKategori' langsung ke kolom 'kategori'
-                sql = "UPDATE tbl_pelanggan SET nama_pelanggang=?, no_hp=?, alamat=? WHERE id_pelanggan=?";
+                sql = "UPDATE tbl_pelanggan SET nama_pelanggan=?, no_hp=?, alamat=? WHERE id_pelanggan=?";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, nama);
                 ps.setString(2, noHp); 

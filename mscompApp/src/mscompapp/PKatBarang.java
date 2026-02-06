@@ -232,7 +232,7 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TAMBAH KATEGORI BARANG");
+        jLabel1.setText("TAMBAH KATEGORI SPAREPART");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
