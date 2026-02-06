@@ -286,11 +286,17 @@ public class DafServisAnda extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSerAnda = new javax.swing.JTable();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jPanel2 = new javax.swing.JPanel();
+        btnNextKanan = new javax.swing.JButton();
+        btnNextKiri = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setMaximumSize(new java.awt.Dimension(1720, 750));
-        setMinimumSize(new java.awt.Dimension(1720, 750));
+        setMaximumSize(new java.awt.Dimension(1720, 960));
+        setMinimumSize(new java.awt.Dimension(1720, 960));
         setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1720, 960));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(3, 83, 164));
 
@@ -326,31 +332,40 @@ public class DafServisAnda extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 1718, -1));
+
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 89, 418, 47));
 
         btnCari.setBackground(new java.awt.Color(255, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnCari.setText("Cari[F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 89, 105, 47));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDetail.setText("Detail");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(554, 89, 105, 47));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRefresh.setText("Refresh [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(665, 89, -1, 47));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Tanggal :");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 100, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Status :");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1508, 102, -1, -1));
 
         cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1589, 89, 124, 47));
 
         tblSerAnda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblSerAnda.setModel(new javax.swing.table.DefaultTableModel(
@@ -367,54 +382,46 @@ public class DafServisAnda extends javax.swing.JPanel {
         tblSerAnda.setRowHeight(35);
         jScrollPane1.setViewportView(tblSerAnda);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 154, 1706, 650));
+        add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1381, 89, 115, 47));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        btnNextKanan.setText("NEXT");
+        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+
+        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
+        btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(1446, Short.MAX_VALUE)
+                .addComponent(btnNextKiri)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnNextKanan)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 492, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNextKanan, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                    .addComponent(btnNextKiri, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
-                    .addComponent(cbStatus)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel3))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(62, 62, 62)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 810, 1680, 60));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -435,10 +442,20 @@ public class DafServisAnda extends javax.swing.JPanel {
         tampilData();
     }//GEN-LAST:event_btnCariActionPerformed
 
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextKiriActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDetail;
+    private javax.swing.JButton btnNextKanan;
+    private javax.swing.JButton btnNextKiri;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox<String> cbStatus;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -446,6 +463,7 @@ public class DafServisAnda extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNmTeknisi;
     private javax.swing.JTable tblSerAnda;

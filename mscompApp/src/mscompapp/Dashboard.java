@@ -171,80 +171,39 @@ public class Dashboard extends javax.swing.JFrame {
 
         pNav.setBackground(new java.awt.Color(4, 102, 200));
         pNav.setForeground(new java.awt.Color(0, 24, 69));
+        pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
         lblWelcome.setText("Welcome");
+        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1618, 31, -1, -1));
 
         lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         lblTanggal.setForeground(new java.awt.Color(255, 255, 255));
         lblTanggal.setText("Tanggal");
+        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1618, 64, -1, -1));
 
         jLabel2.setForeground(new java.awt.Color(0, 24, 69));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ant.png"))); // NOI18N
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 396, 120));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        pNav.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 31, 42, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
+        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, 120));
 
-        javax.swing.GroupLayout pNavLayout = new javax.swing.GroupLayout(pNav);
-        pNav.setLayout(pNavLayout);
-        pNavLayout.setHorizontalGroup(
-            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pNavLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 937, Short.MAX_VALUE)
-                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblWelcome)
-                    .addComponent(lblTanggal))
-                .addGap(214, 214, 214))
-        );
-        pNavLayout.setVerticalGroup(
-            pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pNavLayout.createSequentialGroup()
-                .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pNavLayout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(pNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pNavLayout.createSequentialGroup()
-                                .addComponent(lblWelcome)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTanggal))
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pNavLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 140));
+        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 120));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
-
-        javax.swing.GroupLayout pSideLayout = new javax.swing.GroupLayout(pSide);
-        pSide.setLayout(pSideLayout);
-        pSideLayout.setHorizontalGroup(
-            pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        pSideLayout.setVerticalGroup(
-            pSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 940, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 200, 940));
+        pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 200, 960));
 
         pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 1720, 940));
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 1720, 960));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -328,26 +328,36 @@ public class LapBulanan extends javax.swing.JPanel {
         btnNota = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         cbKategori = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        btnNextKanan = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setMaximumSize(new java.awt.Dimension(1720, 750));
-        setMinimumSize(new java.awt.Dimension(1720, 750));
+        setMaximumSize(new java.awt.Dimension(1720, 780));
+        setMinimumSize(new java.awt.Dimension(1720, 780));
+        setPreferredSize(new java.awt.Dimension(1720, 780));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 259, 50));
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 18, -1, 50));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDetail.setText("DETAIL");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(399, 18, -1, 50));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 18, -1, 50));
 
         tblLapBulanan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
@@ -364,110 +374,82 @@ public class LapBulanan extends javax.swing.JPanel {
         tblLapBulanan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapBulanan);
 
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 88, 1677, 540));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Bulan :");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 18, -1, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Status :");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1525, 18, -1, 50));
 
         cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1579, 18, 116, 50));
 
         mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        add(mcBulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1036, 18, 121, 50));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Tahun :");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1169, 18, -1, 50));
+        add(thTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(1223, 18, 100, 50));
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
+        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 18, -1, 50));
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
         btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnPdf.setText("PDF");
         btnPdf.addActionListener(this::btnPdfActionPerformed);
+        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(823, 18, -1, 50));
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNota.setText("Nota");
         btnNota.addActionListener(this::btnNotaActionPerformed);
+        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(901, 18, -1, 50));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Kategori :");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1329, 18, -1, 50));
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
+        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(1401, 18, 112, 50));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCari)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDetail)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh)
-                        .addGap(48, 48, 48)
-                        .addComponent(btCetakE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPdf)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNota)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(mcBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(thTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnPdf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnNota, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton1.setBackground(new java.awt.Color(204, 204, 204));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        jButton1.setText("NEXT");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1450, 20, -1, 48));
+
+        jButton2.setBackground(new java.awt.Color(204, 204, 204));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        jButton2.setText("NEXT");
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1570, 20, -1, 48));
+
+        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        btnNextKanan.setText("NEXT");
+        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+        jPanel1.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 670, -1, -1));
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 1720, 150));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
@@ -554,20 +536,36 @@ public class LapBulanan extends javax.swing.JPanel {
         tampilData();
     }//GEN-LAST:event_cbKategoriItemStateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCetakE;
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDetail;
+    private javax.swing.JButton btnNextKanan;
     private javax.swing.JButton btnNota;
     private javax.swing.JButton btnPdf;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox<String> cbKategori;
     private javax.swing.JComboBox<String> cbStatus;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private com.toedter.calendar.JMonthChooser mcBulan;
     public javax.swing.JTable tblLapBulanan;
