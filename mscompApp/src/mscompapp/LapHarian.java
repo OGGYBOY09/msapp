@@ -26,17 +26,19 @@ public class LapHarian extends javax.swing.JPanel {
      */
     private PKelLaporan parent;
 
-    // --- UBAH CONSTRUCTOR MENERIMA PARENT ---
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 3;
+
     public LapHarian(PKelLaporan parent) {
-        this.parent = parent; // Simpan referensi
+        this.parent = parent; 
         initComponents();
         loadComboStatus();
-        tglHarian.setDate(new Date());
-        tampilData();
-        addFilterListeners();
         loadComboKategori();
-        aturWarnaBarisTabel();
+        tglHarian.setDate(new Date());
         
+        aturWarnaBarisTabel();
+        addFilterListeners();
+        tampilData();
     }
     
     private void aturWarnaBarisTabel() {
@@ -94,8 +96,9 @@ public class LapHarian extends javax.swing.JPanel {
 }
     
     private void addFilterListeners() {
-        tglHarian.addPropertyChangeListener("date", e -> tampilData());
-        cbStatus.addActionListener(e -> tampilData());
+       tglHarian.addPropertyChangeListener("date", e -> { currentPage = 0; tampilData(); });
+        cbStatus.addActionListener(e -> { currentPage = 0; tampilData(); });
+        cbKategori.addActionListener(e -> { currentPage = 0; tampilData(); });
     }
     
     private void loadComboStatus() {
@@ -109,35 +112,29 @@ public class LapHarian extends javax.swing.JPanel {
     
     private void loadComboKategori() {
     cbKategori.removeAllItems();
-    cbKategori.addItem("- Semua Kategori -"); // Opsi default
-    try {
-        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
-        Connection conn = Koneksi.configDB();
-        ResultSet rs = conn.createStatement().executeQuery(sql);
-        while (rs.next()) {
-            cbKategori.addItem(rs.getString("nama_jenis"));
-        }
-    } catch (Exception e) {
-        System.err.println("Error load kategori: " + e.getMessage());
-    }
+        cbKategori.addItem("- Semua Kategori -");
+        try {
+            Connection conn = Koneksi.configDB();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT nama_jenis FROM tbl_jenis_perangkat");
+            while (rs.next()) {
+                cbKategori.addItem(rs.getString("nama_jenis"));
+            }
+        } catch (Exception e) { System.err.println("Err: " + e.getMessage()); }
 }
 
-    private void tampilData() {
+    public void tampilData() {
         DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-        }};
-        // --- STRUKTUR KOLOM DISAMAKAN DENGAN LAP BULANAN/MINGGUAN ---
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
         model.addColumn("No");
         model.addColumn("ID Servis"); 
-        model.addColumn("Tanggal Masuk"); // <--- Penambahan Kolom Wajib
+        model.addColumn("Tanggal Masuk");
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        // Model & Seri tidak ditampilkan di tabel agar ringkas
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
         model.addColumn("Total Biaya"); 
@@ -145,74 +142,55 @@ public class LapHarian extends javax.swing.JPanel {
         model.addColumn("Status Barang");
 
         try {
-            // Update Query: Tambah s.tanggal_masuk
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk, s.status_barang "
-                       + "FROM servis s "
-                       + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
-                       + "WHERE 1=1 ";
-
-            // 1. Filter Tanggal
+            // 1. Membangun Where Clause
+            String where = "WHERE 1=1 ";
             if (tglHarian.getDate() != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String tgl = sdf.format(tglHarian.getDate());
-                sql += "AND s.tanggal_masuk = '" + tgl + "' ";
+                where += "AND s.tanggal_masuk = '" + sdf.format(tglHarian.getDate()) + "' ";
             }
-
-            // 2. Filter Pencarian
-            String keyword = tfCari.getText();
-            if (!keyword.isEmpty()) {
-                sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
-                     + "OR p.no_hp LIKE '%" + keyword + "%' "
-                     + "OR s.id_servis LIKE '%" + keyword + "%' "
-                     + "OR s.merek LIKE '%" + keyword + "%') ";
+            if (!tfCari.getText().isEmpty()) {
+                String key = tfCari.getText();
+                where += "AND (p.nama_pelanggan LIKE '%"+key+"%' OR p.no_hp LIKE '%"+key+"%' OR s.id_servis LIKE '%"+key+"%') ";
             }
-
-            // 3. Filter Status
             if (cbStatus.getSelectedIndex() > 0) {
-                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
+                where += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
-            
             if (cbKategori.getSelectedIndex() > 0) {
-            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
-            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
-        }
-            
-            sql += "ORDER BY s.id_servis DESC";
+                where += "AND s.jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+            }
 
+            // 2. Hitung Total untuk Pagination
             Connection conn = Koneksi.configDB();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-            
-            DecimalFormat df = new DecimalFormat("#,###");
+            ResultSet rsCount = conn.createStatement().executeQuery("SELECT COUNT(*) AS total FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " + where);
+            int totalData = 0;
+            if (rsCount.next()) totalData = rsCount.getInt("total");
 
-            int no = 1;
+            // 3. Query Utama dengan Limit
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT s.*, p.nama_pelanggan, p.no_hp, p.alamat "
+                       + "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
+                       + where + "ORDER BY s.id_servis DESC LIMIT " + PAGE_SIZE + " OFFSET " + offset;
+
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            DecimalFormat df = new DecimalFormat("#,###");
+            int no = offset + 1;
+
             while (rs.next()) {
-                double hargaVal = rs.getDouble("harga");
-                String hargaFmt = "Rp " + df.format(hargaVal);
-                
                 model.addRow(new Object[]{
-                    no++,
-                    rs.getString("id_servis"),
-                    rs.getString("tanggal_masuk"), // <--- Masukkan Data Tanggal
-                    rs.getString("nama_pelanggan"),
-                    rs.getString("no_hp"),
-                    rs.getString("alamat"),
-                    rs.getString("jenis_barang"),
-                    rs.getString("merek"),
-                    rs.getString("keluhan_awal"),
-                    rs.getString("kelengkapan"),
-                    hargaFmt, 
-                    rs.getString("status"),
-                    rs.getString("status_barang")
+                    no++, rs.getString("id_servis"), rs.getString("tanggal_masuk"),
+                    rs.getString("nama_pelanggan"), rs.getString("no_hp"), rs.getString("alamat"),
+                    rs.getString("jenis_barang"), rs.getString("merek"), rs.getString("keluhan_awal"),
+                    rs.getString("kelengkapan"), "Rp " + df.format(rs.getDouble("harga")), 
+                    rs.getString("status"), rs.getString("status_barang")
                 });
             }
             tblLapHarian.setModel(model);
 
-        } catch (Exception e) {
-            System.err.println("Error tampil data harian: " + e.getMessage());
-        }
-        
+            // Update Status Tombol
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
+
+        } catch (Exception e) { System.err.println("Err: " + e.getMessage()); }
         hitungDanKirimPendapatan();
     }
     
@@ -495,10 +473,10 @@ public class LapHarian extends javax.swing.JPanel {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        tfCari.setText("");
-        cbStatus.setSelectedIndex(0);
-        tglHarian.setDate(new Date());
-        tampilData();
+        tfCari.setText(""); 
+        cbStatus.setSelectedIndex(0); 
+        tglHarian.setDate(new Date()); 
+        currentPage = 0; tampilData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
@@ -568,10 +546,16 @@ public class LapHarian extends javax.swing.JPanel {
 
     private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
         // TODO add your handling code here:
+        if (currentPage > 0) {
+            currentPage--;
+            tampilData();
+        }
     }//GEN-LAST:event_btnNextKiriActionPerformed
 
     private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
         // TODO add your handling code here:
+        currentPage++;
+        tampilData();
     }//GEN-LAST:event_btnNextKananActionPerformed
 
 

@@ -7,6 +7,7 @@ import config.Koneksi;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.PreparedStatement; // Tambahan untuk keamanan query
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
@@ -31,20 +32,24 @@ public class LapBulanan extends javax.swing.JPanel {
      */
     private PKelLaporan parent;
 
-    // Constructor Menerima Parent
+    
+    // --- FITUR PAGINATION ---
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 3;
+
     public LapBulanan(PKelLaporan parent) {
         this.parent = parent;
         initComponents();
         loadComboStatus();
         loadComboKategori();
-        initKeyShortcuts();// <--- Tambahkan ini
+        initKeyShortcuts();
         
-        // Tambahkan ini di dalam Constructor LapBulanan
+        // Custom Table Renderer (Warna baris berdasarkan status)
         tblLapBulanan = new javax.swing.JTable() {
             {
-        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
-        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
-    }
+                setRowHeight(30);
+                getTableHeader().setReorderingAllowed(false);
+            }
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
@@ -52,47 +57,33 @@ public class LapBulanan extends javax.swing.JPanel {
 
                 if (statusValue != null) {
                     String status = statusValue.toString();
-
                     if (isRowSelected(row)) {
                         comp.setBackground(getSelectionBackground());
                     } else {
                         switch (status) {
-                            case "Proses":
-                                comp.setBackground(java.awt.Color.YELLOW);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Selesai":
-                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Dibatalkan":
-                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Menunggu":
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            default:
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
+                            case "Proses": comp.setBackground(java.awt.Color.YELLOW); break;
+                            case "Selesai": comp.setBackground(new java.awt.Color(144, 238, 144)); break;
+                            case "Dibatalkan": comp.setBackground(new java.awt.Color(255, 182, 193)); break;
+                            case "Menunggu": comp.setBackground(java.awt.Color.WHITE); break;
+                            default: comp.setBackground(java.awt.Color.WHITE); break;
                         }
+                        comp.setForeground(java.awt.Color.BLACK);
                     }
                 }
                 return comp;
             }
         };
-        // Jangan lupa pindahkan tblLapBulanan ke JScrollPane jika Anda membuatnya secara manual lewat kode
         jScrollPane1.setViewportView(tblLapBulanan);
         
-                tampilData();
+        tampilData();
 
-        // Listener
-        mcBulan.addPropertyChangeListener("month", e -> tampilData());
-        thTahun.addPropertyChangeListener("year", e -> tampilData());
-        cbStatus.addActionListener(e -> tampilData()); 
+        // --- LISTENERS (RESET KE HALAMAN 1 JIKA FILTER BERUBAH) ---
+        mcBulan.addPropertyChangeListener("month", e -> { currentPage = 0; tampilData(); });
+        thTahun.addPropertyChangeListener("year", e -> { currentPage = 0; tampilData(); });
+        cbStatus.addActionListener(e -> { currentPage = 0; tampilData(); }); 
+        cbKategori.addActionListener(e -> { currentPage = 0; tampilData(); });
     }
+    
     private void initKeyShortcuts() {
         // Menggunakan WHEN_IN_FOCUSED_WINDOW agar shortcut jalan dimanapun fokus kursor berada
         InputMap im = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -127,19 +118,18 @@ public class LapBulanan extends javax.swing.JPanel {
     }
     
     private void loadComboKategori() {
-    cbKategori.removeAllItems();
-    cbKategori.addItem("- Semua Kategori -"); // Opsi default
-    try {
-        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
-        Connection conn = Koneksi.configDB();
-        ResultSet rs = conn.createStatement().executeQuery(sql);
-        while (rs.next()) {
-            cbKategori.addItem(rs.getString("nama_jenis"));
+        cbKategori.removeAllItems();
+        cbKategori.addItem("- Semua Kategori -");
+        try {
+            Connection conn = Koneksi.configDB();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT nama_jenis FROM tbl_jenis_perangkat");
+            while (rs.next()) {
+                cbKategori.addItem(rs.getString("nama_jenis"));
+            }
+        } catch (Exception e) {
+            System.err.println("Error load kategori: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.err.println("Error load kategori: " + e.getMessage());
     }
-}
     
     private void loadComboStatus() {
         cbStatus.removeAllItems();
@@ -150,22 +140,19 @@ public class LapBulanan extends javax.swing.JPanel {
         cbStatus.addItem("Dibatalkan");
         cbStatus.setSelectedIndex(0);
     }
-
     public void tampilData() {
         DefaultTableModel model = new DefaultTableModel(){
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-            }};        
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };        
         model.addColumn("No");
         model.addColumn("ID Servis");
-        model.addColumn("Tanggal Masuk"); // <--- KOLOM BARU DI GUI
+        model.addColumn("Tanggal Masuk");
         model.addColumn("Nama");
         model.addColumn("Nomor HP");
         model.addColumn("Alamat");
         model.addColumn("Jenis Barang");
         model.addColumn("Merek");
-        // Model & Seri Dihapus dari GUI agar tidak sempit
         model.addColumn("Keluhan");
         model.addColumn("Kelengkapan");
         model.addColumn("Total Biaya"); 
@@ -173,68 +160,69 @@ public class LapBulanan extends javax.swing.JPanel {
         model.addColumn("Status Barang");
 
         try {
-            // Update Query
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status,s.status_barang , s.harga, s.tanggal_masuk " // <-- Ambil tanggal
-                       + "FROM servis s "
-                       + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
-                       + "WHERE 1=1 ";
-
+            // 1. Persiapan Filter
+            String whereClause = "WHERE 1=1 ";
             int bulan = mcBulan.getMonth() + 1;
             int tahun = thTahun.getYear();
-            sql += "AND MONTH(s.tanggal_masuk) = " + bulan + " AND YEAR(s.tanggal_masuk) = " + tahun + " ";
+            whereClause += "AND MONTH(s.tanggal_masuk) = " + bulan + " AND YEAR(s.tanggal_masuk) = " + tahun + " ";
 
-            String keyword = tfCari.getText();
-            if (!keyword.isEmpty()) {
-                sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
-                     + "OR s.id_servis LIKE '%" + keyword + "%') ";
+            if (!tfCari.getText().isEmpty()) {
+                whereClause += "AND (p.nama_pelanggan LIKE '%" + tfCari.getText() + "%' OR s.id_servis LIKE '%" + tfCari.getText() + "%') ";
             }
 
             if (cbStatus.getSelectedIndex() > 0) {
-                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
+                whereClause += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
             }
             
             if (cbKategori.getSelectedIndex() > 0) {
-            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
-            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
-        }
-            
-            sql += "ORDER BY s.tanggal_masuk DESC";
+                whereClause += "AND s.jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+            }
 
+            // 2. Hitung Total Data (Untuk mematikan/menghidupkan tombol Next)
             Connection conn = Koneksi.configDB();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
+            String sqlCount = "SELECT COUNT(*) AS total FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " + whereClause;
+            ResultSet rsCount = conn.createStatement().executeQuery(sqlCount);
+            int totalData = 0;
+            if (rsCount.next()) totalData = rsCount.getInt("total");
 
+            // 3. Query Utama dengan LIMIT dan OFFSET
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT s.*, p.nama_pelanggan, p.no_hp, p.alamat "
+                       + "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
+                       + whereClause
+                       + "ORDER BY s.tanggal_masuk DESC "
+                       + "LIMIT " + PAGE_SIZE + " OFFSET " + offset;
+
+            ResultSet rs = conn.createStatement().executeQuery(sql);
             DecimalFormat df = new DecimalFormat("#,###");
             
-            int no = 1;
+            int no = offset + 1; // Nomor urut menyesuaikan halaman
             while (rs.next()) {
-                double hargaVal = rs.getDouble("harga");
-                String hargaFmt = "Rp " + df.format(hargaVal);
-                
                 model.addRow(new Object[]{
                     no++,
                     rs.getString("id_servis"),
-                    rs.getString("tanggal_masuk"), // <--- Masukkan Data Tanggal
+                    rs.getString("tanggal_masuk"),
                     rs.getString("nama_pelanggan"),
                     rs.getString("no_hp"),
                     rs.getString("alamat"),
                     rs.getString("jenis_barang"),
                     rs.getString("merek"),
-                    // Hapus Model & Seri di GUI
                     rs.getString("keluhan_awal"),
                     rs.getString("kelengkapan"),
-                    hargaFmt, 
+                    "Rp " + df.format(rs.getDouble("harga")), 
                     rs.getString("status"),
                     rs.getString("status_barang")
                 });
             }
             tblLapBulanan.setModel(model);
 
+            // 4. Atur Button State (Biar tidak error kalau data habis)
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
+
         } catch (Exception e) {
-            System.err.println("Error tampil data bulanan: " + e.getMessage());
+            System.err.println("Error tampil data: " + e.getMessage());
         }
-        
         hitungDanKirimPendapatan();
     }
     
@@ -269,37 +257,25 @@ public class LapBulanan extends javax.swing.JPanel {
     
     private void hitungDanKirimPendapatan() {
         if (parent == null) return;
-        
         try {
-            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' ";
-            
             int bulan = mcBulan.getMonth() + 1;
             int tahun = thTahun.getYear();
-            sql += "AND MONTH(tanggal_masuk) = " + bulan + " AND YEAR(tanggal_masuk) = " + tahun + " ";
+            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' "
+                       + "AND MONTH(tanggal_masuk) = " + bulan + " AND YEAR(tanggal_masuk) = " + tahun;
             
             if (cbKategori.getSelectedIndex() > 0) {
-                sql += "AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
+                sql += " AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "'";
             }
 
             Connection conn = Koneksi.configDB();
             ResultSet rs = conn.createStatement().executeQuery(sql);
-            
             int total = 0;
-            if (rs.next()) {
-                total = rs.getInt("total");
-            }
+            if (rs.next()) total = rs.getInt("total");
             
-            // Nama Bulan untuk Judul
             String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
                                   "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
-            String bulanStr = namaBulan[mcBulan.getMonth()];
-            
-            // KIRIM KE PARENT
-            parent.setInfoPendapatan("Pendapatan Bulan " + bulanStr + " " + tahun + " :", total);
-            
-        } catch (Exception e) {
-            System.out.println("Err Bulanan: " + e.getMessage());
-        }
+            parent.setInfoPendapatan("Pendapatan Bulan " + namaBulan[mcBulan.getMonth()] + " " + tahun + " :", total);
+        } catch (Exception e) { System.out.println("Err Bulanan: " + e.getMessage()); }
     }
 
     /**
@@ -329,8 +305,7 @@ public class LapBulanan extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         cbKategori = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnNextKiri = new javax.swing.JButton();
         btnNextKanan = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -426,20 +401,12 @@ public class LapBulanan extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
-        jButton1.setText("NEXT");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1450, 20, -1, 48));
-
-        jButton2.setBackground(new java.awt.Color(204, 204, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
-        jButton2.setText("NEXT");
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1570, 20, -1, 48));
+        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
+        btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        jPanel1.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(1450, 20, -1, -1));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -447,7 +414,7 @@ public class LapBulanan extends javax.swing.JPanel {
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        jPanel1.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 670, -1, -1));
+        jPanel1.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1590, 20, -1, -1));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 1720, 150));
     }// </editor-fold>//GEN-END:initComponents
@@ -455,15 +422,18 @@ public class LapBulanan extends javax.swing.JPanel {
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
         tampilData();
+        currentPage = 0;
     }//GEN-LAST:event_btnCariActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
         tfCari.setText("");
         cbStatus.setSelectedIndex(0);
+        cbKategori.setSelectedIndex(0);
         java.util.Calendar cal = java.util.Calendar.getInstance();
         mcBulan.setMonth(cal.get(java.util.Calendar.MONTH));
         thTahun.setYear(cal.get(java.util.Calendar.YEAR));
+        currentPage = 0; // Reset pagination
         tampilData();
         
     }//GEN-LAST:event_btnRefreshActionPerformed
@@ -536,16 +506,18 @@ public class LapBulanan extends javax.swing.JPanel {
         tampilData();
     }//GEN-LAST:event_cbKategoriItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        if (currentPage > 0) {
+            currentPage--;
+            tampilData();
+        }
+    }//GEN-LAST:event_btnNextKiriActionPerformed
 
     private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
         // TODO add your handling code here:
+        currentPage++;
+        tampilData();
     }//GEN-LAST:event_btnNextKananActionPerformed
 
 
@@ -554,13 +526,12 @@ public class LapBulanan extends javax.swing.JPanel {
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnNextKanan;
+    private javax.swing.JButton btnNextKiri;
     private javax.swing.JButton btnNota;
     private javax.swing.JButton btnPdf;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox<String> cbKategori;
     private javax.swing.JComboBox<String> cbStatus;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

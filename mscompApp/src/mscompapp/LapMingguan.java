@@ -30,128 +30,84 @@ public class LapMingguan extends javax.swing.JPanel {
     // Referensi ke Induk (PKelLaporan)
     private PKelLaporan parent;
 
-    // Constructor Menerima Parent
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 3;
+
     public LapMingguan(PKelLaporan parent) {
-        this.parent = parent; // Simpan referensi
+        this.parent = parent; 
         initComponents();
         loadComboStatus();
         loadComboKategori();
+        
+        // Custom Renderer (Warna)
         tblLapMingguan = new javax.swing.JTable() {
-            {
-        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
-        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
-    }
+            { setRowHeight(30); getTableHeader().setReorderingAllowed(false); }
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
-
-                // Ambil data dari kolom Status (indeks kolom terakhir atau sesuai model Anda)
-                // Di tampilData() Anda, Status berada di kolom ke-11 (indeks 11)
                 Object statusValue = getValueAt(row, 11); 
-
                 if (statusValue != null) {
                     String status = statusValue.toString();
-
-                    if (isRowSelected(row)) {
-                        comp.setBackground(getSelectionBackground());
-                    } else {
+                    if (isRowSelected(row)) comp.setBackground(getSelectionBackground());
+                    else {
                         switch (status) {
-                            case "Proses":
-                                comp.setBackground(java.awt.Color.YELLOW);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Selesai":
-                                comp.setBackground(new java.awt.Color(144, 238, 144)); // Hijau Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Dibatalkan":
-                                comp.setBackground(new java.awt.Color(255, 182, 193)); // Merah Muda
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            case "Menunggu":
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
-                            default:
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK);
-                                break;
+                            case "Proses": comp.setBackground(java.awt.Color.YELLOW); break;
+                            case "Selesai": comp.setBackground(new java.awt.Color(144, 238, 144)); break;
+                            case "Dibatalkan": comp.setBackground(new java.awt.Color(255, 182, 193)); break;
+                            default: comp.setBackground(java.awt.Color.WHITE); break;
                         }
                     }
                 }
                 return comp;
             }
         };
-        // Jangan lupa pindahkan tblLapBulanan ke JScrollPane jika Anda membuatnya secara manual lewat kode
         jScrollPane1.setViewportView(tblLapMingguan);
         
-        
-        // Set Default: Akhir = Hari ini, Awal = 7 hari lalu
         resetTanggalMingguan();
-        
-        // Setup Listener (Otomatisasi Tanggal & Refresh Table)
         setupListeners();
-        
         tampilData();
     }
     
     private void resetTanggalMingguan() {
-        isUpdatingDate = true; // Matikan listener sementara
+        isUpdatingDate = true;
         Calendar cal = Calendar.getInstance();
-        tglAkhir.setDate(cal.getTime()); // Hari ini
+        tglAkhir.setDate(cal.getTime());
         cal.add(Calendar.DAY_OF_MONTH, -7);
-        tglAwal.setDate(cal.getTime()); // 7 hari lalu
-        isUpdatingDate = false; // Hidupkan listener lagi
+        tglAwal.setDate(cal.getTime());
+        isUpdatingDate = false;
     }
     
     private void loadComboKategori() {
-    cbKategori.removeAllItems();
-    cbKategori.addItem("- Semua Kategori -"); // Opsi default
-    try {
-        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
-        Connection conn = Koneksi.configDB();
-        ResultSet rs = conn.createStatement().executeQuery(sql);
-        while (rs.next()) {
-            cbKategori.addItem(rs.getString("nama_jenis"));
-        }
-    } catch (Exception e) {
-        System.err.println("Error load kategori: " + e.getMessage());
-    }
+    cbKategori.removeAllItems(); cbKategori.addItem("- Semua Kategori -");
+        try {
+            ResultSet rs = Koneksi.configDB().createStatement().executeQuery("SELECT nama_jenis FROM tbl_jenis_perangkat");
+            while (rs.next()) cbKategori.addItem(rs.getString("nama_jenis"));
+        } catch (Exception e) {}
 }
     
     private void setupListeners() {
-        // 1. Jika Tanggal AWAL diubah -> Tanggal AKHIR otomatis +7 hari
         tglAwal.addPropertyChangeListener("date", e -> {
             if (isUpdatingDate || tglAwal.getDate() == null) return;
-            
-            isUpdatingDate = true; // Cegah looping
-            
+            isUpdatingDate = true;
             Calendar cal = Calendar.getInstance();
-            cal.setTime(tglAwal.getDate());
-            cal.add(Calendar.DAY_OF_MONTH, 7); // Tambah 7 hari
+            cal.setTime(tglAwal.getDate()); cal.add(Calendar.DAY_OF_MONTH, 7);
             tglAkhir.setDate(cal.getTime());
-            
             isUpdatingDate = false;
-            tampilData(); // Refresh Tabel
+            currentPage = 0; tampilData(); 
         });
         
-        // 2. Jika Tanggal AKHIR diubah -> Tanggal AWAL otomatis -7 hari
         tglAkhir.addPropertyChangeListener("date", e -> {
             if (isUpdatingDate || tglAkhir.getDate() == null) return;
-            
-            isUpdatingDate = true; // Cegah looping
-            
+            isUpdatingDate = true;
             Calendar cal = Calendar.getInstance();
-            cal.setTime(tglAkhir.getDate());
-            cal.add(Calendar.DAY_OF_MONTH, -7); // Kurang 7 hari
+            cal.setTime(tglAkhir.getDate()); cal.add(Calendar.DAY_OF_MONTH, -7);
             tglAwal.setDate(cal.getTime());
-            
             isUpdatingDate = false;
-            tampilData(); // Refresh Tabel
+            currentPage = 0; tampilData();
         });
         
-        // 3. Listener Status
-        cbStatus.addActionListener(e -> tampilData());
+        cbStatus.addActionListener(e -> { currentPage = 0; tampilData(); });
+        cbKategori.addActionListener(e -> { currentPage = 0; tampilData(); });
     }
     
     private void loadComboStatus() {
@@ -165,94 +121,45 @@ public class LapMingguan extends javax.swing.JPanel {
     }
 
     private void tampilData() {
-        DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-        }};
-        model.addColumn("No");
-        model.addColumn("ID Servis");
-        model.addColumn("Tanggal Masuk"); // <--- PERBAIKAN 1: Tambah Kolom Ini
-        model.addColumn("Nama");
-        model.addColumn("Nomor HP");
-        model.addColumn("Alamat");
-        model.addColumn("Jenis Barang");
-        model.addColumn("Merek");
-        // Model & Seri Dihapus agar ringkas
-        model.addColumn("Keluhan");
-        model.addColumn("Kelengkapan");
-        model.addColumn("Total Biaya"); 
-        model.addColumn("Status");
-        model.addColumn("Status Barang");
+        DefaultTableModel model = new DefaultTableModel(){ @Override public boolean isCellEditable(int r, int c) { return false; } };
+        model.addColumn("No"); model.addColumn("ID Servis"); model.addColumn("Tanggal Masuk"); model.addColumn("Nama");
+        model.addColumn("Nomor HP"); model.addColumn("Alamat"); model.addColumn("Jenis Barang"); model.addColumn("Merek");
+        model.addColumn("Keluhan"); model.addColumn("Kelengkapan"); model.addColumn("Total Biaya"); model.addColumn("Status"); model.addColumn("Status Barang");
 
         try {
-            // PERBAIKAN 2: Tambahkan s.tanggal_masuk di Query
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, p.alamat, s.jenis_barang, "
-                       + "s.merek, s.keluhan_awal, s.kelengkapan, s.status, s.harga, s.tanggal_masuk, s.status_barang " 
-                       + "FROM servis s "
-                       + "JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan "
-                       + "WHERE 1=1 ";
-
+            String where = "WHERE 1=1 ";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             if (tglAwal.getDate() != null && tglAkhir.getDate() != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String start = sdf.format(tglAwal.getDate());
-                String end = sdf.format(tglAkhir.getDate());
-                sql += "AND s.tanggal_masuk BETWEEN '" + start + "' AND '" + end + "' ";
+                where += "AND s.tanggal_masuk BETWEEN '" + sdf.format(tglAwal.getDate()) + "' AND '" + sdf.format(tglAkhir.getDate()) + "' ";
             }
-
-            String keyword = tfCari.getText();
-            if (!keyword.isEmpty()) {
-                sql += "AND (p.nama_pelanggan LIKE '%" + keyword + "%' "
-                     + "OR s.id_servis LIKE '%" + keyword + "%' "
-                     + "OR s.merek LIKE '%" + keyword + "%') ";
+            if (!tfCari.getText().isEmpty()) {
+                where += "AND (p.nama_pelanggan LIKE '%"+tfCari.getText()+"%' OR s.id_servis LIKE '%"+tfCari.getText()+"%') ";
             }
+            if (cbStatus.getSelectedIndex() > 0) where += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
+            if (cbKategori.getSelectedIndex() > 0) where += "AND s.jenis_barang = '" + cbKategori.getSelectedItem().toString() + "' ";
 
-            if (cbStatus.getSelectedIndex() > 0) {
-                sql += "AND s.status = '" + cbStatus.getSelectedItem().toString() + "' ";
-            
-            }
-            
-            if (cbKategori.getSelectedIndex() > 0) {
-            String kategoriTerpilih = cbKategori.getSelectedItem().toString();
-            sql += "AND s.jenis_barang = '" + kategoriTerpilih + "' ";
-        }
-            
-            sql += "ORDER BY s.tanggal_masuk DESC";
-
+            // Count
             Connection conn = Koneksi.configDB();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-            
-            DecimalFormat df = new DecimalFormat("#,###");
+            ResultSet rsC = conn.createStatement().executeQuery("SELECT COUNT(*) AS total FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " + where);
+            int totalData = rsC.next() ? rsC.getInt("total") : 0;
 
-            int no = 1;
+            // Select with Limit
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT s.*, p.nama_pelanggan, p.no_hp, p.alamat FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " 
+                       + where + "ORDER BY s.tanggal_masuk DESC LIMIT " + PAGE_SIZE + " OFFSET " + offset;
+
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            DecimalFormat df = new DecimalFormat("#,###");
+            int no = offset + 1;
             while (rs.next()) {
-                double hargaVal = rs.getDouble("harga");
-                String hargaFmt = "Rp " + df.format(hargaVal);
-                
-                model.addRow(new Object[]{
-                    no++,
-                    rs.getString("id_servis"),
-                    rs.getString("tanggal_masuk"), // <--- PERBAIKAN 3: Masukkan data tanggal
-                    rs.getString("nama_pelanggan"),
-                    rs.getString("no_hp"),
-                    rs.getString("alamat"),
-                    rs.getString("jenis_barang"),
-                    rs.getString("merek"),
-                    // Hapus Model & Seri di GUI
-                    rs.getString("keluhan_awal"),
-                    rs.getString("kelengkapan"),
-                    hargaFmt, 
-                    rs.getString("status"),
-                    rs.getString("status_barang")
-                });
+                model.addRow(new Object[]{ no++, rs.getString("id_servis"), rs.getString("tanggal_masuk"), rs.getString("nama_pelanggan"), rs.getString("no_hp"), rs.getString("alamat"), rs.getString("jenis_barang"), rs.getString("merek"), rs.getString("keluhan_awal"), rs.getString("kelengkapan"), "Rp " + df.format(rs.getDouble("harga")), rs.getString("status"), rs.getString("status_barang") });
             }
             tblLapMingguan.setModel(model);
 
-        } catch (Exception e) {
-            System.err.println("Error tampil data mingguan: " + e.getMessage());
-        }
-        
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
+
+        } catch (Exception e) { e.printStackTrace(); }
         hitungDanKirimPendapatan();
     }
     
@@ -399,6 +306,7 @@ public class LapMingguan extends javax.swing.JPanel {
         jLabel2.setText("Status :");
 
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbStatus.addActionListener(this::cbStatusActionPerformed);
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -420,6 +328,7 @@ public class LapMingguan extends javax.swing.JPanel {
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
+        cbKategori.addActionListener(this::cbKategoriActionPerformed);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -441,7 +350,7 @@ public class LapMingguan extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(1448, Short.MAX_VALUE)
+                .addContainerGap(1367, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNextKanan)
@@ -536,16 +445,12 @@ public class LapMingguan extends javax.swing.JPanel {
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
-        tampilData();
+        currentPage = 0; tampilData();
     }//GEN-LAST:event_btnCariActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        tfCari.setText("");
-        cbStatus.setSelectedIndex(0);
-        resetTanggalMingguan(); // Reset ke logika Today & Today-7
-        tampilData();
-        
+        tfCari.setText(""); cbStatus.setSelectedIndex(0); resetTanggalMingguan(); currentPage = 0; tampilData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
@@ -628,11 +533,21 @@ public class LapMingguan extends javax.swing.JPanel {
 
     private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
         // TODO add your handling code here:
+        if (currentPage > 0) { currentPage--; tampilData(); }
     }//GEN-LAST:event_btnNextKiriActionPerformed
 
     private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
         // TODO add your handling code here:
+        currentPage++; tampilData();
     }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbStatusActionPerformed
+
+    private void cbKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKategoriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbKategoriActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
