@@ -75,7 +75,6 @@ public class PKelLaporan extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -91,53 +90,38 @@ public class PKelLaporan extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(4, 102, 200));
-
+        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LAPORAN DATA SERVICE");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 1718, -1));
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel1.setOpaque(true);
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1680, 70));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel2.setText("Filter :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 99, 115, 45));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 115, 45));
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan Bulanan", "Laporan Mingguan", "Laporan Harian" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(179, 99, 226, 45));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 226, 45));
 
         txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 24)); // NOI18N
         txtTotalPendapatan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
         txtTotalPendapatan.setText("OOOOOOOOO\\");
-            jPanel1.add(txtTotalPendapatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1257, 121, -1, -1));
+            jPanel1.add(txtTotalPendapatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 110, -1, -1));
 
             jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
             jLabel3.setText("Total Pendapatan :");
-            jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1257, 84, -1, -1));
+            jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 80, -1, -1));
 
-            add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1720, 160));
+            add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1680, 160));
 
             jPanel4.setBackground(new java.awt.Color(255, 255, 255));
             jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            jPanel4.setMinimumSize(new java.awt.Dimension(1720, 760));
+            jPanel4.setPreferredSize(new java.awt.Dimension(1720, 760));
             jPanel4.setRequestFocusEnabled(false);
 
             javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -148,10 +132,10 @@ public class PKelLaporan extends javax.swing.JPanel {
             );
             jPanel4Layout.setVerticalGroup(
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 778, Short.MAX_VALUE)
+                .addGap(0, 758, Short.MAX_VALUE)
             );
 
-            add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 1720, 780));
+            add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 1680, 760));
         }// </editor-fold>//GEN-END:initComponents
 
 
@@ -161,7 +145,6 @@ public class PKelLaporan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel txtTotalPendapatan;
     // End of variables declaration//GEN-END:variables

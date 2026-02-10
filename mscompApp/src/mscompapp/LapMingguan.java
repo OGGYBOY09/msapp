@@ -31,7 +31,7 @@ public class LapMingguan extends javax.swing.JPanel {
     private PKelLaporan parent;
 
     private int currentPage = 0;
-    private final int PAGE_SIZE = 3;
+    private final int PAGE_SIZE = 20;
 
     public LapMingguan(PKelLaporan parent) {
         this.parent = parent; 
@@ -265,24 +265,29 @@ public class LapMingguan extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setMaximumSize(new java.awt.Dimension(1720, 750));
-        setMinimumSize(new java.awt.Dimension(1720, 750));
-        setPreferredSize(new java.awt.Dimension(1720, 750));
+        setMaximumSize(new java.awt.Dimension(1680, 760));
+        setMinimumSize(new java.awt.Dimension(1680, 760));
+        setPreferredSize(new java.awt.Dimension(1680, 760));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 246, 50));
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 18, -1, 50));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDetail.setText("DETAIL");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 18, -1, 50));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(484, 18, -1, 50));
 
         tblLapMingguan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapMingguan.setModel(new javax.swing.table.DefaultTableModel(
@@ -299,36 +304,48 @@ public class LapMingguan extends javax.swing.JPanel {
         tblLapMingguan.setRowHeight(35);
         jScrollPane1.setViewportView(tblLapMingguan);
 
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 88, 1682, 525));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Tanggal S/D :");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 10, -1, 50));
+        add(tglAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 20, 123, 50));
+        add(tglAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 20, 126, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Status :");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1500, 20, -1, 50));
 
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbStatus.addActionListener(this::cbStatusActionPerformed);
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1550, 20, 154, 50));
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNota.setText("Nota");
         btnNota.addActionListener(this::btnNotaActionPerformed);
+        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, -1, 63));
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
         btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnPdf.setText("PDF");
         btnPdf.addActionListener(this::btnPdfActionPerformed);
+        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 10, -1, 51));
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
+        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, -1, 51));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Kategori :");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 20, -1, 50));
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
+        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(1360, 20, 132, 50));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -350,7 +367,7 @@ public class LapMingguan extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(1367, Short.MAX_VALUE)
+                .addContainerGap(1476, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNextKanan)
@@ -366,81 +383,7 @@ public class LapMingguan extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCari)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDetail)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh)
-                        .addGap(32, 32, 32)
-                        .addComponent(btCetakE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPdf)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNota)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1682, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(2, 2, 2))))
-                    .addComponent(btnNota, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btCetakE, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
-        );
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, 1710, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed

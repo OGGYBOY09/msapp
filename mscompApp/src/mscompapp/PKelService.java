@@ -27,8 +27,10 @@ public class PKelService extends javax.swing.JPanel {
     
     public int idPelanggan = 0; 
 
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 20;
+
     public PKelService() {
-        
         initComponents();
         auto_number_service();
         tampilkanAdmin();
@@ -38,12 +40,12 @@ public class PKelService extends javax.swing.JPanel {
         tampilKategori();  
         initKeyShortcuts();
 
-        // Custom Renderer untuk Tabel
+        // Custom Renderer untuk Tabel (Logic Pewarnaan Tetap Dipertahankan)
         tblServis = new javax.swing.JTable() {
             {
-        setRowHeight(30); // Ubah angka 30 sesuai keinginanmu (semakin besar semakin tinggi)
-        getTableHeader().setReorderingAllowed(false); // Opsional: Biar kolom gak bisa digeser-geser
-    }
+                setRowHeight(30);
+                getTableHeader().setReorderingAllowed(false);
+            }
             @Override
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
@@ -64,7 +66,7 @@ public class PKelService extends javax.swing.JPanel {
                             case "Dibatalkan":
                                 comp.setBackground(new java.awt.Color(255, 182, 193)); 
                                 comp.setForeground(java.awt.Color.BLACK); break;
-                            default: // Menunggu
+                            default:
                                 comp.setBackground(java.awt.Color.WHITE);
                                 comp.setForeground(java.awt.Color.BLACK); break;
                         }
@@ -78,13 +80,12 @@ public class PKelService extends javax.swing.JPanel {
 
         load_table_service();
 
-        // Default State
         rbLama.setSelected(true);
         btnCari.setEnabled(true);
         tNamaPelanggan.setEditable(false);
         tNoPelanggan.setEditable(false);
         tAlamatPelanggan.setEditable(false);
-        
+      
     }
     
     // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---
@@ -174,32 +175,17 @@ public class PKelService extends javax.swing.JPanel {
     // --- LOAD DATA & HELPER METHODS ---
     
     private void tampilKategori() {
-    try {
-        cbJenisBrg.removeAllItems();
-        cbJenisBrg.addItem("- Pilih Jenis -");
-        String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
-        java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet res = stm.executeQuery(sql);
-        while (res.next()) {
-            cbJenisBrg.addItem(res.getString("nama_jenis"));
-        }
-    } catch (Exception e) {
-        System.out.println("Error tampil kategori: " + e.getMessage());
+        try {
+            cbJenisBrg.removeAllItems();
+            cbJenisBrg.addItem("- Pilih Jenis -");
+            Connection conn = Koneksi.configDB();
+            ResultSet res = conn.createStatement().executeQuery("SELECT nama_jenis FROM tbl_jenis_perangkat");
+            while (res.next()) cbJenisBrg.addItem(res.getString("nama_jenis"));
+        } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
     }
-}
     
     private void tampilkanAdmin() {
-        try {
-            String namaLog = Login.namaUser; 
-            if (namaLog != null && !namaLog.isEmpty()) {
-                tNamaAdmin.setText(namaLog);
-            } else {
-                tNamaAdmin.setText("Admin");
-            }
-        } catch (Exception e) {
-            tNamaAdmin.setText("Admin");
-        }
+        tNamaAdmin.setText(Login.namaUser != null ? Login.namaUser : "Admin");
         tNamaAdmin.setEditable(false);
     }
     
@@ -207,12 +193,8 @@ public class PKelService extends javax.swing.JPanel {
         cbJenisBrg.removeAllItems();
         cbJenisBrg.addItem("- Pilih Jenis -");
         try {
-            String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat";
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            while(res.next()) {
-                cbJenisBrg.addItem(res.getString("nama_jenis"));
-            }
+            ResultSet res = Koneksi.configDB().createStatement().executeQuery("SELECT nama_jenis FROM tbl_jenis_perangkat");
+            while(res.next()) cbJenisBrg.addItem(res.getString("nama_jenis"));
         } catch (Exception e) {}
     }
     
@@ -269,57 +251,62 @@ public class PKelService extends javax.swing.JPanel {
 
     private void load_table_service() {
         DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-    }};
-        model.addColumn("No Servis");
-        model.addColumn("Nama Pelanggan");
-        model.addColumn("No HP");
-        model.addColumn("Jenis Barang");
-        model.addColumn("Merek");
-        model.addColumn("Model");
-        model.addColumn("Keluhan");
-        model.addColumn("Status");
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        model.addColumn("No Servis"); model.addColumn("Nama Pelanggan");
+        model.addColumn("No HP"); model.addColumn("Jenis Barang");
+        model.addColumn("Merek"); model.addColumn("Model");
+        model.addColumn("Keluhan"); model.addColumn("Status");
 
         try {
-            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
-                         "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan ";
-
+            String whereClause = "";
             String keyword = tfCari.getText();
-
             if (!keyword.isEmpty()) {
-                sql += " WHERE p.nama_pelanggan LIKE ? OR s.id_servis LIKE ? ";
+                whereClause = " WHERE p.nama_pelanggan LIKE ? OR s.id_servis LIKE ? ";
             }
 
-            sql += " ORDER BY s.tanggal_masuk DESC";
+            Connection conn = Koneksi.configDB();
+            
+            // 1. Hitung Total Data
+            String sqlCount = "SELECT COUNT(*) AS total FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " + whereClause;
+            PreparedStatement pstCount = conn.prepareStatement(sqlCount);
+            if (!keyword.isEmpty()) {
+                pstCount.setString(1, "%" + keyword + "%"); pstCount.setString(2, "%" + keyword + "%");
+            }
+            ResultSet rsCount = pstCount.executeQuery();
+            int totalData = rsCount.next() ? rsCount.getInt("total") : 0;
 
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            // 2. Query Data dengan LIMIT & OFFSET
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT s.id_servis, p.nama_pelanggan, p.no_hp, s.jenis_barang, s.merek, s.model, s.keluhan_awal, s.status " +
+                         "FROM servis s JOIN tbl_pelanggan p ON s.id_pelanggan = p.id_pelanggan " +
+                         whereClause + " ORDER BY s.tanggal_masuk DESC LIMIT ? OFFSET ?";
 
+            PreparedStatement pst = conn.prepareStatement(sql);
             if (!keyword.isEmpty()) {
                 pst.setString(1, "%" + keyword + "%");
                 pst.setString(2, "%" + keyword + "%");
+                pst.setInt(3, PAGE_SIZE);
+                pst.setInt(4, offset);
+            } else {
+                pst.setInt(1, PAGE_SIZE);
+                pst.setInt(2, offset);
             }
 
-            java.sql.ResultSet res = pst.executeQuery();
-
+            ResultSet res = pst.executeQuery();
             while(res.next()){
                 model.addRow(new Object[]{
-                    
-                    res.getString("id_servis"),
-                    res.getString("nama_pelanggan"),
-                    res.getString("no_hp"),
-                    res.getString("jenis_barang"),
-                    res.getString("merek"),
-                    res.getString("model"),
-                    res.getString("keluhan_awal"),
-                    res.getString("status")
-                       
-                        
+                    res.getString("id_servis"), res.getString("nama_pelanggan"),
+                    res.getString("no_hp"), res.getString("jenis_barang"),
+                    res.getString("merek"), res.getString("model"),
+                    res.getString("keluhan_awal"), res.getString("status")
                 });
             }
             tblServis.setModel(model);
+
+            // 3. Update Status Tombol Pagination
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
 
         } catch (Exception e) {
             System.out.println("Error Load Table: " + e.getMessage());
@@ -340,7 +327,6 @@ public class PKelService extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         tNomorServ = new javax.swing.JTextField();
@@ -360,13 +346,11 @@ public class PKelService extends javax.swing.JPanel {
         tNamaPelanggan = new javax.swing.JTextField();
         tNoPelanggan = new javax.swing.JTextField();
         tAlamatPelanggan = new javax.swing.JTextField();
-        jPanel6 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         btBatal = new javax.swing.JButton();
         btSimpan = new javax.swing.JButton();
         btnCari = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         cbJenisBrg = new javax.swing.JComboBox<>();
         tMerek = new javax.swing.JTextField();
@@ -383,7 +367,6 @@ public class PKelService extends javax.swing.JPanel {
         tKelengkapan = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblServis = new javax.swing.JTable();
@@ -398,287 +381,180 @@ public class PKelService extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
         setPreferredSize(new java.awt.Dimension(1720, 960));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(3, 83, 164));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
+        jLabel1.setBackground(new java.awt.Color(3, 83, 164));
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("INPUT DATA SERVIS");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-        );
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel1.setOpaque(true);
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 60));
 
         jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel2.setText("Nomor Service :");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 150, 40));
 
         tNomorServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNomorServ.addActionListener(this::tNomorServActionPerformed);
+        jPanel1.add(tNomorServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 279, 35));
 
         tNamaAdmin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(tNamaAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, 279, 35));
 
         jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel3.setText("Admin :");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 150, 40));
 
         jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel6.setText("Tanggal :");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 120, 40));
 
         tTgl.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
         tTgl.setText("000");
+        jPanel1.add(tTgl, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, 220, 35));
 
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel7.setText("Status [F7] :");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 120, 40));
 
         cbStatusServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
+        cbStatusServ.addActionListener(this::cbStatusServActionPerformed);
+        jPanel1.add(cbStatusServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 120, 150, 35));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tNomorServ, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tNamaAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(461, 461, 461)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tTgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cbStatusServ, 0, 147, Short.MAX_VALUE))
-                .addContainerGap(48, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tNomorServ)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tTgl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tNamaAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbStatusServ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 850, 200));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         buttonGroup1.add(rbBaru);
         rbBaru.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         rbBaru.setText("Pelanggan Baru");
         rbBaru.addActionListener(this::rbBaruActionPerformed);
+        jPanel3.add(rbBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 200, 35));
 
         buttonGroup1.add(rbLama);
         rbLama.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         rbLama.setText("Pelangggan Lama");
         rbLama.addActionListener(this::rbLamaActionPerformed);
+        jPanel3.add(rbLama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 200, 35));
 
         jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel4.setText("Cari No Hp / Nama :");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 200, 35));
 
         jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel9.setText("Nama :");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 70, 35));
 
         jLabel13.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel13.setText("No Hp :");
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 70, 35));
 
         jLabel14.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel14.setText("Alamat :");
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 70, 35));
 
         tNamaPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNamaPelanggan.addActionListener(this::tNamaPelangganActionPerformed);
+        jPanel3.add(tNamaPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, 180, 35));
 
         tNoPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNoPelanggan.addActionListener(this::tNoPelangganActionPerformed);
+        jPanel3.add(tNoPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, 180, 35));
 
         tAlamatPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tAlamatPelanggan.addActionListener(this::tAlamatPelangganActionPerformed);
+        jPanel3.add(tAlamatPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 180, 35));
 
-        jPanel6.setBackground(new java.awt.Color(3, 83, 164));
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
+        jLabel12.setBackground(new java.awt.Color(3, 83, 164));
         jLabel12.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("DATA PELANGGAN");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-        );
+        jLabel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel12.setOpaque(true);
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 60));
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
         btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btBatal.setText("BATAL [DEL]");
         btBatal.addActionListener(this::btBatalActionPerformed);
+        jPanel3.add(btBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, 300, 41));
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btSimpan.setText("SIMPAN [SHIFT+ENTER]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
+        jPanel3.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 300, 41));
 
         btnCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnCari.setText("Cari... [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
+        jPanel3.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 223, 37));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addGap(18, 18, 18)
-                                .addComponent(tAlamatPelanggan))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tNamaPelanggan)
-                                    .addComponent(tNoPelanggan)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbLama, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbBaru, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(37, 37, 37))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                    .addComponent(btBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(37, 37, 37))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(rbBaru)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbLama)
-                .addGap(41, 41, 41)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(tNamaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(tNoPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(tAlamatPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addComponent(btSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(177, Short.MAX_VALUE))
-        );
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 350, 710));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel5.setBackground(new java.awt.Color(3, 83, 164));
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
+        jLabel5.setBackground(new java.awt.Color(3, 83, 164));
         jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("DATA PERANGKAT/SERVIS");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-        );
+        jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel5.setOpaque(true);
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 60));
 
         cbJenisBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbJenisBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbJenisBrg.addActionListener(this::cbJenisBrgActionPerformed);
+        jPanel4.add(cbJenisBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 280, 40));
 
         tMerek.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tMerek.addActionListener(this::tMerekActionPerformed);
+        jPanel4.add(tMerek, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 280, 40));
 
         tModel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tModel.addActionListener(this::tModelActionPerformed);
+        jPanel4.add(tModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 280, 40));
 
         jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel8.setText("Merek :");
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 150, 35));
 
         jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel10.setText("Kelengkapan :");
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 150, 35));
 
         jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel15.setText("Jenis Barang [F8] :");
+        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 160, 35));
 
         jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel16.setText("Model / Tipe :");
+        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 150, 35));
 
         jLabel17.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel17.setText("No Seri :");
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 150, 35));
 
         tSeri.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tSeri.addActionListener(this::tSeriActionPerformed);
+        jPanel4.add(tSeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 250, 280, 40));
 
         jLabel18.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
         jLabel18.setText("Keluhan :");
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 150, 35));
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -688,96 +564,30 @@ public class PKelService extends javax.swing.JPanel {
         tKeluhan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tKeluhan);
 
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, 280, 86));
+
         tKelengkapan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tKelengkapan.addActionListener(this::tKelengkapanActionPerformed);
+        jPanel4.add(tKelengkapan, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 280, 40));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 454, -1, -1));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel11))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(tMerek)
-                        .addComponent(tModel)
-                        .addComponent(cbJenisBrg, 0, 293, Short.MAX_VALUE)
-                        .addComponent(tSeri)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbJenisBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15))
-                        .addGap(8, 8, 8)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tMerek, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tModel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel17))
-                    .addComponent(tSeri, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tKelengkapan, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel11))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 490, 710));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.setPreferredSize(new java.awt.Dimension(815, 960));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel8.setBackground(new java.awt.Color(3, 83, 164));
-        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
+        jLabel19.setBackground(new java.awt.Color(3, 83, 164));
         jLabel19.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("DAFTAR SERVIS");
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jLabel19.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel19.setOpaque(true);
+        jPanel7.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 60));
 
         tblServis.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblServis.setModel(new javax.swing.table.DefaultTableModel(
@@ -805,8 +615,11 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.getColumnModel().getColumn(8).setResizable(false);
         }
 
+        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 810, 680));
+
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel20.setText("Cari [F6] :");
+        jPanel7.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -814,115 +627,39 @@ public class PKelService extends javax.swing.JPanel {
                 tfCariKeyReleased(evt);
             }
         });
+        jPanel7.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 225, -1));
 
         btRefresh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btRefresh.setText("Refresh [F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
+        jPanel7.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 128, -1));
 
         btEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btEdit.setText("Edit [F1]");
         btEdit.addActionListener(this::btEditActionPerformed);
+        jPanel7.add(btEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 80, 128, -1));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        jPanel9.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 6, -1, 48));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+        jPanel9.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 6, -1, 48));
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnNextKiri)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNextKanan)
-                .addContainerGap())
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNextKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+        jPanel7.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 820, 810, 80));
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(90, 90, 90)
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btRefresh)
-                        .addComponent(btEdit))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel20)
-                        .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 821, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 20, 830, 920));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbBaruActionPerformed
@@ -1109,12 +846,14 @@ public class PKelService extends javax.swing.JPanel {
     private void tfCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCariKeyReleased
         // TODO add your handling code here:
         load_table_service();
+        currentPage = 0;
     }//GEN-LAST:event_tfCariKeyReleased
 
     private void btRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRefreshActionPerformed
         // TODO add your handling code here:
         tfCari.setText("");
         load_table_service();
+        currentPage = 0;
     }//GEN-LAST:event_btRefreshActionPerformed
 
     private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
@@ -1174,6 +913,28 @@ public class PKelService extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tKelengkapanActionPerformed
 
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+        currentPage++;
+        load_table_service();
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
+        // TODO add your handling code here:
+        if (currentPage > 0) {
+            currentPage--;
+            load_table_service();
+        }
+    }//GEN-LAST:event_btnNextKiriActionPerformed
+
+    private void cbStatusServActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusServActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbStatusServActionPerformed
+
+    private void tAlamatPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tAlamatPelangganActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tAlamatPelangganActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBatal;
@@ -1207,13 +968,9 @@ public class PKelService extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

@@ -31,6 +31,9 @@ public class PKelBarang extends javax.swing.JPanel {
      */
     private boolean isEdit = false;
 
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 20;
+
     public PKelBarang() {
         initComponents();
         resetForm();
@@ -96,7 +99,7 @@ public class PKelBarang extends javax.swing.JPanel {
         tfHarga.setText("");
         tfKeterangan.setText("");
         tfCari.setText("");
-        
+        currentPage = 0;
         load_kategori();
         load_table();
         auto_number(); 
@@ -132,62 +135,50 @@ public class PKelBarang extends javax.swing.JPanel {
         cbKategori.removeAllItems();
         cbKategori.addItem("-Pilih-");
         try {
-            Connection conn = Koneksi.configDB();
-            Statement st = conn.createStatement();
-            // Ambil daftar nama kategori dari tabel master kategori
-            ResultSet rs = st.executeQuery("SELECT nama_kategori FROM tbl_kat_barang");
-            while (rs.next()) {
-                cbKategori.addItem(rs.getString("nama_kategori"));
-            }
-        } catch (Exception e) {
-            System.out.println("Gagal load kategori: " + e.getMessage());
-        }
+            ResultSet rs = Koneksi.configDB().createStatement().executeQuery("SELECT nama_kategori FROM tbl_kat_barang");
+            while (rs.next()) cbKategori.addItem(rs.getString("nama_kategori"));
+        } catch (Exception e) {}
     }
 
     // --- 4. LOAD TABLE (LANGSUNG DARI TBL_BARANG) ---
     private void load_table() {
         DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-    }};
-        model.addColumn("No");
-        model.addColumn("Kode");
-        model.addColumn("Nama Barang");
-        model.addColumn("Kategori");
-        model.addColumn("Harga");
-        model.addColumn("Stok");
-        model.addColumn("Ket");
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        model.addColumn("No"); model.addColumn("Kode"); model.addColumn("Nama Barang");
+        model.addColumn("Kategori"); model.addColumn("Harga"); model.addColumn("Stok"); model.addColumn("Ket");
 
         try {
-            // TIDAK PERLU JOIN LAGI
-            // Karena nama kategori sudah tersimpan langsung di tabel barang
-            String sql = "SELECT * FROM tbl_barang ";
-            
-            if (!tfCari.getText().isEmpty()) {
-                sql += "WHERE nama_barang LIKE '%" + tfCari.getText() + "%' ";
+            String where = "";
+            if (!tfCari.getText().isEmpty() && !tfCari.getText().equals("Cari....")) {
+                where = "WHERE nama_barang LIKE '%" + tfCari.getText() + "%' ";
             }
-            
-            sql += "ORDER BY kode_barang ASC";
 
+            // 1. Hitung Total Data
             Connection conn = Koneksi.configDB();
+            ResultSet rsCount = conn.createStatement().executeQuery("SELECT COUNT(*) FROM tbl_barang " + where);
+            int totalData = 0;
+            if (rsCount.next()) totalData = rsCount.getInt(1);
+
+            // 2. Load Data dengan LIMIT & OFFSET
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT * FROM tbl_barang " + where + " ORDER BY kode_barang ASC LIMIT " + PAGE_SIZE + " OFFSET " + offset;
+
             ResultSet rs = conn.createStatement().executeQuery(sql);
-            int no = 1;
+            int no = offset + 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    no++,
-                    rs.getString("kode_barang"),
-                    rs.getString("nama_barang"),
-                    rs.getString("kategori"), // Pastikan nama kolom di DB 'kategori'
-                    rs.getInt("harga"),
-                    rs.getInt("stok"),
-                    rs.getString("keterangan")
+                    no++, rs.getString("kode_barang"), rs.getString("nama_barang"),
+                    rs.getString("kategori"), rs.getInt("harga"), rs.getInt("stok"), rs.getString("keterangan")
                 });
             }
             tblBarang.setModel(model);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Load Table: " + e.getMessage());
-        }
+
+            // 3. Update Tombol Pagination
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
+
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     /**
@@ -421,12 +412,14 @@ public class PKelBarang extends javax.swing.JPanel {
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -529,6 +522,7 @@ public class PKelBarang extends javax.swing.JPanel {
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
         load_table();
+        currentPage = 0;
     }//GEN-LAST:event_btnCariActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
@@ -626,11 +620,26 @@ public class PKelBarang extends javax.swing.JPanel {
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
         resetForm();
+        
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void tfCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCariFocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_tfCariFocusGained
+
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+        currentPage++;
+        load_table();
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
+        // TODO add your handling code here:
+        if (currentPage > 0) {
+            currentPage--;
+            load_table();
+        }
+    }//GEN-LAST:event_btnNextKiriActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

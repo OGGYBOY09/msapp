@@ -9,14 +9,12 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
-import java.awt.event.KeyAdapter; // Import baru untuk event ngetik
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -37,6 +35,9 @@ public class PKelStok extends javax.swing.JPanel {
     /**
      * Creates new form PKelStok
      */
+    private int currentPage = 0;
+    private final int PAGE_SIZE = 20;
+
     public PKelStok() {
         initComponents();
         loadData();
@@ -50,32 +51,18 @@ public class PKelStok extends javax.swing.JPanel {
         tTotalHarga.setEditable(false);
         
         tJumlahBeli.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                hitungTotal();
-            }
+            @Override public void keyReleased(KeyEvent e) { hitungTotal(); }
         });
         
-        dateAwal.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            @Override
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                if ("date".equals(evt.getPropertyName())) {
-                    java.util.Date tanggalAwal = dateAwal.getDate();
-
-                    if (tanggalAwal != null) {
-                        // Jika tanggal awal ada isinya, set batas minimum untuk dateAkhir
-                        dateAkhir.setMinSelectableDate(tanggalAwal);
-
-                        // Cek jika dateAkhir sudah terisi tapi lebih kecil dari dateAwal yang baru
-                        if (dateAkhir.getDate() != null && dateAkhir.getDate().before(tanggalAwal)) {
-                            dateAkhir.setDate(tanggalAwal);
-                        }
-                    } else {
-                        // JIKA TANGGAL AWAL NULL (saat di-reset)
-                        // Hapus batasan pada dateAkhir agar tidak error
-                        dateAkhir.setMinSelectableDate(null);
+        dateAwal.addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                Date tglAwal = dateAwal.getDate();
+                if (tglAwal != null) {
+                    dateAkhir.setMinSelectableDate(tglAwal);
+                    if (dateAkhir.getDate() != null && dateAkhir.getDate().before(tglAwal)) {
+                        dateAkhir.setDate(tglAwal);
                     }
-                }
+                } else { dateAkhir.setMinSelectableDate(null); }
             }
         });
     }
@@ -142,6 +129,14 @@ public class PKelStok extends javax.swing.JPanel {
         }
     }
     
+    private void loadKategori(){
+        cbKategori.removeAllItems(); cbKategori.addItem("-Pilih Kategori-");
+        try {
+            ResultSet res = Koneksi.configDB().createStatement().executeQuery("SELECT nama_kategori FROM tbl_kat_barang");
+            while(res.next()) cbKategori.addItem(res.getString("nama_kategori"));
+        } catch (Exception e) {}
+    }
+    
     private void bersihkan() {
         tKodeBrg.setText("");
         tNamaBarang.setText("");
@@ -184,54 +179,43 @@ public class PKelStok extends javax.swing.JPanel {
 
     private void loadData(){
         DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-    }};
-        model.addColumn("No");
-        model.addColumn("ID Pembelian"); 
-        model.addColumn("Tanggal");
-        model.addColumn("Kode Barang");
-        model.addColumn("Nama Barang"); 
-        model.addColumn("Kategori"); 
-        model.addColumn("Harga");
-        model.addColumn("Jumlah Beli");
-        model.addColumn("Total Harga");
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        model.addColumn("No"); model.addColumn("ID Pembelian"); model.addColumn("Tanggal");
+        model.addColumn("Kode Barang"); model.addColumn("Nama Barang"); model.addColumn("Kategori"); 
+        model.addColumn("Harga"); model.addColumn("Jumlah Beli"); model.addColumn("Total Harga");
+
         try {
-            String sql = "SELECT * FROM tbl_pembelian ORDER BY id_pembelian DESC";
-            int no = 1;
-            java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
+            String where = "";
+            if (dateAwal.getDate() != null && dateAkhir.getDate() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                where = " WHERE tanggal BETWEEN '" + sdf.format(dateAwal.getDate()) + "' AND '" + sdf.format(dateAkhir.getDate()) + "'";
+            }
+
+            Connection conn = Koneksi.configDB();
+            
+            // 1. Count
+            ResultSet rsC = conn.createStatement().executeQuery("SELECT COUNT(*) FROM tbl_pembelian" + where);
+            int totalData = rsC.next() ? rsC.getInt(1) : 0;
+
+            // 2. Load with Pagination
+            int offset = currentPage * PAGE_SIZE;
+            String sql = "SELECT * FROM tbl_pembelian" + where + " ORDER BY id_pembelian DESC LIMIT " + PAGE_SIZE + " OFFSET " + offset;
+            ResultSet res = conn.createStatement().executeQuery(sql);
+            int no = offset + 1;
             while(res.next()){
                 model.addRow(new Object[]{
-                    no++,
-                    res.getString("id_pembelian"),
-                    res.getString("tanggal"), 
-                    res.getString("kode_barang"), 
-                    res.getString("nama_barang"), 
-                    res.getString("kategori"),    
-                    res.getInt("harga"),    
-                    res.getInt("jumlah_beli"),
-                    res.getInt("total_harga")
+                    no++, res.getString("id_pembelian"), res.getString("tanggal"), 
+                    res.getString("kode_barang"), res.getString("nama_barang"), 
+                    res.getString("kategori"), res.getInt("harga"), res.getInt("jumlah_beli"), res.getInt("total_harga")
                 });
             }
             tblBarang.setModel(model);
-        } catch (Exception e) { System.out.println("Gagal Load: " + e.getMessage()); }
-    }
-    
-    private void loadKategori(){
-        cbKategori.removeAllItems();
-        cbKategori.addItem("-Pilih Kategori-");
-        try {
-            String sql = "SELECT nama_kategori FROM tbl_kat_barang";
-            java.sql.Connection conn = (java.sql.Connection)config.Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            while(res.next()){
-                cbKategori.addItem(res.getString("nama_kategori"));
-            }
-        } catch (Exception e) {
-            System.out.println("Gagal load kategori: " + e.getMessage());
-        }
+
+            btnNextKiri.setEnabled(currentPage > 0);
+            btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
+
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     /**
@@ -399,12 +383,14 @@ public class PKelStok extends javax.swing.JPanel {
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -578,11 +564,24 @@ public class PKelStok extends javax.swing.JPanel {
 
     private void btRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRefreshActionPerformed
         // TODO add your handling code here:
-        dateAkhir.setMinSelectableDate(null);
-        dateAwal.setDate(null);
-        dateAkhir.setDate(null);
+        dateAwal.setDate(null); dateAkhir.setDate(null);
+        currentPage = 0;
         loadData();
     }//GEN-LAST:event_btRefreshActionPerformed
+
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+        currentPage++;
+        loadData();
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
+        // TODO add your handling code here:
+        if (currentPage > 0) {
+            currentPage--;
+            loadData();
+        }
+    }//GEN-LAST:event_btnNextKiriActionPerformed
 
    private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                         
         try {
@@ -739,61 +738,18 @@ public class PKelStok extends javax.swing.JPanel {
 
     // [BARU] Logika Filter Data Berdasarkan Tanggal (btCari)
     private void btCariActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        if (dateAwal.getDate() == null || dateAkhir.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Pilih Tanggal Awal dan Akhir dulu!");
-            return;
-        }
+        currentPage = 0; // Filter tanggal reset ke hal 1
+        loadData();
         
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
-        model.addColumn("ID Pembelian");
-        model.addColumn("Tanggal");
-        model.addColumn("Kode Barang");
-        model.addColumn("Nama Barang"); 
-        model.addColumn("Kategori"); 
-        model.addColumn("Harga");
-        model.addColumn("Jumlah Beli");
-        model.addColumn("Total Harga");
-        
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String tgl1 = sdf.format(dateAwal.getDate());
-            String tgl2 = sdf.format(dateAkhir.getDate());
-            
-            // Query filter
-            String sql = "SELECT * FROM tbl_pembelian WHERE tanggal BETWEEN '" + tgl1 + "' AND '" + tgl2 + "'";
-            
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-            
-            int no = 1;
-            while(res.next()){
-                model.addRow(new Object[]{
-                    no++,
-                    res.getString("id_pembelian"),
-                    res.getString("tanggal"), 
-                    res.getString("kode_barang"), 
-                    res.getString("nama_barang"), 
-                    res.getString("kategori"),    
-                    res.getInt("harga"),    
-                    res.getInt("jumlah_beli"),
-                    res.getInt("total_harga")
-                });
-            }
-            tblBarang.setModel(model);
-        } catch (Exception e) {
-            System.out.println("Gagal Filter: " + e.getMessage());
-        }
     }                                      
 
     private void btPilihKodeActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        PopUpBarang popup = new PopUpBarang();
-        popup.stokForm = this; 
-        popup.setVisible(true);
+        PopUpBarang popup = new PopUpBarang(); popup.stokForm = this; popup.setVisible(true);
     }                                           
 
     private void btLihatActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // Kosong (Untuk fitur laporan nanti)
+        
     }
 
 
