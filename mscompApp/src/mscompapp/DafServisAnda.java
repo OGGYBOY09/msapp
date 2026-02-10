@@ -273,6 +273,7 @@ public class DafServisAnda extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblNmTeknisi = new javax.swing.JLabel();
@@ -291,12 +292,15 @@ public class DafServisAnda extends javax.swing.JPanel {
         btnNextKiri = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
         setName(""); // NOI18N
         setPreferredSize(new java.awt.Dimension(1720, 960));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(3, 83, 164));
 
@@ -316,7 +320,7 @@ public class DafServisAnda extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1076, Short.MAX_VALUE)
                 .addComponent(lblNmTeknisi)
                 .addContainerGap())
         );
@@ -325,47 +329,49 @@ public class DafServisAnda extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblNmTeknisi)
-                        .addGap(0, 31, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 1718, -1));
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1690, -1));
 
         tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 89, 418, 47));
+        tfCari.addActionListener(this::tfCariActionPerformed);
+        jPanel3.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 418, 47));
 
         btnCari.setBackground(new java.awt.Color(255, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnCari.setText("Cari[F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 89, 105, 47));
+        jPanel3.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 80, 105, 47));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDetail.setText("Detail");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
-        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(554, 89, 105, 47));
+        jPanel3.add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 105, 47));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRefresh.setText("Refresh [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(665, 89, -1, 47));
+        jPanel3.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, 47));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Tanggal :");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 100, -1, -1));
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 90, -1, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Status :");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1508, 102, -1, -1));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1460, 90, -1, 30));
 
         cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1589, 89, 124, 47));
+        cbStatus.addActionListener(this::cbStatusActionPerformed);
+        jPanel3.add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1540, 80, 124, 50));
 
         tblSerAnda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblSerAnda.setModel(new javax.swing.table.DefaultTableModel(
@@ -382,8 +388,8 @@ public class DafServisAnda extends javax.swing.JPanel {
         tblSerAnda.setRowHeight(35);
         jScrollPane1.setViewportView(tblSerAnda);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 154, 1706, 650));
-        add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1381, 89, 115, 47));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1660, 590));
+        jPanel3.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1330, 80, 115, 50));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -405,24 +411,41 @@ public class DafServisAnda extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(1446, Short.MAX_VALUE)
+                .addContainerGap(1414, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnNextKanan)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNextKanan, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnNextKanan, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addComponent(btnNextKiri, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
         );
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 810, 1680, 60));
+        jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 750, 1660, 60));
+
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1690, 910));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextKiriActionPerformed
+
+    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
+        // TODO add your handling code here:
+        bukaDetail();
+    }//GEN-LAST:event_btnDetailActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
@@ -432,23 +455,13 @@ public class DafServisAnda extends javax.swing.JPanel {
         tampilData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
-    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
         // TODO add your handling code here:
-        bukaDetail();
-    }//GEN-LAST:event_btnDetailActionPerformed
+    }//GEN-LAST:event_cbStatusActionPerformed
 
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+    private void tfCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCariActionPerformed
         // TODO add your handling code here:
-        tampilData();
-    }//GEN-LAST:event_btnCariActionPerformed
-
-    private void btnNextKananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKananActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNextKananActionPerformed
-
-    private void btnNextKiriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextKiriActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNextKiriActionPerformed
+    }//GEN-LAST:event_tfCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -464,6 +477,7 @@ public class DafServisAnda extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNmTeknisi;
     private javax.swing.JTable tblSerAnda;

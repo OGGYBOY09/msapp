@@ -16,7 +16,6 @@ public class Koneksi {
             String url = "jdbc:mysql://localhost:3306/ms_db"; 
             String user = "root"; // user default XAMPP
             String pass = "";     // password default XAMPP (kosong)
-            
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             mysqlconfig = DriverManager.getConnection(url, user, pass);            
         } catch (Exception e) {

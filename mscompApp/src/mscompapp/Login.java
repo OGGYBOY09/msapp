@@ -112,7 +112,7 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 1030));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backlogin.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 1310, 960));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 1310, 1020));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

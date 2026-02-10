@@ -279,21 +279,24 @@ public class Beranda extends javax.swing.JPanel {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
         jLabel1.setText("Jumlah User");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblTotalUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalUser.setText("0");
-        jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, -1, -1));
+        lblTotalUser.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 400, 200));
 
@@ -301,15 +304,16 @@ public class Beranda extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/package-box.png"))); // NOI18N
         jLabel3.setText("Jumlah Barang");
         jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblTotalBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalBarang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalBarang.setText("0");
-        jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(378, 144, -1, -1));
+        jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
 
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 400, 200));
 
@@ -317,15 +321,16 @@ public class Beranda extends javax.swing.JPanel {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
         jLabel4.setText("Jumlah Service");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblTotalService.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalService.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalService.setText("0");
-        jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(381, 144, -1, -1));
+        jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 170, 40));
 
         jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 20, 400, 200));
 
@@ -333,15 +338,17 @@ public class Beranda extends javax.swing.JPanel {
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
         jLabel5.setText("Total Stock Barang");
         jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblTotalStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalStock.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalStock.setText("0");
-        jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(354, 144, -1, -1));
+        lblTotalStock.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
 
         jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 20, 400, 200));
 
@@ -352,14 +359,15 @@ public class Beranda extends javax.swing.JPanel {
         jPanel7.setPreferredSize(new java.awt.Dimension(396, 196));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Pendapatan Harian");
         jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblPenHarian.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblPenHarian.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPenHarian.setText("0");
-        jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 143, -1, -1));
+        jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 260, 40));
 
         jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 400, 200));
 
@@ -369,14 +377,15 @@ public class Beranda extends javax.swing.JPanel {
         jPanel8.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Pendapatan Bulanan");
         jPanel8.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblPenBulanan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblPenBulanan.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPenBulanan.setText("0");
-        jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(355, 143, -1, -1));
+        jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 230, 40));
 
         jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 250, 400, 200));
 
@@ -386,14 +395,16 @@ public class Beranda extends javax.swing.JPanel {
         jPanel9.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Servis Selesai");
         jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblSerSelesai.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSerSelesai.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSerSelesai.setText("0");
-        jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(358, 143, -1, -1));
+        lblSerSelesai.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
 
         jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 250, 400, 200));
 
@@ -403,14 +414,16 @@ public class Beranda extends javax.swing.JPanel {
         jPanel11.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pppp.setFont(new java.awt.Font("Segoe UI Historic", 1, 30)); // NOI18N
+        pppp.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         pppp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pppp.setText("Servis Proses/Menunggu");
         jPanel11.add(pppp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblSerProses.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSerProses.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSerProses.setText("0");
-        jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(331, 143, -1, -1));
+        lblSerProses.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
 
         jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 250, 400, 200));
 
