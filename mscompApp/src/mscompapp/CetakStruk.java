@@ -140,8 +140,8 @@ public class CetakStruk implements Printable {
         centerText(g, "MS COMPUTER SERVICE", width, y); y += 10;
         
         g.setFont(fontRegular);
-        centerText(g, "Jl. Contoh No. 123, Pekalongan", width, y); y += 10;
-        centerText(g, "Telp: 0812-3456-7890", width, y); y += 15;
+        centerText(g, "Jl. Gajah Mada Bar. Ruko Gama Plaza No.2, ", width, y); y += 10;
+        centerText(g, "Pekalongan | Telp: 0858-7853-1100", width, y); y += 15;
         
         drawLine(g, x, width, y); y += 10;
         

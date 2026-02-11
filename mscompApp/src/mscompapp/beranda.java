@@ -323,7 +323,7 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/service.png"))); // NOI18N
         jLabel4.setText("Jumlah Service");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
@@ -361,6 +361,7 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
         jLabel6.setText("Pendapatan Harian");
         jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
@@ -379,6 +380,7 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/money.png"))); // NOI18N
         jLabel7.setText("Pendapatan Bulanan");
         jPanel8.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
@@ -397,7 +399,8 @@ public class Beranda extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Servis Selesai");
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/result.png"))); // NOI18N
+        jLabel8.setText("Service Selesai");
         jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblSerSelesai.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -416,7 +419,8 @@ public class Beranda extends javax.swing.JPanel {
 
         pppp.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
         pppp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        pppp.setText("Servis Proses/Menunggu");
+        pppp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/time-management.png"))); // NOI18N
+        pppp.setText("Service Pending");
         jPanel11.add(pppp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
 
         lblSerProses.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N

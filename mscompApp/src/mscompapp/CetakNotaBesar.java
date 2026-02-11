@@ -36,6 +36,28 @@ public class CetakNotaBesar implements Printable {
     private int biayaJasa = 0;
     private int diskon = 0;
     private List<String[]> listSparepart = new ArrayList<>(); 
+    
+    private int drawMultiLine(Graphics2D g, String text, int x, int width, int y) {
+        FontMetrics fm = g.getFontMetrics();
+        String[] words = text.split(" ");
+        String currentLine = "";
+        int lineHeight = fm.getHeight();
+
+        for (String word : words) {
+            if (fm.stringWidth(currentLine + word) < width) {
+                currentLine += word + " ";
+            } else {
+                g.drawString(currentLine, x, y);
+                y += lineHeight; 
+                currentLine = word + " ";
+            }
+        }
+        if (!currentLine.isEmpty()) {
+            g.drawString(currentLine, x, y);
+            y += lineHeight;
+        }
+        return y; 
+    }
 
     public CetakNotaBesar(String idServis, String idAdmin) {
         this.idServis = idServis;
@@ -115,10 +137,20 @@ public class CetakNotaBesar implements Printable {
 
         // Header
         g.setFont(new Font(fontType, Font.BOLD, 18));
-        g.drawString("MS COMPUTER SERVICE", x, y); y += 20;
+        g.drawString("MS COMPUTER SERVICE", x, y); 
+        y += 20;
+
         g.setFont(new Font(fontType, Font.PLAIN, 10));
-        g.drawString("Jl. Contoh No. 123, Pekalongan | Telp: 0812-3456-7890", x, y); y += 30;
-        g.setStroke(new BasicStroke(1)); g.drawLine(x, y, x + width, y); y += 30;
+        String infoHeader = "Jl. Gajah Mada Bar. Ruko Gama Plaza No.2, Pekalongan | Telp: 0858-7853-1100";
+
+        // Gunakan fungsi drawMultiLine untuk menggantikan g.drawString
+        // Angka 500 adalah batas lebar (width) agar teks tidak menabrak pinggir kertas
+        y = drawMultiLine(g, infoHeader, x, 500, y); 
+
+        y += 10; // Memberi jarak sebelum garis pembatas
+        g.setStroke(new BasicStroke(1)); 
+        g.drawLine(x, y, x + 500, y); // Garis disesuaikan dengan lebar area cetak
+        y += 30;
 
         // Info Dokumen & Pelanggan (2 Kolom)
         g.setFont(new Font(fontType, Font.BOLD, 11));
@@ -186,6 +218,10 @@ public class CetakNotaBesar implements Printable {
             g.setFont(new Font(fontType, Font.ITALIC, 9)); 
             g.drawString("(Potongan Diskon: Rp " + df.format(diskon) + ")", x + 300, y); 
         }
+        
+        y += 30; // Beri jarak sedikit ke bawah
+g.setFont(new Font(fontType, Font.BOLD | Font.ITALIC, 9));
+g.drawString("* GARANSI SERVIS 1 MINGGU (Syarat & Ketentuan Berlaku)", x, y);
 
         // Bagian Tanda Tangan Tanpa Nama Cetak
         y += 80;

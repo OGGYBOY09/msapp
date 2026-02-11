@@ -13,9 +13,9 @@ public class Koneksi {
     public static Connection configDB() throws SQLException {
         try {
             // URL koneksi: localhost, port 3306, nama database db_latihan
-            String url = "jdbc:mysql://localhost:3306/ms_db"; 
-            String user = "root"; // user default XAMPP
-            String pass = "";     // password default XAMPP (kosong)
+            String url = "jdbc:mysql://192.168.100.96:3306/ms_db"; 
+            String user = "admin_ms"; // user default XAMPP
+            String pass = "Adminms_123";     // password default XAMPP (kosong)
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             mysqlconfig = DriverManager.getConnection(url, user, pass);            
         } catch (Exception e) {
