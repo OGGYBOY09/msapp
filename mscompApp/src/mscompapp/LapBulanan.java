@@ -483,18 +483,29 @@ public class LapBulanan extends javax.swing.JPanel {
     private void btnNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotaActionPerformed
         // TODO add your handling code here:
         int row = tblLapBulanan.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data servis yang ingin dicetak notanya!");
-            return;
-        }
-        
-        // 2. Ambil ID Servis
-        String idServis = tblLapBulanan.getValueAt(row, 1).toString();
-        
-        // 3. Panggil Class CetakStruk
-        // Parameter: ID Servis dan ID User yang sedang Login (Admin)
-        // Session.idUser didapat dari sistem login kamu
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih data servis yang ingin dicetak notanya!");
+        return;
+    }
+    
+    String idServis = tblLapBulanan.getValueAt(row, 1).toString();
+    
+    // Dialog pilihan ukuran kertas
+    Object[] options = {"Struk Kecil (Thermal)", "Nota Besar (A4)"};
+    int choice = JOptionPane.showOptionDialog(this, 
+            "Pilih ukuran kertas yang ingin digunakan:", 
+            "Opsi Cetak Nota", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, options, options[0]);
+
+    if (choice == JOptionPane.YES_OPTION) {
+        // Panggil Struk Kecil yang sudah ada
         CetakStruk.cetakStruk(idServis, Session.idUser);
+    } else if (choice == JOptionPane.NO_OPTION) {
+        // Panggil Nota Besar yang baru dibuat
+        CetakNotaBesar.cetakNotaA4(idServis, Session.idUser);
+    }
     }//GEN-LAST:event_btnNotaActionPerformed
 
     private void cbKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKategoriActionPerformed
