@@ -80,7 +80,7 @@ public class Dashboard extends javax.swing.JFrame {
         ActionMap am = pMain.getActionMap();
 
         // Loop Alt+1 sampai Alt+8
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 10; i++) {
             String key = "alt " + i;
             final int index = i - 1; // Index panel dimulai dari 0
             
@@ -100,18 +100,20 @@ public class Dashboard extends javax.swing.JFrame {
         if ("admin".equalsIgnoreCase(userRole)) {
             // --- MENU ADMIN ---
             // Batasi index agar tidak error jika tekan Alt+9
-            if (index > 7) return; 
+            if (index > 9) return; 
             
             setPanelIndex(index);
             switch (index) {
                 case 0: switchPanel(new Beranda()); break;      // Alt + 1
-                case 1: switchPanel(new PKelLaporan()); break;  // Alt + 2
-                case 2: switchPanel(new PKelService()); break;  // Alt + 3
-                case 3: switchPanel(new PKelBarang()); break;   // Alt + 4
-                case 4: switchPanel(new PKatService()); break;  // Alt + 5
-                case 5: switchPanel(new PKatBarang()); break;   // Alt + 6
-                case 6: switchPanel(new PKelStok()); break;     // Alt + 7
-                case 7: switchPanel(new PKelUser()); break;     // Alt + 8
+                case 1: switchPanel(new PKelService()); break;  // Alt + 2
+                case 2: switchPanel(new PKelLaporan()); break;  // Alt + 3
+                case 3: switchPanel(new PKelUser()); break;   // Alt + 4
+                case 4: switchPanel(new PKelBarang()); break;  // Alt + 5
+                case 5: switchPanel(new PKatService()); break;   // Alt + 6
+                case 6: switchPanel(new PKatBarang()); break;     // Alt + 7
+                case 7: switchPanel(new PKelStok()); break; 
+                case 8: switchPanel(new PKelPelanggan()); break;     // Alt + 7
+                case 9: switchPanel(new Pengaturan()); break; // Alt + 8
             }
         } else {
             // --- MENU TEKNISI ---

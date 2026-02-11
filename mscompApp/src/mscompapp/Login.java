@@ -6,7 +6,17 @@ package mscompapp;
 
 import config.Koneksi;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -16,13 +26,11 @@ public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     public static String namaUser;
-    
     public static String role;
     public static String idUser;
     
-    /**
-     * Creates new form Login
-     */
+    private final String CONFIG_FILE = "db_config.properties"; // File target konfigurasi
+    
     public Login() {
         initComponents();
         this.namaUser = Session.namaUser;
@@ -30,20 +38,83 @@ public class Login extends javax.swing.JFrame {
         this.idUser = Session.idUser;
         this.getRootPane().setDefaultButton(btLogin);
         
-        // 1. Ambil ukuran layar yang tersedia (sudah dipotong Taskbar)
-    GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    this.setMaximizedBounds(env.getMaximumWindowBounds());
-    
-    // 2. Set state ke maximized
-    this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
-    
-    this.setResizable(true); 
+        // 1. Setting Tampilan Layar Penuh
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        this.setMaximizedBounds(env.getMaximumWindowBounds());
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        this.setResizable(true); 
 
-// Memaksa window untuk langsung dalam kondisi Maximized saat dibuka
-this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        // 2. Setting Label Config agar terlihat seperti tombol
+        btn_config.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_config.setToolTipText("Klik untuk mengubah konfigurasi database");
         
+        // 3. Listener Klik pada btn_config
+        btn_config.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                bukaPopupConfig();
+            }
+        });
     }
+    
+    private void bukaPopupConfig() {
+        // Ambil data lama dari file properties
+        Properties prop = new Properties();
+        String currentUrl = "jdbc:mysql://localhost:3306/ms_db";
+        String currentUser = "root";
+        String currentPass = "";
 
+        try (FileInputStream fis = new FileInputStream(CONFIG_FILE)) {
+            prop.load(fis);
+            currentUrl = prop.getProperty("db.url", currentUrl);
+            currentUser = prop.getProperty("db.user", currentUser);
+            currentPass = prop.getProperty("db.pass", currentPass);
+        } catch (IOException e) {
+            // Gunakan default jika file tidak ditemukan
+        }
+
+        // Buat Form di dalam Panel untuk Pop-up
+        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
+        JTextField tfUrl = new JTextField(currentUrl);
+        JTextField tfUser = new JTextField(currentUser);
+        JTextField tfPassField = new JTextField(currentPass);
+
+        panel.add(new JLabel("Database URL:"));
+        panel.add(tfUrl);
+        panel.add(new JLabel("Username Database:"));
+        panel.add(tfUser);
+        panel.add(new JLabel("Password Database:"));
+        panel.add(tfPassField);
+
+        // Tampilkan Dialog
+        int result = JOptionPane.showConfirmDialog(this, panel, "Pengaturan Koneksi Database",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            // Simpan data baru ke file properties
+            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+                prop.setProperty("db.url", tfUrl.getText().trim());
+                prop.setProperty("db.user", tfUser.getText().trim());
+                prop.setProperty("db.pass", tfPassField.getText());
+                prop.store(fos, "Database Connection Configuration (Updated from Login)");
+
+                // Konfirmasi Restart
+                Object[] options = {"Restart Sekarang", "Batal"};
+                int n = JOptionPane.showOptionDialog(this,
+                    "Konfigurasi berhasil disimpan!\nAplikasi harus dimulai ulang untuk menerapkan perubahan.",
+                    "Simpan Berhasil",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null, options, options[0]);
+
+                if (n == JOptionPane.YES_OPTION) {
+                    System.exit(0); // Menutup aplikasi secara total
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Gagal menyimpan file konfigurasi: " + ex.getMessage());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,6 +133,7 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         tUsn = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        btn_config = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -109,6 +181,11 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         jLabel6.setText("Silahkan masukkan");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 270, 40));
 
+        btn_config.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 14)); // NOI18N
+        btn_config.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_config.setText("Ubah Koneksi!");
+        jPanel1.add(btn_config, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 50));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 1030));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backlogin.png"))); // NOI18N
@@ -127,35 +204,28 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
             java.sql.ResultSet res = stm.executeQuery(sql);
             
             if (res.next()) {
-                // 1. Ambil data
                 String id = res.getString("id_user");
                 String nama = res.getString("nama");
                 String hakAkses = res.getString("role");
 
-                // 2. ISI SESSION (Wajib agar Teknisi.java tidak crash)
                 Session.idUser = id;
                 Session.namaUser = nama;
                 Session.level = hakAkses; 
 
-                // 3. Gunakan Try-Catch khusus saat membuka Dashboard
-                try {
-                    Dashboard dash = new Dashboard(nama, hakAkses); 
-
-                    // Pastikan objek dash berhasil dibuat sebelum mengatur lokasi
-                    if (dash != null) {
-                        dash.setLocationRelativeTo(null);
-                        dash.setVisible(true);
-                        this.dispose();
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Gagal memuat Dashboard: " + ex.getMessage());
-                    ex.printStackTrace(); 
+                Dashboard dash = new Dashboard(nama, hakAkses); 
+                if (dash != null) {
+                    dash.setLocationRelativeTo(null);
+                    dash.setVisible(true);
+                    this.dispose();
                 }
             } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
             }
         } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error Login: " + e.getMessage());
+            // Jika koneksi gagal, berikan saran untuk menggunakan tombol config
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Gagal terhubung ke database!\nError: " + e.getMessage() + 
+                "\n\nKlik 'Ubah Koneksi!' di pojok kiri atas untuk mengatur IP.");
         }
     }//GEN-LAST:event_btLoginActionPerformed
 
@@ -196,6 +266,7 @@ this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btLogin;
+    private javax.swing.JLabel btn_config;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
