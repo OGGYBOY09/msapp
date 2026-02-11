@@ -403,7 +403,7 @@ public class DafServisAnda extends javax.swing.JPanel {
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
-        btnNextKiri.setText("NEXT");
+        btnNextKiri.setText("PREV");
         btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -411,7 +411,7 @@ public class DafServisAnda extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(1414, Short.MAX_VALUE)
+                .addContainerGap(1417, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
                 .addGap(18, 18, 18)
                 .addComponent(btnNextKanan)
