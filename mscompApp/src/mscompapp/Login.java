@@ -57,6 +57,29 @@ public class Login extends javax.swing.JFrame {
         });
     }
     
+    
+    private void restartApplication() {
+    try {
+        // Mendapatkan lokasi file jar yang sedang berjalan
+        String javaBin = System.getProperty("java.home") + java.io.File.separator + "bin" + java.io.File.separator + "java";
+        java.io.File currentJar = new java.io.File(Login.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+        // Jika yang dijalankan adalah file JAR
+        if (currentJar.getName().endsWith(".jar")) {
+            new ProcessBuilder(javaBin, "-jar", currentJar.getPath()).start();
+        } else {
+            // Jika dijalankan dari IDE (NetBeans/IntelliJ)
+            // Ganti 'mscompapp.Login' dengan nama package.MainClass kamu
+            new ProcessBuilder(javaBin, "-cp", System.getProperty("java.class.path"), "mscompapp.Login").start();
+        }
+
+        // Tutup aplikasi saat ini
+        System.exit(0);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal restart otomatis: " + e.getMessage());
+    }
+}
+    
     private void bukaPopupConfig() {
         // Ambil data lama dari file properties
         Properties prop = new Properties();
@@ -91,28 +114,20 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            // Simpan data baru ke file properties
-            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
-                prop.setProperty("db.url", tfUrl.getText().trim());
-                prop.setProperty("db.user", tfUser.getText().trim());
-                prop.setProperty("db.pass", tfPassField.getText());
-                prop.store(fos, "Database Connection Configuration (Updated from Login)");
+    try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+        prop.setProperty("db.url", tfUrl.getText().trim());
+        prop.setProperty("db.user", tfUser.getText().trim());
+        prop.setProperty("db.pass", tfPassField.getText());
+        prop.store(fos, "Updated from Login");
 
-                // Konfirmasi Restart
-                Object[] options = {"Restart Sekarang", "Batal"};
-                int n = JOptionPane.showOptionDialog(this,
-                    "Konfigurasi berhasil disimpan!\nAplikasi harus dimulai ulang untuk menerapkan perubahan.",
-                    "Simpan Berhasil",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null, options, options[0]);
-
-                if (n == JOptionPane.YES_OPTION) {
-                    System.exit(0); // Menutup aplikasi secara total
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Gagal menyimpan file konfigurasi: " + ex.getMessage());
-            }
+        JOptionPane.showMessageDialog(this, "Konfigurasi diperbarui. Merestart aplikasi...");
+        
+        // Panggil restart (pastikan method restartApplication sudah dicopy ke Login.java juga)
+        restartApplication();
+        
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + ex.getMessage());
+    }
         }
     }
     /**
@@ -196,37 +211,60 @@ public class Login extends javax.swing.JFrame {
 
     private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
         // TODO add your handling code here
+        setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+
+    // Gunakan Thread agar UI tidak freeze saat mengecek IP/Koneksi
+    new Thread(() -> {
         try {
-            String sql = "SELECT * FROM tbl_user WHERE username='" + tUsn.getText() 
-                       + "' AND password='" + new String(tPass.getPassword()) + "'";
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet res = stm.executeQuery(sql);
+            java.sql.Connection conn = config.Koneksi.configDB();
             
+            // Validasi: Jika koneksi null, berarti ada yang salah dengan konfigurasi
+            if (conn == null || conn.isClosed()) {
+                throw new java.sql.SQLException("Koneksi tidak dapat dibangun. Periksa IP Address Anda.");
+            }
+
+            String sql = "SELECT * FROM tbl_user WHERE username=? AND password=?";
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, tUsn.getText());
+            ps.setString(2, new String(tPass.getPassword()));
+            java.sql.ResultSet res = ps.executeQuery();
+
             if (res.next()) {
+                // ... (Logika session Anda tetap sama)
                 String id = res.getString("id_user");
                 String nama = res.getString("nama");
                 String hakAkses = res.getString("role");
 
                 Session.idUser = id;
                 Session.namaUser = nama;
-                Session.level = hakAkses; 
+                Session.level = hakAkses;
 
-                Dashboard dash = new Dashboard(nama, hakAkses); 
-                if (dash != null) {
-                    dash.setLocationRelativeTo(null);
+                java.awt.EventQueue.invokeLater(() -> {
+                    Dashboard dash = new Dashboard(nama, hakAkses);
                     dash.setVisible(true);
                     this.dispose();
-                }
+                });
             } else {
-                javax.swing.JOptionPane.showMessageDialog(null, "Username atau Password Salah");
+                java.awt.EventQueue.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(null, "Username atau Password Salah");
+                });
             }
         } catch (Exception e) {
-            // Jika koneksi gagal, berikan saran untuk menggunakan tombol config
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Gagal terhubung ke database!\nError: " + e.getMessage() + 
-                "\n\nKlik 'Ubah Koneksi!' di pojok kiri atas untuk mengatur IP.");
+            // Tampilkan pesan error jika IP salah atau koneksi gagal
+            java.awt.EventQueue.invokeLater(() -> {
+                JOptionPane.showMessageDialog(this, 
+                    "GAGAL TERHUBUNG KE DATABASE!\n" +
+                    "Penyebab: IP Address salah atau server mati.\n\n" +
+                    "Error: " + e.getMessage(), 
+                    "Connection Error", JOptionPane.ERROR_MESSAGE);
+            });
+        } finally {
+            // Kembalikan kursor ke normal
+            java.awt.EventQueue.invokeLater(() -> {
+                setCursor(java.awt.Cursor.getDefaultCursor());
+            });
         }
+    }).start();
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void tPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tPassActionPerformed

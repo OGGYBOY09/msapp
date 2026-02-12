@@ -36,6 +36,28 @@ public class Pengaturan extends javax.swing.JPanel {
         tfNo.setEditable(false);
         tfRole.setEditable(false);
     }
+    
+    private void restartApplication() {
+    try {
+        // Mendapatkan lokasi file jar yang sedang berjalan
+        String javaBin = System.getProperty("java.home") + java.io.File.separator + "bin" + java.io.File.separator + "java";
+        java.io.File currentJar = new java.io.File(Login.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+        // Jika yang dijalankan adalah file JAR
+        if (currentJar.getName().endsWith(".jar")) {
+            new ProcessBuilder(javaBin, "-jar", currentJar.getPath()).start();
+        } else {
+            // Jika dijalankan dari IDE (NetBeans/IntelliJ)
+            // Ganti 'mscompapp.Login' dengan nama package.MainClass kamu
+            new ProcessBuilder(javaBin, "-cp", System.getProperty("java.class.path"), "mscompapp.Login").start();
+        }
+
+        // Tutup aplikasi saat ini
+        System.exit(0);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal restart otomatis: " + e.getMessage());
+    }
+}
 
     // --- FITUR 1: KONFIGURASI DATABASE ---
     private void loadDataConfig() {
@@ -294,9 +316,9 @@ public class Pengaturan extends javax.swing.JPanel {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfNo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfRole, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfRole, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -351,27 +373,20 @@ public class Pengaturan extends javax.swing.JPanel {
     private void btnSimpanconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanconfigActionPerformed
         // TODO add your handling code here:
         Properties prop = new Properties();
-        try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
-            prop.setProperty("db.url", tfUrl.getText().trim());
-            prop.setProperty("db.user", tfUser.getText().trim());
-            prop.setProperty("db.pass", tfPassword.getText());
-            prop.store(fos, "Database Connection Configuration");
+    try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+        prop.setProperty("db.url", tfUrl.getText().trim());
+        prop.setProperty("db.user", tfUser.getText().trim());
+        prop.setProperty("db.pass", tfPassword.getText());
+        prop.store(fos, "Database Connection Configuration");
 
-            // Opsi Restart Aplikasi
-            Object[] options = {"Restart Sekarang", "Nanti Saja"};
-            int n = JOptionPane.showOptionDialog(this,
-                "Konfigurasi database berhasil disimpan!\nUntuk menerapkan perubahan, aplikasi perlu di-restart.",
-                "Simpan Berhasil",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null, options, options[0]);
-
-            if (n == JOptionPane.YES_OPTION) {
-                System.exit(0); // Menutup aplikasi secara total
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
-        }
+        JOptionPane.showMessageDialog(this, "Konfigurasi disimpan! Aplikasi akan restart otomatis.");
+        
+        // Panggil method restart yang kita buat tadi
+        restartApplication();
+        
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnSimpanconfigActionPerformed
 
     private void btnSimpanprofilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanprofilActionPerformed

@@ -18,27 +18,24 @@ public class Koneksi {
 
     public static Connection configDB() throws SQLException {
         Properties prop = new Properties();
-        try {
-            FileInputStream fis = new FileInputStream(CONFIG_FILE);
-            prop.load(fis);
-            fis.close();
-            
-            // Mengambil data dari file properties
-            String url = prop.getProperty("db.url", "jdbc:mysql://localhost:3306/ms_db");
-            String user = prop.getProperty("db.user", "root");
-            String pass = prop.getProperty("db.pass", "");
+    try {
+        FileInputStream fis = new FileInputStream(CONFIG_FILE);
+        prop.load(fis);
+        fis.close();
+        
+        String url = prop.getProperty("db.url", "jdbc:mysql://localhost:3306/ms_db");
+        String user = prop.getProperty("db.user", "root");
+        String pass = prop.getProperty("db.pass", "");
 
-            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            mysqlconfig = DriverManager.getConnection(url, user, pass);            
-        } catch (IOException e) {
-            // Jika file tidak ada, gunakan default hardcoded (hanya untuk pertama kali)
-            String url = "jdbc:mysql://localhost:3306/ms_db";
-            String user = "root";
-            String pass = "";
-            mysqlconfig = DriverManager.getConnection(url, user, pass);
-        } catch (Exception e) {
-            System.err.println("Koneksi gagal: " + e.getMessage());
-        }
-        return mysqlconfig;
+        // SET TIMEOUT: Biar tidak freeze kelamaan (contoh: 5 detik)
+        DriverManager.setLoginTimeout(5); 
+        
+        DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+        mysqlconfig = DriverManager.getConnection(url, user, pass);            
+    } catch (IOException | SQLException e) {
+        // Jika gagal koneksi dari file, lempar error agar ditangkap Login.java
+        throw new SQLException("Pastikan IP/Konfigurasi Database benar: " + e.getMessage());
+    }
+    return mysqlconfig;
     }
 }
