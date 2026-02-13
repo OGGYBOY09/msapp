@@ -35,6 +35,7 @@ public class sidebar_admin extends javax.swing.JPanel {
             lblKelkatbarang,
             lblKelStock,
             keluser,
+            lblKelPlgn,
             pengaturan
         };
         
@@ -254,7 +255,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         dashboard.setPanelIndex(5);
         
     }//GEN-LAST:event_kelkatperangkatMouseClicked
-
+  
     private void lblKelPlgnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKelPlgnMouseClicked
         // TODO add your handling code here:
         dashboard.switchPanel(new PKelPelanggan());
