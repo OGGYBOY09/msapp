@@ -19,6 +19,8 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import java.util.Vector;
+import javax.swing.JComboBox;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -29,6 +31,21 @@ public class PKelService extends javax.swing.JPanel {
 
     private int currentPage = 0;
     private final int PAGE_SIZE = 20;
+    
+    private class UserItem {
+        String id;
+        String nama;
+
+        public UserItem(String id, String nama) {
+            this.id = id;
+            this.nama = nama;
+        }
+
+        @Override
+        public String toString() {
+            return nama;
+        }
+    }
 
     public PKelService() {
         initComponents();
@@ -40,7 +57,6 @@ public class PKelService extends javax.swing.JPanel {
         tampilKategori();  
         initKeyShortcuts();
 
-        // Custom Renderer untuk Tabel (Logic Pewarnaan Tetap Dipertahankan)
         tblServis = new javax.swing.JTable() {
             {
                 setRowHeight(30);
@@ -50,34 +66,24 @@ public class PKelService extends javax.swing.JPanel {
             public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
                 java.awt.Component comp = super.prepareRenderer(renderer, row, column);
                 Object statusValue = getValueAt(row, 7); 
-
                 if (statusValue != null) {
                     String status = statusValue.toString();
                     if (isRowSelected(row)) {
                         comp.setBackground(getSelectionBackground());
                     } else {
                         switch (status) {
-                            case "Proses":
-                                comp.setBackground(java.awt.Color.YELLOW);
-                                comp.setForeground(java.awt.Color.BLACK); break;
-                            case "Selesai":
-                                comp.setBackground(new java.awt.Color(144, 238, 144)); 
-                                comp.setForeground(java.awt.Color.BLACK); break;
-                            case "Dibatalkan":
-                                comp.setBackground(new java.awt.Color(255, 182, 193)); 
-                                comp.setForeground(java.awt.Color.BLACK); break;
-                            default:
-                                comp.setBackground(java.awt.Color.WHITE);
-                                comp.setForeground(java.awt.Color.BLACK); break;
+                            case "Proses": comp.setBackground(java.awt.Color.YELLOW); break;
+                            case "Selesai": comp.setBackground(new java.awt.Color(144, 238, 144)); break;
+                            case "Dibatalkan": comp.setBackground(new java.awt.Color(255, 182, 193)); break;
+                            default: comp.setBackground(java.awt.Color.WHITE); break;
                         }
+                        comp.setForeground(java.awt.Color.BLACK);
                     }
                 }
                 return comp;
             }
         };
-        javax.swing.SwingUtilities.invokeLater(() -> this.requestFocusInWindow());
         jScrollPane2.setViewportView(tblServis);
-
         load_table_service();
 
         rbLama.setSelected(true);
@@ -85,7 +91,6 @@ public class PKelService extends javax.swing.JPanel {
         tNamaPelanggan.setEditable(false);
         tNoPelanggan.setEditable(false);
         tAlamatPelanggan.setEditable(false);
-      
     }
     
     // --- FITUR BARU: INISIALISASI SHORTCUT KEYBOARD ---
@@ -173,6 +178,36 @@ public class PKelService extends javax.swing.JPanel {
     }
     
     // --- LOAD DATA & HELPER METHODS ---
+    
+    private String pilihTeknisiPopUp() {
+        Vector<UserItem> listTeknisi = new Vector<>();
+        try {
+            Connection conn = Koneksi.configDB();
+            // Mengambil user dengan role teknisi (atau admin juga jika bisa memperbaiki)
+            String sql = "SELECT id_user, nama FROM tbl_user WHERE role = 'teknisi' OR role = 'admin' ORDER BY nama ASC";
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            while(rs.next()) {
+                listTeknisi.add(new UserItem(rs.getString("id_user"), rs.getString("nama")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (listTeknisi.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tidak ada data teknisi di database!");
+            return null;
+        }
+
+        JComboBox<UserItem> cbTeknisi = new JComboBox<>(listTeknisi);
+        int result = JOptionPane.showConfirmDialog(this, cbTeknisi, 
+                "Pilih Teknisi Penanggung Jawab", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            return ((UserItem) cbTeknisi.getSelectedItem()).id;
+        }
+        return null;
+    }
     
     private void tampilKategori() {
         try {
@@ -710,36 +745,33 @@ public class PKelService extends javax.swing.JPanel {
     private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
 
         try {
-            // 1. Validasi Input
+            // 1. Validasi Input Dasar
             if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Nama, Jenis Barang, dan Keluhan wajib diisi!");
                 return;
             }
 
-            java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
+            // 2. Munculkan Pop-up Pilih Teknisi
+            String idTeknisiTerpilih = pilihTeknisiPopUp();
+            if (idTeknisiTerpilih == null) return; // Batalkan simpan jika pop-up ditutup/batal
+
+            Connection conn = Koneksi.configDB();
+            conn.setAutoCommit(false); // Gunakan transaksi untuk keamanan data
+
             int finalIdPelanggan = idPelanggan;
 
-            // 2. Logika Pelanggan
+            // 3. Simpan/Update Pelanggan
             if (rbBaru.isSelected()) {
-                String sqlPelanggan = "INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)";
-                java.sql.PreparedStatement pstPel = conn.prepareStatement(sqlPelanggan, java.sql.Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement pstPel = conn.prepareStatement("INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 pstPel.setString(1, tNamaPelanggan.getText());
                 pstPel.setString(2, tNoPelanggan.getText());
                 pstPel.setString(3, tAlamatPelanggan.getText());
                 pstPel.executeUpdate();
-
-                java.sql.ResultSet rsId = pstPel.getGeneratedKeys();
-                if (rsId.next()) {
-                    finalIdPelanggan = rsId.getInt(1);
-                }
+                ResultSet rsId = pstPel.getGeneratedKeys();
+                if (rsId.next()) finalIdPelanggan = rsId.getInt(1);
             } else {
-                if (finalIdPelanggan == 0) {
-                    JOptionPane.showMessageDialog(this, "Mohon cari dan pilih data pelanggan lama!");
-                    return;
-                }
-                // Opsional: Update data pelanggan lama jika ada perubahan di form
-                String updatePel = "UPDATE tbl_pelanggan SET nama_pelanggan=?, no_hp=?, alamat=? WHERE id_pelanggan=?";
-                java.sql.PreparedStatement pstUpPel = conn.prepareStatement(updatePel);
+                if (finalIdPelanggan == 0) { JOptionPane.showMessageDialog(this, "Pilih pelanggan lama!"); return; }
+                PreparedStatement pstUpPel = conn.prepareStatement("UPDATE tbl_pelanggan SET nama_pelanggan=?, no_hp=?, alamat=? WHERE id_pelanggan=?");
                 pstUpPel.setString(1, tNamaPelanggan.getText());
                 pstUpPel.setString(2, tNoPelanggan.getText());
                 pstUpPel.setString(3, tAlamatPelanggan.getText());
@@ -747,27 +779,19 @@ public class PKelService extends javax.swing.JPanel {
                 pstUpPel.executeUpdate();
             }
 
-            // 3. Logika Simpan atau Update Tabel Servis
-            // Cek apakah ID Servis sudah ada
-            String checkSql = "SELECT COUNT(*) FROM servis WHERE id_servis = ?";
-            java.sql.PreparedStatement pstCheck = conn.prepareStatement(checkSql);
+            // 4. Cek apakah ini Servis baru atau Update
+            PreparedStatement pstCheck = conn.prepareStatement("SELECT COUNT(*) FROM servis WHERE id_servis = ?");
             pstCheck.setString(1, tNomorServ.getText());
-            java.sql.ResultSet rsCheck = pstCheck.executeQuery();
+            ResultSet rsCheck = pstCheck.executeQuery(); 
             rsCheck.next();
             boolean isUpdate = rsCheck.getInt(1) > 0;
 
-            String sqlService;
-            if (isUpdate) {
-                // Query UPDATE
-                sqlService = "UPDATE servis SET id_pelanggan=?, jenis_barang=?, merek=?, model=?, no_seri=?, kelengkapan=?, keluhan_awal=?, status=? WHERE id_servis=?";
-            } else {
-                // Query INSERT
-                sqlService = "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            }
+            // 5. Simpan/Update ke tabel SERVIS
+            String sqlService = isUpdate 
+                ? "UPDATE servis SET id_pelanggan=?, jenis_barang=?, merek=?, model=?, no_seri=?, kelengkapan=?, keluhan_awal=?, status=? WHERE id_servis=?"
+                : "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-            java.sql.PreparedStatement pstServ = conn.prepareStatement(sqlService);
-
-            // Set parameter (Urutan harus sama dengan query di atas)
+            PreparedStatement pstServ = conn.prepareStatement(sqlService);
             pstServ.setInt(1, finalIdPelanggan);
             pstServ.setString(2, cbJenisBrg.getSelectedItem().toString());
             pstServ.setString(3, tMerek.getText());
@@ -780,23 +804,40 @@ public class PKelService extends javax.swing.JPanel {
             if (isUpdate) {
                 pstServ.setString(9, tNomorServ.getText());
             } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                pstServ.setString(9, sdf.format(new java.util.Date())); // tanggal_masuk
-                pstServ.setInt(10, getAdminId()); // id_admin
-                pstServ.setString(11, tNomorServ.getText()); // id_servis
+                pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                pstServ.setString(10, Session.idUser); // Admin yang menginput
+                pstServ.setString(11, tNomorServ.getText());
             }
-
             pstServ.executeUpdate();
 
-            String pesan = isUpdate ? "Data Berhasil Diperbarui!" : "Data Berhasil Disimpan!";
-            JOptionPane.showMessageDialog(this, pesan + "\nNo: " + tNomorServ.getText());
+            // 6. Simpan/Update ke tabel PERBAIKAN (Menggunakan idTeknisiTerpilih dari pop-up)
+            if (!isUpdate) {
+                // Input awal perbaikan dengan teknisi terpilih
+                String sqlFix = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa, diskon) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement pstFix = conn.prepareStatement(sqlFix);
+                pstFix.setString(1, tNomorServ.getText());
+                pstFix.setString(2, idTeknisiTerpilih); // ID dari Pop-up
+                pstFix.setString(3, ""); // Kosongkan dulu karena belum diperbaiki
+                pstFix.setString(4, "");
+                pstFix.setInt(5, 0);
+                pstFix.setInt(6, 0);
+                pstFix.executeUpdate();
+            } else {
+                // Update teknisi di perbaikan jika sudah ada
+                String sqlFixUp = "UPDATE perbaikan SET id_teknisi = ? WHERE id_servis = ?";
+                PreparedStatement pstFixUp = conn.prepareStatement(sqlFixUp);
+                pstFixUp.setString(1, idTeknisiTerpilih);
+                pstFixUp.setString(2, tNomorServ.getText());
+                pstFixUp.executeUpdate();
+            }
 
+            conn.commit(); // Eksekusi semua perintah SQL
+            JOptionPane.showMessageDialog(this, "Berhasil Disimpan! Teknisi: " + idTeknisiTerpilih);
             load_table_service();
             btBatalActionPerformed(null);
-            tNomorServ.setEditable(true); // Aktifkan kembali ID field setelah reset
-
+            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Proses: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_btSimpanActionPerformed

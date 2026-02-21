@@ -188,8 +188,8 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1510, 60, -1, -1));
 
         jLabel2.setForeground(new java.awt.Color(0, 24, 69));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ant.png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 396, 120));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ann (1).png"))); // NOI18N
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 120));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
@@ -197,7 +197,7 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 31, 42, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
-        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 210, 120));
+        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 210, 120));
 
         getContentPane().add(pNav, java.awt.BorderLayout.NORTH);
 

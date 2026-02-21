@@ -266,7 +266,7 @@ public class PKelStok extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1780, 960));
         setMinimumSize(new java.awt.Dimension(1780, 960));
-        setPreferredSize(new java.awt.Dimension(1780, 960));
+        setPreferredSize(new java.awt.Dimension(1720, 960));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -289,13 +289,13 @@ public class PKelStok extends javax.swing.JPanel {
         tblBarang.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(tblBarang);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 1280, 540));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 1170, 540));
 
         btCari.setBackground(new java.awt.Color(204, 204, 204));
         btCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btCari.setText("Cari");
+        btCari.setText("Cari[F2]");
         btCari.addActionListener(this::btCariActionPerformed);
-        jPanel2.add(btCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 120, 150, 40));
+        jPanel2.add(btCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 120, 100, 40));
         jPanel2.add(dateAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 150, 40));
         jPanel2.add(dateAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 150, 40));
 
@@ -313,21 +313,21 @@ public class PKelStok extends javax.swing.JPanel {
 
         btnedit.setBackground(new java.awt.Color(255, 255, 102));
         btnedit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btnedit.setText("EDIT");
+        btnedit.setText("Edit[F1]");
         btnedit.addActionListener(this::btneditActionPerformed);
-        jPanel2.add(btnedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 120, 150, 40));
+        jPanel2.add(btnedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 120, 100, 40));
 
         btndelete.setBackground(new java.awt.Color(255, 51, 51));
         btndelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btndelete.setText("DELETE");
+        btndelete.setText("Delete[Del]");
         btndelete.addActionListener(this::btndeleteActionPerformed);
-        jPanel2.add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 120, 150, 40));
+        jPanel2.add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 120, 150, 40));
 
         btRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
-        btRefresh.setText("Refresh");
+        btRefresh.setText("Refresh[F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
-        jPanel2.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 120, 150, 40));
+        jPanel2.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 130, 40));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -349,23 +349,22 @@ public class PKelStok extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(1008, Short.MAX_VALUE)
+                .addContainerGap(844, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNextKanan)
-                .addGap(55, 55, 55))
+                .addGap(118, 118, 118))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addGap(0, 26, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNextKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 740, 1291, -1));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 740, 1190, -1));
 
         jLabel11.setBackground(new java.awt.Color(4, 102, 200));
         jLabel11.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
@@ -374,10 +373,10 @@ public class PKelStok extends javax.swing.JPanel {
         jLabel11.setText("DAFTAR PEMBELIAN STOK BARANG");
         jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel11.setOpaque(true);
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 70));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 70));
         jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 150, 40));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 1320, 920));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 1210, 920));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
