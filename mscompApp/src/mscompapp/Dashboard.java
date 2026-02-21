@@ -4,6 +4,7 @@
  */
 package mscompapp;
 
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,8 @@ public class Dashboard extends javax.swing.JFrame {
         lblWelcome.setText("Selamat Datang, " + username);
         
         pSide.setLayout(new java.awt.BorderLayout());
+        pSide.setPreferredSize(new Dimension(200, getHeight()));
+        pSide.setMinimumSize(new Dimension(180, 0));
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.setMaximizedBounds(env.getMaximumWindowBounds());
@@ -169,7 +172,6 @@ public class Dashboard extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(4, 102, 200));
         pNav.setForeground(new java.awt.Color(0, 24, 69));
@@ -197,15 +199,15 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
         pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 210, 120));
 
-        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 120));
+        getContentPane().add(pNav, java.awt.BorderLayout.NORTH);
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
         pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 200, 960));
+        getContentPane().add(pSide, java.awt.BorderLayout.WEST);
 
-        pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 1720, 960));
+        pMain.setLayout(new java.awt.GridLayout());
+        getContentPane().add(pMain, java.awt.BorderLayout.EAST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

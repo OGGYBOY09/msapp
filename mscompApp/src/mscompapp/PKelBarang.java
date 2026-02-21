@@ -309,7 +309,7 @@ public class PKelBarang extends javax.swing.JPanel {
         tblBarang.setRowHeight(35);
         jScrollPane1.setViewportView(tblBarang);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 1230, 610));
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1230, 610));
 
         tfCari.setText("Cari....");
         tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
