@@ -176,19 +176,19 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.setForeground(new java.awt.Color(0, 24, 69));
         pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblWelcome.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 14)); // NOI18N
         lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
         lblWelcome.setText("Welcome");
-        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1510, 30, -1, -1));
+        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, -1, -1));
 
-        lblTanggal.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        lblTanggal.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 14)); // NOI18N
         lblTanggal.setForeground(new java.awt.Color(255, 255, 255));
         lblTanggal.setText("Tanggal");
-        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1510, 60, -1, -1));
+        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 40, -1, -1));
 
         jLabel2.setForeground(new java.awt.Color(0, 24, 69));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ann (1).png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 420, 100));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo ms.png"))); // NOI18N
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 160, 80));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
@@ -196,17 +196,17 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 31, 42, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
-        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 210, 90));
+        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 110, 80));
 
-        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1920, 80));
+        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 80));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
         pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 120, 650));
+        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 170, 690));
 
-        pMain.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 1160, 640));
+        pMain.setLayout(new java.awt.GridBagLayout());
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 1200, 690));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -31,13 +31,50 @@ public class Login extends javax.swing.JFrame {
     
     private final String CONFIG_FILE = "db_config.properties"; // File target konfigurasi
     
+    
+    
+    
     public Login() {
         initComponents();
+        
+        
+        // 1. Ambil gambar asli dari jLabel5 yang sudah kamu pasang di design
+    // Pastikan casting ke ImageIcon berhasil
+    javax.swing.ImageIcon iconAsli = (javax.swing.ImageIcon) jLabel5.getIcon();
+    
+    if (iconAsli != null) {
+        java.awt.Image imgAsli = iconAsli.getImage();
+
+        // 2. Tambahkan Listener untuk mendeteksi perubahan ukuran layar (Resize)
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+    @Override
+    public void componentResized(java.awt.event.ComponentEvent e) {
+        int w = jLabel5.getWidth();
+        int h = jLabel5.getHeight();
+
+        if (w > 0 && h > 0) {
+            // Membuat gambar kosong baru sesuai ukuran layar
+            java.awt.image.BufferedImage dimg = new java.awt.image.BufferedImage(w, h, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            
+            // Menggambar ulang background ke gambar kosong tadi secara instan
+            java.awt.Graphics2D g2d = dimg.createGraphics();
+            
+            // Mengaktifkan RenderingHints agar tetap halus tapi cepat
+            g2d.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.drawImage(imgAsli, 0, 0, w, h, null);
+            g2d.dispose();
+
+            jLabel5.setIcon(new javax.swing.ImageIcon(dimg));
+        }
+    }
+});
+    }
+    
         this.namaUser = Session.namaUser;
         this.role = Session.level;
         this.idUser = Session.idUser;
-        this.getRootPane().setDefaultButton(btLogin);
-        
+        this.getRootPane().setDefaultButton(btLogin);        
+
         // 1. Setting Tampilan Layar Penuh
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.setMaximizedBounds(env.getMaximumWindowBounds());
@@ -129,6 +166,7 @@ public class Login extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + ex.getMessage());
     }
         }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,8 +176,9 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 =  new RoundedPanel(50, java.awt.Color.WHITE);
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btLogin = new javax.swing.JButton();
@@ -154,58 +193,75 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
         setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1366, 768));
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Password :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, 200, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 200, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Username :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 200, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 200, 40));
 
         btLogin.setBackground(new java.awt.Color(204, 204, 204));
         btLogin.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btLogin.setText("LOGIN");
         btLogin.setFocusPainted(false);
         btLogin.addActionListener(this::btLoginActionPerformed);
-        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, 200, 40));
+        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 200, 40));
 
-        jLabel1.setFont(new java.awt.Font("Swis721 Hv BT", 1, 35)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 Hv BT", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LOGIN");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 610, 40));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 500, 40));
 
         tPass.addActionListener(this::tPassActionPerformed);
-        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 340, 30));
+        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 340, 30));
 
         tUsn.addActionListener(this::tUsnActionPerformed);
-        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 340, 30));
+        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 340, 30));
 
         jLabel4.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("username dan password");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 610, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 150, 610, 40));
 
         jLabel6.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Silahkan masukkan");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 610, 40));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 110, 610, 40));
 
         btn_config.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 14)); // NOI18N
         btn_config.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_config.setText("Ubah Koneksi!");
         jPanel1.add(btn_config, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 50));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 1030));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -40;
+        gridBagConstraints.ipady = 140;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(100, 680, 0, 0);
+        getContentPane().add(jPanel1, gridBagConstraints);
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backlogin.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, -150, 1310, 1020));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.jpg"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 144;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jLabel5, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
