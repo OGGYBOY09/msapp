@@ -153,48 +153,49 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
-        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Password :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 420, 120, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, 200, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Username :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 295, 150, 60));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 200, 40));
 
         btLogin.setBackground(new java.awt.Color(204, 204, 204));
         btLogin.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btLogin.setText("LOGIN");
         btLogin.setFocusPainted(false);
         btLogin.addActionListener(this::btLoginActionPerformed);
-        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 630, 200, 60));
+        jPanel1.add(btLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, 200, 40));
 
         jLabel1.setFont(new java.awt.Font("Swis721 Hv BT", 1, 35)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LOGIN");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 150, 60));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 610, 40));
 
-        tPass.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tPass.addActionListener(this::tPassActionPerformed);
-        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 340, 50));
+        jPanel1.add(tPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 340, 30));
 
-        tUsn.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tUsn.addActionListener(this::tUsnActionPerformed);
-        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 360, 340, 50));
+        jPanel1.add(tUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 340, 30));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 25)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("username dan password");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 340, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 610, 40));
 
-        jLabel6.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 25)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 LtEx BT", 1, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Silahkan masukkan");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 270, 40));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 610, 40));
 
         btn_config.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 14)); // NOI18N
         btn_config.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -204,7 +205,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 1030));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backlogin.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 1310, 1020));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, -150, 1310, 1020));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

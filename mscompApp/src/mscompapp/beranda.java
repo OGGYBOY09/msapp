@@ -286,71 +286,71 @@ public class Beranda extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
         jLabel1.setText("Jumlah User");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblTotalUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblTotalUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalUser.setText("0");
         lblTotalUser.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
+        jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 400, 200));
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 270, 160));
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/package-box.png"))); // NOI18N
         jLabel3.setText("Jumlah Barang");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblTotalBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblTotalBarang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalBarang.setText("0");
-        jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
+        jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 400, 200));
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 270, 160));
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/service.png"))); // NOI18N
         jLabel4.setText("Jumlah Service");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblTotalService.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalService.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblTotalService.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalService.setText("0");
-        jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 170, 40));
+        jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 170, 40));
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 20, 400, 200));
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 270, 160));
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
         jLabel5.setText("Total Stock Barang");
-        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblTotalStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 24)); // NOI18N
+        lblTotalStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblTotalStock.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalStock.setText("0");
         lblTotalStock.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
+        jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 20, 400, 200));
+        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 270, 160));
 
         jPanel7.setBackground(new java.awt.Color(204, 204, 204));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -359,18 +359,18 @@ public class Beranda extends javax.swing.JPanel {
         jPanel7.setPreferredSize(new java.awt.Dimension(396, 196));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
         jLabel6.setText("Pendapatan Harian");
-        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblPenHarian.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblPenHarian.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblPenHarian.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPenHarian.setText("0");
-        jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 260, 40));
+        jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 250, 40));
 
-        jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 400, 200));
+        jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 270, 160));
 
         jPanel8.setBackground(new java.awt.Color(204, 204, 204));
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -378,18 +378,18 @@ public class Beranda extends javax.swing.JPanel {
         jPanel8.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/money.png"))); // NOI18N
         jLabel7.setText("Pendapatan Bulanan");
-        jPanel8.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel8.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 50));
 
-        lblPenBulanan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblPenBulanan.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblPenBulanan.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPenBulanan.setText("0");
-        jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 230, 40));
+        jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 230, 40));
 
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 250, 400, 200));
+        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 270, 160));
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
         jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -397,19 +397,19 @@ public class Beranda extends javax.swing.JPanel {
         jPanel9.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/result.png"))); // NOI18N
         jLabel8.setText("Service Selesai");
-        jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblSerSelesai.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSerSelesai.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblSerSelesai.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSerSelesai.setText("0");
         lblSerSelesai.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
+        jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 250, 400, 200));
+        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 270, 160));
 
         jPanel11.setBackground(new java.awt.Color(204, 204, 204));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -417,21 +417,21 @@ public class Beranda extends javax.swing.JPanel {
         jPanel11.setMinimumSize(new java.awt.Dimension(396, 196));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pppp.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        pppp.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         pppp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pppp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/time-management.png"))); // NOI18N
         pppp.setText("Service Pending");
-        jPanel11.add(pppp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+        jPanel11.add(pppp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
 
-        lblSerProses.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSerProses.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         lblSerProses.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSerProses.setText("0");
         lblSerProses.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 40));
+        jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 250, 400, 200));
+        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 190, 270, 160));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, -3, 1718, 960));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, -3, 1160, 640));
 
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1720, 960));
     }// </editor-fold>//GEN-END:initComponents

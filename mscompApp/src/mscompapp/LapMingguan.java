@@ -259,35 +259,36 @@ public class LapMingguan extends javax.swing.JPanel {
         btCetakE = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         cbKategori = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
-        btnNextKiri = new javax.swing.JButton();
         btnNextKanan = new javax.swing.JButton();
+        btnNextKiri = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMaximumSize(new java.awt.Dimension(1680, 760));
-        setMinimumSize(new java.awt.Dimension(1680, 760));
-        setPreferredSize(new java.awt.Dimension(1680, 760));
+        setMinimumSize(new java.awt.Dimension(1140, 510));
+        setPreferredSize(new java.awt.Dimension(1140, 510));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 246, 50));
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 150, 30));
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 18, -1, 50));
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 90, 30));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
-        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDetail.setText("DETAIL");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
-        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 18, -1, 50));
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 90, 30));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(484, 18, -1, 50));
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, -1, 30));
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(1140, 510));
 
         tblLapMingguan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapMingguan.setModel(new javax.swing.table.DefaultTableModel(
@@ -304,86 +305,63 @@ public class LapMingguan extends javax.swing.JPanel {
         tblLapMingguan.setRowHeight(35);
         jScrollPane1.setViewportView(tblLapMingguan);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 88, 1682, 525));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 1120, 320));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Tanggal S/D :");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 10, -1, 50));
-        add(tglAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 20, 123, 50));
-        add(tglAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 20, 126, 50));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 80, 30));
+        add(tglAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 120, 30));
+        add(tglAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 120, 30));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Status :");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1500, 20, -1, 50));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 50, 50, 30));
 
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbStatus.addActionListener(this::cbStatusActionPerformed);
-        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1550, 20, 154, 50));
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 50, 120, 30));
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
-        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNota.setText("Nota");
         btnNota.addActionListener(this::btnNotaActionPerformed);
-        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, -1, 63));
+        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 60, 30));
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
-        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPdf.setText("PDF");
         btnPdf.addActionListener(this::btnPdfActionPerformed);
-        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 10, -1, 51));
+        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 60, 30));
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
-        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
-        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, -1, 51));
+        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 100, 30));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Kategori :");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 20, -1, 50));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 50, 70, 30));
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
-        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(1360, 20, 132, 50));
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
-        btnNextKiri.setText("NEXT");
-        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 50, 110, 30));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+        add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 430, 90, 30));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(1476, Short.MAX_VALUE)
-                .addComponent(btnNextKiri)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNextKanan)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNextKanan, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, 1710, -1));
+        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
+        btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 430, 90, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
@@ -520,7 +498,6 @@ public class LapMingguan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblLapMingguan;
     private javax.swing.JTextField tfCari;

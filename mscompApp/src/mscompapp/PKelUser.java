@@ -178,70 +178,70 @@ private void bersihkanForm() {
         jRadioButton1.setText("jRadioButton1");
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
-        setMinimumSize(new java.awt.Dimension(1720, 960));
-        setPreferredSize(new java.awt.Dimension(1720, 960));
+        setMinimumSize(new java.awt.Dimension(1160, 640));
+        setPreferredSize(new java.awt.Dimension(1160, 640));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel2.setText("Username :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 200, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 300, 30));
 
-        tfUsn.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfUsn.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         tfUsn.addActionListener(this::tfUsnActionPerformed);
-        jPanel1.add(tfUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 390, 40));
+        jPanel1.add(tfUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 300, 30));
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel3.setText("Password :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 200, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 300, 30));
 
-        tfPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         tfPass.addActionListener(this::tfPassActionPerformed);
-        jPanel1.add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 390, 40));
+        jPanel1.add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 300, 30));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel4.setText("Nama :");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 200, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 300, 30));
 
-        tfNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         tfNama.addActionListener(this::tfNamaActionPerformed);
-        jPanel1.add(tfNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 390, 40));
+        jPanel1.add(tfNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 300, 30));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel5.setText("Role :");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 200, 40));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 300, 30));
 
-        cbRole.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        cbRole.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
-        jPanel1.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, 390, 40));
+        jPanel1.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 300, 30));
 
-        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel6.setText("No :");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 200, 40));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
 
-        tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         tfNo.addActionListener(this::tfNoActionPerformed);
-        jPanel1.add(tfNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 390, 40));
+        jPanel1.add(tfNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 300, 30));
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, 390, 70));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 300, 40));
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH USER");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 70));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 40));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 450, 920));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 340, 600));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -267,32 +267,32 @@ private void bersihkanForm() {
         });
         jScrollPane2.setViewportView(tblUser);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 1170, 690));
-        jPanel2.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 400, 40));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 770, 460));
+        jPanel2.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 190, 30));
 
         btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnEdit.setText("EDIT [F1]");
         btnEdit.addActionListener(this::btnEditActionPerformed);
-        jPanel2.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 100, 150, 40));
+        jPanel2.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 120, 30));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        jPanel2.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 170, 40));
+        jPanel2.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 120, 30));
 
         btnCari.setBackground(new java.awt.Color(204, 204, 204));
-        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        jPanel2.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 150, 40));
+        jPanel2.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 120, 30));
 
         btnHapus.setBackground(new java.awt.Color(255, 0, 0));
-        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnHapus.setText("HAPUS [Del]");
         btnHapus.addActionListener(this::btnHapusActionPerformed);
-        jPanel2.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 100, 150, 40));
+        jPanel2.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 120, 30));
 
         jLabel7.setBackground(new java.awt.Color(4, 102, 200));
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
@@ -301,9 +301,9 @@ private void bersihkanForm() {
         jLabel7.setText("DAFTAR USER");
         jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel7.setOpaque(true);
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 70));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 40));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 1210, 920));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 790, 600));
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfUsnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUsnActionPerformed

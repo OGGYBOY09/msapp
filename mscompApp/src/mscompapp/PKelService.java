@@ -414,8 +414,8 @@ public class PKelService extends javax.swing.JPanel {
         btnNextKanan = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
-        setMinimumSize(new java.awt.Dimension(1720, 960));
-        setPreferredSize(new java.awt.Dimension(1720, 960));
+        setMinimumSize(new java.awt.Dimension(1160, 640));
+        setPreferredSize(new java.awt.Dimension(1160, 640));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -423,192 +423,181 @@ public class PKelService extends javax.swing.JPanel {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(3, 83, 164));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("INPUT DATA SERVIS");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 60));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 40));
 
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel2.setText("Nomor Service :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 150, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 90, 30));
 
-        tNomorServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNomorServ.addActionListener(this::tNomorServActionPerformed);
-        jPanel1.add(tNomorServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 279, 35));
+        jPanel1.add(tNomorServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 200, 30));
 
-        tNamaAdmin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tNamaAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, 279, 35));
+        tNamaAdmin.addActionListener(this::tNamaAdminActionPerformed);
+        jPanel1.add(tNamaAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 200, 30));
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel3.setText("Admin :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 150, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 90, 30));
 
-        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel6.setText("Tanggal :");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 120, 40));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, 80, 30));
 
-        tTgl.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        tTgl.setFont(new java.awt.Font("Segoe UI Historic", 1, 12)); // NOI18N
         tTgl.setText("000");
-        jPanel1.add(tTgl, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, 220, 35));
+        jPanel1.add(tTgl, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 120, 30));
 
-        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel7.setText("Status [F7] :");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 120, 40));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 80, 30));
 
-        cbStatusServ.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
         cbStatusServ.addActionListener(this::cbStatusServActionPerformed);
-        jPanel1.add(cbStatusServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 120, 150, 35));
+        jPanel1.add(cbStatusServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 120, 30));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 850, 200));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 550, 150));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         buttonGroup1.add(rbBaru);
-        rbBaru.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        rbBaru.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         rbBaru.setText("Pelanggan Baru");
         rbBaru.addActionListener(this::rbBaruActionPerformed);
-        jPanel3.add(rbBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 200, 35));
+        jPanel3.add(rbBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
 
         buttonGroup1.add(rbLama);
-        rbLama.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        rbLama.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         rbLama.setText("Pelangggan Lama");
         rbLama.addActionListener(this::rbLamaActionPerformed);
-        jPanel3.add(rbLama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 200, 35));
+        jPanel3.add(rbLama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel4.setText("Cari No Hp / Nama :");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 200, 35));
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 200, 30));
 
-        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel9.setText("Nama :");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 70, 35));
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 50, 30));
 
-        jLabel13.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel13.setText("No Hp :");
-        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 70, 35));
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 50, 30));
 
-        jLabel14.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel14.setText("Alamat :");
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 70, 35));
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 50, 30));
 
-        tNamaPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNamaPelanggan.addActionListener(this::tNamaPelangganActionPerformed);
-        jPanel3.add(tNamaPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, 180, 35));
+        jPanel3.add(tNamaPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 160, 30));
 
-        tNoPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNoPelanggan.addActionListener(this::tNoPelangganActionPerformed);
-        jPanel3.add(tNoPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, 180, 35));
+        jPanel3.add(tNoPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 160, 30));
 
-        tAlamatPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tAlamatPelanggan.addActionListener(this::tAlamatPelangganActionPerformed);
-        jPanel3.add(tAlamatPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 180, 35));
+        jPanel3.add(tAlamatPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 160, 30));
 
         jLabel12.setBackground(new java.awt.Color(3, 83, 164));
-        jLabel12.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("DATA PELANGGAN");
         jLabel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel12.setOpaque(true);
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 60));
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 40));
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
-        btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btBatal.setText("BATAL [DEL]");
         btBatal.addActionListener(this::btBatalActionPerformed);
-        jPanel3.add(btBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, 300, 41));
+        jPanel3.add(btBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 190, 30));
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btSimpan.setText("SIMPAN [SHIFT+ENTER]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
-        jPanel3.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 300, 41));
+        jPanel3.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 190, 30));
 
-        btnCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnCari.setText("Cari... [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        jPanel3.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 223, 37));
+        jPanel3.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 190, 30));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 350, 710));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 250, 460));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setBackground(new java.awt.Color(3, 83, 164));
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("DATA PERANGKAT/SERVIS");
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel5.setOpaque(true);
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 60));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 40));
 
-        cbJenisBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbJenisBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbJenisBrg.addActionListener(this::cbJenisBrgActionPerformed);
-        jPanel4.add(cbJenisBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 280, 40));
+        jPanel4.add(cbJenisBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 140, 30));
 
-        tMerek.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tMerek.addActionListener(this::tMerekActionPerformed);
-        jPanel4.add(tMerek, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 280, 40));
+        jPanel4.add(tMerek, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 140, 30));
 
-        tModel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tModel.addActionListener(this::tModelActionPerformed);
-        jPanel4.add(tModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 280, 40));
+        jPanel4.add(tModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 140, 30));
 
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel8.setText("Merek :");
-        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 150, 35));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, 30));
 
-        jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel10.setText("Kelengkapan :");
-        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 150, 35));
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 90, 30));
 
-        jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel15.setText("Jenis Barang [F8] :");
-        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 160, 35));
+        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 110, 30));
 
-        jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel16.setText("Model / Tipe :");
-        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 150, 35));
+        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 90, 30));
 
-        jLabel17.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel17.setText("No Seri :");
-        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 150, 35));
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 90, 30));
 
-        tSeri.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tSeri.addActionListener(this::tSeriActionPerformed);
-        jPanel4.add(tSeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 250, 280, 40));
+        jPanel4.add(tSeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 140, 30));
 
-        jLabel18.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel18.setText("Keluhan :");
-        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 150, 35));
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, 30));
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         tKeluhan.setColumns(20);
-        tKeluhan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tKeluhan.setRows(5);
         tKeluhan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tKeluhan);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, 280, 86));
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 140, 50));
 
-        tKelengkapan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tKelengkapan.addActionListener(this::tKelengkapanActionPerformed);
-        jPanel4.add(tKelengkapan, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 280, 40));
+        jPanel4.add(tKelengkapan, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 140, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 454, -1, -1));
 
-        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 490, 710));
+        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 290, 460));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -616,15 +605,14 @@ public class PKelService extends javax.swing.JPanel {
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel19.setBackground(new java.awt.Color(3, 83, 164));
-        jLabel19.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("DAFTAR SERVIS");
         jLabel19.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel19.setOpaque(true);
-        jPanel7.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 60));
+        jPanel7.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 40));
 
-        tblServis.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblServis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -650,51 +638,46 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.getColumnModel().getColumn(8).setResizable(false);
         }
 
-        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 810, 680));
+        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 580, 400));
 
-        jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel20.setText("Cari [F6] :");
-        jPanel7.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+        jPanel7.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 80, 30));
 
-        tfCari.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tfCariKeyReleased(evt);
             }
         });
-        jPanel7.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 225, -1));
+        jPanel7.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 160, 30));
 
-        btRefresh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btRefresh.setText("Refresh [F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
-        jPanel7.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 128, -1));
+        jPanel7.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 120, 30));
 
-        btEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btEdit.setText("Edit [F1]");
         btEdit.addActionListener(this::btEditActionPerformed);
-        jPanel7.add(btEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 80, 128, -1));
+        jPanel7.add(btEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 120, 30));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel7.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 820, 810, 80));
 
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
         btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
-        jPanel9.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 6, -1, 48));
+        jPanel7.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 530, 100, -1));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        jPanel9.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 6, -1, 48));
+        jPanel7.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 530, 100, -1));
 
-        jPanel7.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 820, 810, 80));
-
-        add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 20, 830, 920));
+        add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 580, 620));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbBaruActionPerformed
@@ -975,6 +958,10 @@ public class PKelService extends javax.swing.JPanel {
     private void tAlamatPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tAlamatPelangganActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tAlamatPelangganActionPerformed
+
+    private void tNamaAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNamaAdminActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tNamaAdminActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

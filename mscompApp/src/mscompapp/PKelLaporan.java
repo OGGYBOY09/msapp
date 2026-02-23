@@ -91,32 +91,32 @@ public class PKelLaporan extends javax.swing.JPanel {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LAPORAN DATA SERVICE");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1680, 70));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1140, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Filter :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 115, 45));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 50, 30));
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan Bulanan", "Laporan Mingguan", "Laporan Harian" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 226, 45));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 226, 30));
 
-        txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 24)); // NOI18N
+        txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 12)); // NOI18N
         txtTotalPendapatan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
         txtTotalPendapatan.setText("OOOOOOOOO\\");
-            jPanel1.add(txtTotalPendapatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 110, -1, -1));
+            jPanel1.add(txtTotalPendapatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 50, 240, 30));
 
-            jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+            jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 12)); // NOI18N
             jLabel3.setText("Total Pendapatan :");
-            jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 80, -1, -1));
+            jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 50, -1, 30));
 
-            add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1680, 160));
+            add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1140, 100));
 
             jPanel4.setBackground(new java.awt.Color(255, 255, 255));
             jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -135,8 +135,12 @@ public class PKelLaporan extends javax.swing.JPanel {
                 .addGap(0, 758, Short.MAX_VALUE)
             );
 
-            add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 1680, 760));
+            add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 1140, 510));
         }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

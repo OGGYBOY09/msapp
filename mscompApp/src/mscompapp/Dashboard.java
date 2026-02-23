@@ -4,7 +4,6 @@
  */
 package mscompapp;
 
-import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -35,8 +34,6 @@ public class Dashboard extends javax.swing.JFrame {
         lblWelcome.setText("Selamat Datang, " + username);
         
         pSide.setLayout(new java.awt.BorderLayout());
-        pSide.setPreferredSize(new Dimension(200, getHeight()));
-        pSide.setMinimumSize(new Dimension(180, 0));
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.setMaximizedBounds(env.getMaximumWindowBounds());
@@ -170,8 +167,10 @@ public class Dashboard extends javax.swing.JFrame {
         pMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(4, 102, 200));
         pNav.setForeground(new java.awt.Color(0, 24, 69));
@@ -189,7 +188,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel2.setForeground(new java.awt.Color(0, 24, 69));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ann (1).png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 120));
+        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 420, 100));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
@@ -197,17 +196,17 @@ public class Dashboard extends javax.swing.JFrame {
         pNav.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 31, 42, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
-        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 210, 120));
+        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 210, 90));
 
-        getContentPane().add(pNav, java.awt.BorderLayout.NORTH);
+        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1920, 80));
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
         pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(pSide, java.awt.BorderLayout.WEST);
+        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 120, 650));
 
-        pMain.setLayout(new java.awt.GridLayout());
-        getContentPane().add(pMain, java.awt.BorderLayout.EAST);
+        pMain.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 1160, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

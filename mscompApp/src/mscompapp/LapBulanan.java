@@ -311,30 +311,29 @@ public class LapBulanan extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMaximumSize(new java.awt.Dimension(1680, 760));
-        setMinimumSize(new java.awt.Dimension(1680, 760));
-        setPreferredSize(new java.awt.Dimension(1680, 760));
+        setMinimumSize(new java.awt.Dimension(1140, 510));
+        setPreferredSize(new java.awt.Dimension(1140, 510));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 259, 50));
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 110, 30));
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 18, -1, 50));
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 90, 30));
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
-        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDetail.setText("DETAIL");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
-        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(399, 18, -1, 50));
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 90, 30));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 18, -1, 50));
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, 30));
 
-        tblLapBulanan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -349,74 +348,73 @@ public class LapBulanan extends javax.swing.JPanel {
         tblLapBulanan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapBulanan);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1660, 540));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1120, 320));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Bulan :");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, -1, 50));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 40, 30));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Status :");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1490, 20, -1, 50));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 50, 50, 30));
 
-        cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1550, 20, 116, 50));
+        cbStatus.addActionListener(this::cbStatusActionPerformed);
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 50, 90, 30));
 
-        mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        add(mcBulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 20, 121, 50));
+        mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        add(mcBulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, 80, 30));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Tahun :");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 20, -1, 50));
-        add(thTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 20, 100, 50));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 50, 30));
+        add(thTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 10, 90, 30));
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
-        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
-        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, -1, 50));
+        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 90, 30));
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
-        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPdf.setText("PDF");
         btnPdf.addActionListener(this::btnPdfActionPerformed);
-        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 20, -1, 50));
+        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, 90, 30));
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
-        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNota.setText("Nota");
         btnNota.addActionListener(this::btnNotaActionPerformed);
-        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, -1, 50));
+        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 90, 30));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Kategori :");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1300, 20, -1, 50));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 50, 60, 30));
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
-        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(1370, 20, 112, 50));
+        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, 90, 30));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 1680, 120));
 
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
         btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
-        jPanel1.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(1340, 20, -1, -1));
+        add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 420, -1, 30));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        jPanel1.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 20, -1, -1));
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 1680, 120));
+        add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 420, -1, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
@@ -530,6 +528,10 @@ public class LapBulanan extends javax.swing.JPanel {
         currentPage++;
         tampilData();
     }//GEN-LAST:event_btnNextKananActionPerformed
+
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbStatusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -97,14 +97,14 @@ public class sidebar_admin extends javax.swing.JPanel {
         setBackground(new java.awt.Color(0, 18, 51));
         setForeground(new java.awt.Color(51, 65, 92));
         setMaximumSize(new java.awt.Dimension(200, 980));
-        setMinimumSize(new java.awt.Dimension(200, 980));
-        setPreferredSize(new java.awt.Dimension(200, 980));
+        setMinimumSize(new java.awt.Dimension(150, 640));
+        setPreferredSize(new java.awt.Dimension(150, 640));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kelkatperangkat.setBackground(new java.awt.Color(0, 18, 51));
-        kelkatperangkat.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        kelkatperangkat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         kelkatperangkat.setForeground(new java.awt.Color(255, 255, 255));
-        kelkatperangkat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/jenisperangkat.png"))); // NOI18N
+        kelkatperangkat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         kelkatperangkat.setText("Jenis perangkat");
         kelkatperangkat.setOpaque(true);
         kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -112,12 +112,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 kelkatperangkatMouseClicked(evt);
             }
         });
-        add(kelkatperangkat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 210, 43));
+        add(kelkatperangkat, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 120, 35));
 
         lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelPlgn.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelPlgn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-32.png"))); // NOI18N
+        lblKelPlgn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblKelPlgn.setText("Kelola Pelanggan");
         lblKelPlgn.setOpaque(true);
         lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -125,12 +125,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 lblKelPlgnMouseClicked(evt);
             }
         });
-        add(lblKelPlgn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 210, 43));
+        add(lblKelPlgn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 120, 35));
 
         kelolaservice.setBackground(new java.awt.Color(0, 18, 51));
-        kelolaservice.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        kelolaservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         kelolaservice.setForeground(new java.awt.Color(255, 255, 255));
-        kelolaservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png"))); // NOI18N
+        kelolaservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         kelolaservice.setText("Kelola Service");
         kelolaservice.setOpaque(true);
         kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -138,13 +138,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 kelolaserviceMouseClicked(evt);
             }
         });
-        add(kelolaservice, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 210, 43));
+        add(kelolaservice, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 120, 35));
 
         menu.setBackground(new java.awt.Color(0, 18, 51));
-        menu.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        menu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         menu.setForeground(new java.awt.Color(255, 255, 255));
-        menu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu (1).png"))); // NOI18N
+        menu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         menu.setText("Menu");
         menu.setOpaque(true);
         menu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -152,12 +151,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 menuMouseClicked(evt);
             }
         });
-        add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 225, 43));
+        add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 120, 35));
 
         keluser.setBackground(new java.awt.Color(0, 18, 51));
-        keluser.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        keluser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         keluser.setForeground(new java.awt.Color(255, 255, 255));
-        keluser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/keluser.png"))); // NOI18N
+        keluser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         keluser.setText("Kelola User");
         keluser.setOpaque(true);
         keluser.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -165,12 +164,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 keluserMouseClicked(evt);
             }
         });
-        add(keluser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 210, 43));
+        add(keluser, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 120, 35));
 
         lblKelolaBarang.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelolaBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelolaBarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelolaBarang.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelbarang.png"))); // NOI18N
+        lblKelolaBarang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblKelolaBarang.setText("Kelola Barang");
         lblKelolaBarang.setOpaque(true);
         lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -178,19 +177,19 @@ public class sidebar_admin extends javax.swing.JPanel {
                 lblKelolaBarangMouseClicked(evt);
             }
         });
-        add(lblKelolaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 210, 43));
+        add(lblKelolaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 120, 35));
 
         btnLogout.setBackground(new java.awt.Color(255, 0, 0));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("LOG OUT");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
-        add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 610, 180, 50));
+        add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, 100, 35));
 
         lapservice.setBackground(new java.awt.Color(0, 18, 51));
-        lapservice.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lapservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lapservice.setForeground(new java.awt.Color(255, 255, 255));
-        lapservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png"))); // NOI18N
+        lapservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lapservice.setText("Laporan Service");
         lapservice.setOpaque(true);
         lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -198,12 +197,12 @@ public class sidebar_admin extends javax.swing.JPanel {
                 lapserviceMouseClicked(evt);
             }
         });
-        add(lapservice, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 210, 43));
+        add(lapservice, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 120, 35));
 
         lblKelkatbarang.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelkatbarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelkatbarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelkatbarang.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelkatbarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategoribarang.png"))); // NOI18N
+        lblKelkatbarang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblKelkatbarang.setText("Kategori barang");
         lblKelkatbarang.setOpaque(true);
         lblKelkatbarang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -211,22 +210,24 @@ public class sidebar_admin extends javax.swing.JPanel {
                 lblKelkatbarangMouseClicked(evt);
             }
         });
-        add(lblKelkatbarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 210, 43));
+        add(lblKelkatbarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 120, 35));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("_____________________________________________");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 215, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 200, 120, 35));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("_____________________________________________");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 74, -1, -1));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("__________________________");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 120, 35));
 
         lblKelStock.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        lblKelStock.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelStock.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
+        lblKelStock.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblKelStock.setText("Kelola Stock");
         lblKelStock.setOpaque(true);
         lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -234,19 +235,19 @@ public class sidebar_admin extends javax.swing.JPanel {
                 lblKelStockMouseClicked(evt);
             }
         });
-        add(lblKelStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 210, 43));
+        add(lblKelStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 120, 35));
 
         pengaturan.setBackground(new java.awt.Color(0, 18, 51));
-        pengaturan.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        pengaturan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         pengaturan.setForeground(new java.awt.Color(255, 255, 255));
-        pengaturan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/setting (1).png"))); // NOI18N
+        pengaturan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pengaturan.setText("Pengaturan");
         pengaturan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pengaturanMouseClicked(evt);
             }
         });
-        add(pengaturan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 536, 210, 43));
+        add(pengaturan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 536, 120, 35));
     }// </editor-fold>//GEN-END:initComponents
 
     private void kelkatperangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kelkatperangkatMouseClicked
