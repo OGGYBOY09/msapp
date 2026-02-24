@@ -31,6 +31,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.userRole = role;
         Login.namaUser = username;        
         initComponents();
+        adjustResponsiveLayout();
         lblWelcome.setText("Selamat Datang, " + username);
         
         pSide.setLayout(new java.awt.BorderLayout());
@@ -60,6 +61,24 @@ public class Dashboard extends javax.swing.JFrame {
         });
         timer.start();
     }
+    
+    
+    
+    private void adjustResponsiveLayout() {
+    this.getContentPane().setLayout(new java.awt.BorderLayout());
+
+    // Berikan lebar tetap (misal 200), tapi tinggi biarkan 0 (akan diatur BorderLayout)
+    pSide.setPreferredSize(new java.awt.Dimension(200, 0)); 
+    
+    // Pastikan pSide menggunakan layout yang mendukung komponen di dalamnya memenuhi ruang
+    pSide.setLayout(new java.awt.BorderLayout()); 
+
+    this.getContentPane().add(pNav, java.awt.BorderLayout.NORTH);
+    this.getContentPane().add(pSide, java.awt.BorderLayout.WEST);
+    this.getContentPane().add(pMain, java.awt.BorderLayout.CENTER);
+
+    pMain.setLayout(new java.awt.BorderLayout());
+}
     
     // --- 1. INISIALISASI SIDEBAR BERDASARKAN ROLE ---
     private void initSidebar() {
@@ -134,9 +153,11 @@ public class Dashboard extends javax.swing.JFrame {
 
     public void switchPanel(javax.swing.JPanel panel) {
         pMain.removeAll();
-        pMain.add(panel);
-        pMain.repaint();
-        pMain.revalidate();
+    // Gunakan BorderLayout agar panel yang baru masuk otomatis memenuhi seluruh pMain
+    pMain.setLayout(new java.awt.BorderLayout());
+    pMain.add(panel, java.awt.BorderLayout.CENTER);
+    pMain.repaint();
+    pMain.revalidate();
     }
     
     public void logout() {
@@ -156,12 +177,14 @@ public class Dashboard extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         pNav = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         lblWelcome = new javax.swing.JLabel();
         lblTanggal = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         pSide = new javax.swing.JPanel();
         pMain = new javax.swing.JPanel();
@@ -170,43 +193,62 @@ public class Dashboard extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pNav.setBackground(new java.awt.Color(4, 102, 200));
         pNav.setForeground(new java.awt.Color(0, 24, 69));
-        pNav.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pNav.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setToolTipText("");
+        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblWelcome.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 14)); // NOI18N
         lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
+        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblWelcome.setText("Welcome");
-        pNav.add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 339, 0, 276);
+        jPanel1.add(lblWelcome, gridBagConstraints);
 
         lblTanggal.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 14)); // NOI18N
         lblTanggal.setForeground(new java.awt.Color(255, 255, 255));
+        lblTanggal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTanggal.setText("Tanggal");
-        pNav.add(lblTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 40, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(9, 339, 0, 0);
+        jPanel1.add(lblTanggal, gridBagConstraints);
+
+        pNav.add(jPanel1, java.awt.BorderLayout.EAST);
+
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel2.setForeground(new java.awt.Color(0, 24, 69));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo ms.png"))); // NOI18N
-        pNav.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 160, 80));
-
-        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        pNav.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 31, 42, -1));
+        jPanel2.add(jLabel2);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Logotim.png"))); // NOI18N
-        pNav.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 110, 80));
+        jPanel2.add(jLabel1);
 
-        getContentPane().add(pNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 80));
+        pNav.add(jPanel2, java.awt.BorderLayout.WEST);
+
+        getContentPane().add(pNav, java.awt.BorderLayout.NORTH);
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
         pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(pSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 170, 690));
+        getContentPane().add(pSide, java.awt.BorderLayout.WEST);
 
         pMain.setLayout(new java.awt.GridBagLayout());
-        getContentPane().add(pMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 1200, 690));
+        getContentPane().add(pMain, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -232,7 +274,8 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblTanggal;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JPanel pMain;

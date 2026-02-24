@@ -62,6 +62,7 @@ public class sidebar_teknisi extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
@@ -69,8 +70,10 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 18, 51));
-        setMinimumSize(new java.awt.Dimension(200, 980));
+        setMaximumSize(null);
+        setMinimumSize(null);
         setPreferredSize(new java.awt.Dimension(200, 980));
+        setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 18, 51));
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
@@ -84,12 +87,32 @@ public class sidebar_teknisi extends javax.swing.JPanel {
                 jLabel1MouseClicked(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 36;
+        gridBagConstraints.ipady = 13;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(jLabel1, gridBagConstraints);
 
         btnLogout.setBackground(new java.awt.Color(255, 0, 0));
         btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("LOG OUT");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 79;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(btnLogout, gridBagConstraints);
 
         jLabel2.setBackground(new java.awt.Color(0, 18, 51));
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
@@ -106,6 +129,16 @@ public class sidebar_teknisi extends javax.swing.JPanel {
                 jLabel2KeyPressed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipady = 13;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(jLabel2, gridBagConstraints);
 
         jLabel6.setBackground(new java.awt.Color(0, 18, 51));
         jLabel6.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
@@ -117,36 +150,15 @@ public class sidebar_teknisi extends javax.swing.JPanel {
                 jLabel6MouseClicked(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(272, 272, 272)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(483, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 48;
+        gridBagConstraints.ipady = 11;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(jLabel6, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
