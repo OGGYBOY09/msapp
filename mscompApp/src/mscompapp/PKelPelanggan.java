@@ -216,47 +216,47 @@ public class PKelPelanggan extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(312, 960));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel3.setText("ID Pelanggan :");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 200, 40));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 160, 40));
 
         tIdPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tIdPelanggan.addActionListener(this::tIdPelangganActionPerformed);
-        jPanel3.add(tIdPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 390, 40));
+        jPanel3.add(tIdPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 280, 40));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel4.setText("Nama Pelanggan :");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 200, 40));
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, 40));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel5.setText("No HP :");
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 200, 40));
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 160, 40));
 
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel8.setText("Alamat :");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 200, 40));
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 160, 40));
 
         tNama.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNama.addActionListener(this::tNamaActionPerformed);
-        jPanel3.add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 390, 40));
+        jPanel3.add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 280, 40));
 
         tNoHp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tNoHp.addActionListener(this::tNoHpActionPerformed);
-        jPanel3.add(tNoHp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 390, 40));
+        jPanel3.add(tNoHp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 280, 40));
 
         tAlamat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel3.add(tAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 390, 40));
+        jPanel3.add(tAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 280, 40));
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 390, 60));
+        jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 280, 50));
 
         jPanel1.setBackground(new java.awt.Color(4, 102, 200));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH PELANGGAN");
@@ -267,20 +267,20 @@ public class PKelPelanggan extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, -1, 70));
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 340, 40));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 450, 920));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 340, 620));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -289,7 +289,7 @@ public class PKelPelanggan extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(4, 102, 200));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("DAFTAR PELANGGAN");
@@ -307,11 +307,11 @@ public class PKelPelanggan extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel4.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 1269, 70));
+        jPanel4.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 790, 40));
 
         tPlgn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tPlgn.setModel(new javax.swing.table.DefaultTableModel(
@@ -328,7 +328,7 @@ public class PKelPelanggan extends javax.swing.JPanel {
         tPlgn.setRowHeight(35);
         jScrollPane1.setViewportView(tPlgn);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 1180, 700));
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 770, 520));
 
         tfCari.setText("Cari....");
         tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -337,33 +337,33 @@ public class PKelPelanggan extends javax.swing.JPanel {
             }
         });
         tfCari.addActionListener(this::tfCariActionPerformed);
-        jPanel4.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 400, 40));
+        jPanel4.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 250, 30));
 
         btnCari.setBackground(new java.awt.Color(204, 204, 204));
-        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        jPanel4.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 150, 40));
+        jPanel4.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 120, 30));
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        jPanel4.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 150, 40));
+        jPanel4.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 120, 30));
 
         btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnEdit.setText("EDIT [F1]");
         btnEdit.addActionListener(this::btnEditActionPerformed);
-        jPanel4.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 100, 150, 40));
+        jPanel4.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 50, 120, 30));
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
-        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnHapus.setText("HAPUS [Del]");
         btnHapus.addActionListener(this::btnHapusActionPerformed);
-        jPanel4.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 100, 150, 40));
+        jPanel4.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 50, 120, 30));
 
-        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 1220, 920));
+        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 790, 620));
     }// </editor-fold>//GEN-END:initComponents
 
     private void tIdPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdPelangganActionPerformed

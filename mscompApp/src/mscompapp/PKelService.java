@@ -638,7 +638,7 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.getColumnModel().getColumn(8).setResizable(false);
         }
 
-        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 580, 400));
+        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 560, 400));
 
         jLabel20.setText("Cari [F6] :");
         jPanel7.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 80, 30));

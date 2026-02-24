@@ -233,7 +233,7 @@ private void bersihkanForm() {
         jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 300, 40));
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH USER");
@@ -295,7 +295,7 @@ private void bersihkanForm() {
         jPanel2.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 120, 30));
 
         jLabel7.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("DAFTAR USER");

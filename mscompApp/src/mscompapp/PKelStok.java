@@ -289,45 +289,45 @@ public class PKelStok extends javax.swing.JPanel {
         tblBarang.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(tblBarang);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 1170, 540));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 800, 450));
 
         btCari.setBackground(new java.awt.Color(204, 204, 204));
-        btCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btCari.setText("Cari[F2]");
         btCari.addActionListener(this::btCariActionPerformed);
-        jPanel2.add(btCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 120, 100, 40));
-        jPanel2.add(dateAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 150, 40));
-        jPanel2.add(dateAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 150, 40));
+        jPanel2.add(btCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 80, 80, 30));
+        jPanel2.add(dateAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 80, 30));
+        jPanel2.add(dateAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, -1, 30));
 
-        jLabel6.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
         jLabel6.setText("Dari :");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, 40));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 30));
 
-        jLabel7.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
         jLabel7.setText("Sampai :");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, -1, 40));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, 30));
 
-        jLabel10.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Swis721 LtEx BT", 0, 12)); // NOI18N
         jLabel10.setText("Filter Bulan :");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 40));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 30));
 
         btnedit.setBackground(new java.awt.Color(255, 255, 102));
-        btnedit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnedit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnedit.setText("Edit[F1]");
         btnedit.addActionListener(this::btneditActionPerformed);
-        jPanel2.add(btnedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 120, 100, 40));
+        jPanel2.add(btnedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 80, 30));
 
         btndelete.setBackground(new java.awt.Color(255, 51, 51));
-        btndelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btndelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btndelete.setText("Delete[Del]");
         btndelete.addActionListener(this::btndeleteActionPerformed);
-        jPanel2.add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 120, 150, 40));
+        jPanel2.add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 100, 30));
 
         btRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btRefresh.setText("Refresh[F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
-        jPanel2.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 130, 40));
+        jPanel2.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 80, 110, 30));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -349,113 +349,104 @@ public class PKelStok extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(844, Short.MAX_VALUE)
+                .addGap(0, 152, Short.MAX_VALUE)
                 .addComponent(btnNextKiri)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNextKanan)
-                .addGap(118, 118, 118))
+                .addComponent(btnNextKanan))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 26, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNextKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnNextKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 740, 1190, -1));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 560, 380, 50));
 
         jLabel11.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel11.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("DAFTAR PEMBELIAN STOK BARANG");
         jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel11.setOpaque(true);
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 70));
-        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 150, 40));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 40));
+        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 100, 30));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 1210, 920));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, 820, 620));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH STOK BARANG");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 70));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 40));
 
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel2.setText("Tanggal :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 300, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 210, 20));
 
         JTanggal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(JTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 350, 40));
+        jPanel1.add(JTanggal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 260, 40));
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel3.setText("Kode Barang :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 300, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 210, 20));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel5.setText("Nama Barang :");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 300, 40));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 210, 20));
+        jPanel1.add(tKodeBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 180, 40));
+        jPanel1.add(tNamaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 260, 40));
 
-        tKodeBrg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tKodeBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 270, 40));
-
-        tNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tNamaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 350, 40));
-
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel8.setText("Jumlah Beli :");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, 300, 40));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 210, 20));
+        jPanel1.add(tJumlahBeli, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 260, 40));
 
-        tJumlahBeli.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tJumlahBeli, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 590, 350, 40));
-
-        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel9.setText("Total Harga :");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 640, 300, 40));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 490, 210, 20));
+        jPanel1.add(tTotalHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 520, 260, 40));
 
-        tTotalHarga.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tTotalHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 680, 350, 40));
-
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel4.setText("Kategori Barang :");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 300, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 210, 20));
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btSimpan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btSimpan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btSimpan.setText("SIMPAN");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
-        jPanel1.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 750, 351, 60));
+        jPanel1.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, 260, 30));
 
         cbKategori.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
-        jPanel1.add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 350, 40));
+        jPanel1.add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 260, 40));
 
         btPilihKode.setBackground(new java.awt.Color(204, 204, 204));
-        btPilihKode.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btPilihKode.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btPilihKode.setText("Pilih");
         btPilihKode.addActionListener(this::btPilihKodeActionPerformed);
-        jPanel1.add(btPilihKode, new org.netbeans.lib.awtextra.AbsoluteConstraints(302, 230, 80, 40));
+        jPanel1.add(btPilihKode, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 80, 40));
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, 350, 40));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 260, 40));
 
-        tHarga.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        tHarga.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         tHarga.setText("Harga :");
-        jPanel1.add(tHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 150, 40));
+        jPanel1.add(tHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, 20));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 410, 920));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 310, 620));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRefreshActionPerformed

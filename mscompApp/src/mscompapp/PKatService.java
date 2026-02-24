@@ -197,67 +197,58 @@ public class PKatService extends javax.swing.JPanel {
 
         jButton1.setText("jButton1");
 
-        setMaximumSize(new java.awt.Dimension(1720, 960));
-        setMinimumSize(new java.awt.Dimension(1720, 960));
-        setPreferredSize(new java.awt.Dimension(1720, 960));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setMaximumSize(new java.awt.Dimension(1160, 640));
+        setMinimumSize(new java.awt.Dimension(1160, 640));
+        setPreferredSize(new java.awt.Dimension(1160, 640));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TAMBAH KATEGORI PERANGKAT");
+        jLabel1.setText("TAMBAH KATEGORI");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 70));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 40));
 
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel2.setText("ID Kategori :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 200, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 180, 40));
 
-        tfIdKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfIdKatBarang.addActionListener(this::tfIdKatBarangActionPerformed);
-        jPanel1.add(tfIdKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 390, 51));
+        jPanel1.add(tfIdKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 230, 30));
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel3.setText("Nama Kategori :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 200, 40));
-
-        tfNmKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel1.add(tfNmKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 390, 51));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 180, 40));
+        jPanel1.add(tfNmKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 230, 30));
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 390, 70));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 230, 50));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         jLabel4.setText("Keterangan :");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 200, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 180, 40));
 
-        tfKetKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfKetKatBarang.addActionListener(this::tfKetKatBarangActionPerformed);
-        jPanel1.add(tfKetKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 390, 51));
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 450, 920));
+        jPanel1.add(tfKetKatBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 230, 30));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 30)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("DAFTAR KATEGORI JENIS PERANGKAT");
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel5.setOpaque(true);
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1220, 70));
 
         tblKatBarang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblKatBarang.setModel(new javax.swing.table.DefaultTableModel(
@@ -274,37 +265,89 @@ public class PKatService extends javax.swing.JPanel {
         tblKatBarang.setRowHeight(35);
         jScrollPane1.setViewportView(tblKatBarang);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 161, 1160, 680));
-
-        tf_cari.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        tf_cari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tf_cari.addActionListener(this::tf_cariActionPerformed);
-        jPanel2.add(tf_cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 400, 40));
 
         btn_refresh.setBackground(new java.awt.Color(204, 204, 204));
-        btn_refresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btn_refresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         btn_refresh.setText("Refresh [F3]");
         btn_refresh.addActionListener(this::btn_refreshActionPerformed);
-        jPanel2.add(btn_refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 90, 150, 40));
 
         btn_edit.setBackground(new java.awt.Color(255, 255, 102));
-        btn_edit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btn_edit.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         btn_edit.setText("Edit [F1]");
         btn_edit.addActionListener(this::btn_editActionPerformed);
-        jPanel2.add(btn_edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 90, 150, 40));
 
         btnDelete.setBackground(new java.awt.Color(255, 0, 51));
-        btnDelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btnDelete.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         btnDelete.setText("Hapus [Del]");
         btnDelete.addActionListener(this::btnDeleteActionPerformed);
-        jPanel2.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 90, 150, 40));
 
         btn_cari.setBackground(new java.awt.Color(204, 204, 204));
-        btn_cari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        btn_cari.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         btn_cari.setText("Cari [F2]");
         btn_cari.addActionListener(this::btn_cariActionPerformed);
-        jPanel2.add(btn_cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 150, 40));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 1220, 920));
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(tf_cari)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tf_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
