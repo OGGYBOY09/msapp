@@ -95,6 +95,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         pengaturan = new javax.swing.JLabel();
         spacer = new javax.swing.JPanel();
         btnLogout = new javax.swing.JButton();
+        spacer1 = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(0, 18, 51));
         setForeground(new java.awt.Color(51, 65, 92));
@@ -131,6 +132,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         kelolaservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         kelolaservice.setForeground(new java.awt.Color(255, 255, 255));
         kelolaservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        kelolaservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png"))); // NOI18N
         kelolaservice.setText("Kelola Service");
         kelolaservice.setOpaque(true);
         kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -154,6 +156,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lapservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lapservice.setForeground(new java.awt.Color(255, 255, 255));
         lapservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lapservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png"))); // NOI18N
         lapservice.setText("Laporan Service");
         lapservice.setOpaque(true);
         lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -177,6 +180,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         keluser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         keluser.setForeground(new java.awt.Color(255, 255, 255));
         keluser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        keluser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/keluser.png"))); // NOI18N
         keluser.setText("Kelola User");
         keluser.setOpaque(true);
         keluser.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -200,6 +204,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelolaBarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelolaBarang.setForeground(new java.awt.Color(255, 255, 255));
         lblKelolaBarang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelbarang.png"))); // NOI18N
         lblKelolaBarang.setText("Kelola Barang");
         lblKelolaBarang.setOpaque(true);
         lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -223,6 +228,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         kelkatperangkat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         kelkatperangkat.setForeground(new java.awt.Color(255, 255, 255));
         kelkatperangkat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        kelkatperangkat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/jenisperangkat.png"))); // NOI18N
         kelkatperangkat.setText("Jenis perangkat");
         kelkatperangkat.setOpaque(true);
         kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -246,6 +252,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelkatbarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelkatbarang.setForeground(new java.awt.Color(255, 255, 255));
         lblKelkatbarang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKelkatbarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategoribarang.png"))); // NOI18N
         lblKelkatbarang.setText("Kategori barang");
         lblKelkatbarang.setOpaque(true);
         lblKelkatbarang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -269,6 +276,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelStock.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelStock.setForeground(new java.awt.Color(255, 255, 255));
         lblKelStock.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
         lblKelStock.setText("Kelola Stock");
         lblKelStock.setOpaque(true);
         lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -292,6 +300,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         lblKelPlgn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
         lblKelPlgn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-32.png"))); // NOI18N
         lblKelPlgn.setText("Kelola Pelanggan");
         lblKelPlgn.setOpaque(true);
         lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -315,6 +324,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         pengaturan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         pengaturan.setForeground(new java.awt.Color(255, 255, 255));
         pengaturan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pengaturan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/setting (1).png"))); // NOI18N
         pengaturan.setText("Pengaturan");
         pengaturan.setOpaque(true);
         pengaturan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -359,6 +369,16 @@ public class sidebar_admin extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(btnLogout, gridBagConstraints);
+
+        spacer1.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(spacer1, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void kelkatperangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kelkatperangkatMouseClicked
@@ -442,5 +462,6 @@ public class sidebar_admin extends javax.swing.JPanel {
     private javax.swing.JLabel menu;
     private javax.swing.JLabel pengaturan;
     private javax.swing.JPanel spacer;
+    private javax.swing.JPanel spacer1;
     // End of variables declaration//GEN-END:variables
 }
