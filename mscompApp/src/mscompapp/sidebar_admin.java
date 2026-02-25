@@ -83,17 +83,18 @@ public class sidebar_admin extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        kelkatperangkat = new javax.swing.JLabel();
-        lblKelPlgn = new javax.swing.JLabel();
-        kelolaservice = new javax.swing.JLabel();
         menu = new javax.swing.JLabel();
+        kelolaservice = new javax.swing.JLabel();
+        lapservice = new javax.swing.JLabel();
         keluser = new javax.swing.JLabel();
         lblKelolaBarang = new javax.swing.JLabel();
-        btnLogout = new javax.swing.JButton();
-        lapservice = new javax.swing.JLabel();
+        kelkatperangkat = new javax.swing.JLabel();
         lblKelkatbarang = new javax.swing.JLabel();
         lblKelStock = new javax.swing.JLabel();
+        lblKelPlgn = new javax.swing.JLabel();
         pengaturan = new javax.swing.JLabel();
+        spacer = new javax.swing.JPanel();
+        btnLogout = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 18, 51));
         setForeground(new java.awt.Color(51, 65, 92));
@@ -101,72 +102,6 @@ public class sidebar_admin extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(0, 0));
         setPreferredSize(new java.awt.Dimension(150, 640));
         setLayout(new java.awt.GridBagLayout());
-
-        kelkatperangkat.setBackground(new java.awt.Color(0, 18, 51));
-        kelkatperangkat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        kelkatperangkat.setForeground(new java.awt.Color(255, 255, 255));
-        kelkatperangkat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        kelkatperangkat.setText("Jenis perangkat");
-        kelkatperangkat.setOpaque(true);
-        kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                kelkatperangkatMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 33;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(kelkatperangkat, gridBagConstraints);
-
-        lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelPlgn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelPlgn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblKelPlgn.setText("Kelola Pelanggan");
-        lblKelPlgn.setOpaque(true);
-        lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelPlgnMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 26;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lblKelPlgn, gridBagConstraints);
-
-        kelolaservice.setBackground(new java.awt.Color(0, 18, 51));
-        kelolaservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        kelolaservice.setForeground(new java.awt.Color(255, 255, 255));
-        kelolaservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        kelolaservice.setText("Kelola Service");
-        kelolaservice.setOpaque(true);
-        kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                kelolaserviceMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 41;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(kelolaservice, gridBagConstraints);
 
         menu.setBackground(new java.awt.Color(0, 18, 51));
         menu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -187,9 +122,56 @@ public class sidebar_admin extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 88;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(menu, gridBagConstraints);
+
+        kelolaservice.setBackground(new java.awt.Color(0, 18, 51));
+        kelolaservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        kelolaservice.setForeground(new java.awt.Color(255, 255, 255));
+        kelolaservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        kelolaservice.setText("Kelola Service");
+        kelolaservice.setOpaque(true);
+        kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                kelolaserviceMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 41;
+        gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(kelolaservice, gridBagConstraints);
+
+        lapservice.setBackground(new java.awt.Color(0, 18, 51));
+        lapservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lapservice.setForeground(new java.awt.Color(255, 255, 255));
+        lapservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lapservice.setText("Laporan Service");
+        lapservice.setOpaque(true);
+        lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lapserviceMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 31;
+        gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(lapservice, gridBagConstraints);
 
         keluser.setBackground(new java.awt.Color(0, 18, 51));
         keluser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -204,11 +186,12 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 57;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         add(keluser, gridBagConstraints);
@@ -226,51 +209,38 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 44;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(lblKelolaBarang, gridBagConstraints);
 
-        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout.setText("LOG OUT");
-        btnLogout.addActionListener(this::btnLogoutActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 12;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(btnLogout, gridBagConstraints);
-
-        lapservice.setBackground(new java.awt.Color(0, 18, 51));
-        lapservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lapservice.setForeground(new java.awt.Color(255, 255, 255));
-        lapservice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lapservice.setText("Laporan Service");
-        lapservice.setOpaque(true);
-        lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
+        kelkatperangkat.setBackground(new java.awt.Color(0, 18, 51));
+        kelkatperangkat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        kelkatperangkat.setForeground(new java.awt.Color(255, 255, 255));
+        kelkatperangkat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        kelkatperangkat.setText("Jenis perangkat");
+        kelkatperangkat.setOpaque(true);
+        kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lapserviceMouseClicked(evt);
+                kelkatperangkatMouseClicked(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 31;
+        gridBagConstraints.ipadx = 33;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lapservice, gridBagConstraints);
+        add(kelkatperangkat, gridBagConstraints);
 
         lblKelkatbarang.setBackground(new java.awt.Color(0, 18, 51));
         lblKelkatbarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -290,6 +260,7 @@ public class sidebar_admin extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 31;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(lblKelkatbarang, gridBagConstraints);
@@ -307,20 +278,45 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 51;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(lblKelStock, gridBagConstraints);
+
+        lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
+        lblKelPlgn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
+        lblKelPlgn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKelPlgn.setText("Kelola Pelanggan");
+        lblKelPlgn.setOpaque(true);
+        lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKelPlgnMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 26;
+        gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(lblKelPlgn, gridBagConstraints);
 
         pengaturan.setBackground(new java.awt.Color(0, 18, 51));
         pengaturan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         pengaturan.setForeground(new java.awt.Color(255, 255, 255));
         pengaturan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pengaturan.setText("Pengaturan");
+        pengaturan.setOpaque(true);
         pengaturan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pengaturanMouseClicked(evt);
@@ -328,14 +324,41 @@ public class sidebar_admin extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 56;
         gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(pengaturan, gridBagConstraints);
+
+        spacer.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(spacer, gridBagConstraints);
+
+        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("LOG OUT");
+        btnLogout.addActionListener(this::btnLogoutActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        add(btnLogout, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void kelkatperangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kelkatperangkatMouseClicked
@@ -418,5 +441,6 @@ public class sidebar_admin extends javax.swing.JPanel {
     private javax.swing.JLabel lblKelolaBarang;
     private javax.swing.JLabel menu;
     private javax.swing.JLabel pengaturan;
+    private javax.swing.JPanel spacer;
     // End of variables declaration//GEN-END:variables
 }

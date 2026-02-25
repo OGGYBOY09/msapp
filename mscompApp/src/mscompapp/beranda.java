@@ -71,44 +71,33 @@ public class Beranda extends javax.swing.JPanel {
     }
     
     private void setupPanelAction(JPanel sourcePanel, JPanel targetPanel, int dashboardIndex) {
-        // Efek Hover (Visual)
-        sourcePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        sourcePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Mencari Parent Dashboard secara otomatis
-                Dashboard dash = (Dashboard) SwingUtilities.getWindowAncestor(sourcePanel);
-                
-                if (dash != null) {
-                    // Pindah panel
-                    dash.switchPanel(targetPanel);
-                    // Update index agar shortcut Alt+Angka tetap sinkron
-                    dash.setPanelIndex(dashboardIndex); 
-                }
-            }
+    // Memberikan kursor tangan agar user tahu ini bisa diklik
+    sourcePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    
+    sourcePanel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            // Berubah jadi sedikit lebih terang saat disentuh kursor
+            sourcePanel.setBackground(new Color(230, 230, 230)); 
+        }
 
-            // Efek Hover: Ubah warna sedikit saat mouse masuk
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                sourcePanel.setBackground(new Color(220, 220, 220)); // Sedikit lebih gelap dari putih/abu
-            }
+        @Override
+        public void mouseExited(MouseEvent e) {
+            // Kembali ke warna asli (abu-abu terang sesuai desain Anda)
+            sourcePanel.setBackground(new Color(204, 204, 204)); 
+        }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // Kembalikan ke warna asal (sesuaikan dengan warna di desainmu)
-                // jPanel1-11 di desainmu sepertinya menggunakan warna background yang berbeda-beda
-                // Logika di bawah untuk mengembalikan warna default panel masing-masing
-                if (sourcePanel == jPanel2) {
-                     sourcePanel.setBackground(new Color(4, 102, 200));
-                } else if (sourcePanel == jPanel3) {
-                     sourcePanel.setBackground(new Color(255, 255, 255));
-                } else {
-                     sourcePanel.setBackground(new Color(204, 204, 204)); // Warna default panel kartu
-                }
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // Mengambil instance Dashboard untuk memanggil fungsi switchPanel
+            Dashboard dash = (Dashboard) SwingUtilities.getWindowAncestor(sourcePanel);
+            if (dash != null) {
+                dash.setPanelIndex(dashboardIndex); // Update index shortcut agar sinkron
+                dash.switchPanel(targetPanel);      // Pindah ke halaman tujuan
             }
-        });
-    }
+        }
+    });
+}
     
     // --- HELPER: FORMAT ANGKA (Titik per 3 nol) ---
     private String formatRupiah(int angka) {
@@ -241,8 +230,9 @@ public class Beranda extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+        
 
-        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -268,19 +258,19 @@ public class Beranda extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         pppp = new javax.swing.JLabel();
         lblSerProses = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
 
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1720, 960));
         setPreferredSize(new java.awt.Dimension(1720, 960));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setLayout(new java.awt.GridBagLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.setMaximumSize(new java.awt.Dimension(0, 0));
+        jPanel3.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel3.setPreferredSize(new java.awt.Dimension(0, 0));
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -298,7 +288,15 @@ public class Beranda extends javax.swing.JPanel {
         lblTotalUser.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel1, gridBagConstraints);
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -315,7 +313,15 @@ public class Beranda extends javax.swing.JPanel {
         lblTotalBarang.setText("0");
         jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel4, gridBagConstraints);
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -332,7 +338,15 @@ public class Beranda extends javax.swing.JPanel {
         lblTotalService.setText("0");
         jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 170, 40));
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel5, gridBagConstraints);
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -350,7 +364,15 @@ public class Beranda extends javax.swing.JPanel {
         lblTotalStock.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel6, gridBagConstraints);
 
         jPanel7.setBackground(new java.awt.Color(204, 204, 204));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -370,7 +392,16 @@ public class Beranda extends javax.swing.JPanel {
         lblPenHarian.setText("0");
         jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 250, 40));
 
-        jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = -126;
+        gridBagConstraints.ipady = -36;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel7, gridBagConstraints);
 
         jPanel8.setBackground(new java.awt.Color(204, 204, 204));
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -389,7 +420,14 @@ public class Beranda extends javax.swing.JPanel {
         lblPenBulanan.setText("0");
         jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 230, 40));
 
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel8, gridBagConstraints);
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
         jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -409,7 +447,14 @@ public class Beranda extends javax.swing.JPanel {
         lblSerSelesai.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel9, gridBagConstraints);
 
         jPanel11.setBackground(new java.awt.Color(204, 204, 204));
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -429,11 +474,33 @@ public class Beranda extends javax.swing.JPanel {
         lblSerProses.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
 
-        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 190, 270, 160));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel11, gridBagConstraints);
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, -3, 1160, 640));
+        jPanel2.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(jPanel2, gridBagConstraints);
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1720, 960));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipady = 290;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel3, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
