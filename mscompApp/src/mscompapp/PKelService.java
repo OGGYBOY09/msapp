@@ -28,10 +28,10 @@ import javax.swing.JComboBox;
 public class PKelService extends javax.swing.JPanel {   
     
     public int idPelanggan = 0; 
-
     private int currentPage = 0;
     private final int PAGE_SIZE = 20;
-    
+
+    // Inner class untuk menampung data teknisi di ComboBox
     private class UserItem {
         String id;
         String nama;
@@ -728,22 +728,20 @@ public class PKelService extends javax.swing.JPanel {
     private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
 
         try {
-            // 1. Validasi Input Dasar
             if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Nama, Jenis Barang, dan Keluhan wajib diisi!");
                 return;
             }
 
-            // 2. Munculkan Pop-up Pilih Teknisi
             String idTeknisiTerpilih = pilihTeknisiPopUp();
-            if (idTeknisiTerpilih == null) return; // Batalkan simpan jika pop-up ditutup/batal
+            if (idTeknisiTerpilih == null) return; 
 
             Connection conn = Koneksi.configDB();
-            conn.setAutoCommit(false); // Gunakan transaksi untuk keamanan data
+            conn.setAutoCommit(false); 
 
             int finalIdPelanggan = idPelanggan;
+            String idServisSaatIni = tNomorServ.getText();
 
-            // 3. Simpan/Update Pelanggan
             if (rbBaru.isSelected()) {
                 PreparedStatement pstPel = conn.prepareStatement("INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 pstPel.setString(1, tNamaPelanggan.getText());
@@ -762,14 +760,11 @@ public class PKelService extends javax.swing.JPanel {
                 pstUpPel.executeUpdate();
             }
 
-            // 4. Cek apakah ini Servis baru atau Update
             PreparedStatement pstCheck = conn.prepareStatement("SELECT COUNT(*) FROM servis WHERE id_servis = ?");
-            pstCheck.setString(1, tNomorServ.getText());
-            ResultSet rsCheck = pstCheck.executeQuery(); 
-            rsCheck.next();
+            pstCheck.setString(1, idServisSaatIni);
+            ResultSet rsCheck = pstCheck.executeQuery(); rsCheck.next();
             boolean isUpdate = rsCheck.getInt(1) > 0;
 
-            // 5. Simpan/Update ke tabel SERVIS
             String sqlService = isUpdate 
                 ? "UPDATE servis SET id_pelanggan=?, jenis_barang=?, merek=?, model=?, no_seri=?, kelengkapan=?, keluhan_awal=?, status=? WHERE id_servis=?"
                 : "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
@@ -785,43 +780,55 @@ public class PKelService extends javax.swing.JPanel {
             pstServ.setString(8, cbStatusServ.getSelectedItem().toString());
 
             if (isUpdate) {
-                pstServ.setString(9, tNomorServ.getText());
+                pstServ.setString(9, idServisSaatIni);
             } else {
                 pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                pstServ.setString(10, Session.idUser); // Admin yang menginput
-                pstServ.setString(11, tNomorServ.getText());
+                pstServ.setString(10, Session.idUser);
+                pstServ.setString(11, idServisSaatIni);
             }
             pstServ.executeUpdate();
 
-            // 6. Simpan/Update ke tabel PERBAIKAN (Menggunakan idTeknisiTerpilih dari pop-up)
             if (!isUpdate) {
-                // Input awal perbaikan dengan teknisi terpilih
                 String sqlFix = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa, diskon) VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstFix = conn.prepareStatement(sqlFix);
-                pstFix.setString(1, tNomorServ.getText());
-                pstFix.setString(2, idTeknisiTerpilih); // ID dari Pop-up
-                pstFix.setString(3, ""); // Kosongkan dulu karena belum diperbaiki
+                pstFix.setString(1, idServisSaatIni);
+                pstFix.setString(2, idTeknisiTerpilih);
+                pstFix.setString(3, ""); 
                 pstFix.setString(4, "");
                 pstFix.setInt(5, 0);
                 pstFix.setInt(6, 0);
                 pstFix.executeUpdate();
             } else {
-                // Update teknisi di perbaikan jika sudah ada
-                String sqlFixUp = "UPDATE perbaikan SET id_teknisi = ? WHERE id_servis = ?";
-                PreparedStatement pstFixUp = conn.prepareStatement(sqlFixUp);
+                PreparedStatement pstFixUp = conn.prepareStatement("UPDATE perbaikan SET id_teknisi = ? WHERE id_servis = ?");
                 pstFixUp.setString(1, idTeknisiTerpilih);
-                pstFixUp.setString(2, tNomorServ.getText());
+                pstFixUp.setString(2, idServisSaatIni);
                 pstFixUp.executeUpdate();
             }
 
-            conn.commit(); // Eksekusi semua perintah SQL
-            JOptionPane.showMessageDialog(this, "Berhasil Disimpan! Teknisi: " + idTeknisiTerpilih);
+            conn.commit(); 
+            
+            // --- FITUR AUTO CETAK ---
+            Object[] options = {"Struk Kecil (Thermal)", "Nota Besar (A4)", "Tidak Cetak"};
+            int choice = JOptionPane.showOptionDialog(this, 
+                    "Data servis berhasil disimpan.\nApakah Anda ingin mencetak nota sekarang?", 
+                    "Opsi Cetak Nota", 
+                    JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, options, options[0]);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                CetakStruk.cetakStruk(idServisSaatIni, Session.idUser);
+            } else if (choice == JOptionPane.NO_OPTION) {
+                CetakNotaBesar.cetakNotaA4(idServisSaatIni, Session.idUser);
+            }
+            // --- END FITUR AUTO CETAK ---
+
             load_table_service();
             btBatalActionPerformed(null);
             
         } catch (Exception e) {
+            try { Koneksi.configDB().rollback(); } catch (Exception ex) {}
             JOptionPane.showMessageDialog(this, "Gagal: " + e.getMessage());
-            e.printStackTrace();
         }
     }//GEN-LAST:event_btSimpanActionPerformed
 
