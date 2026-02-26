@@ -31,6 +31,15 @@ public class Beranda extends javax.swing.JPanel {
         initComponents();
         
         // PANGGIL SEMUA FUNGSI DATA DISINI
+        java.awt.Color abuAbu = new java.awt.Color(204, 204, 204);
+                buatPanelMelengkung(jPanel1, abuAbu);
+                buatPanelMelengkung(jPanel4, abuAbu);
+                buatPanelMelengkung(jPanel5, abuAbu);
+                buatPanelMelengkung(jPanel6, abuAbu);
+                buatPanelMelengkung(jPanel7, abuAbu);
+                buatPanelMelengkung(jPanel8, abuAbu);
+                buatPanelMelengkung(jPanel9, abuAbu);
+                buatPanelMelengkung(jPanel11, abuAbu);
         tampilTotalUser();
         tampilTotalBarang();
         tampilTotalService(); // Perbaikan: Ditambahkan kembali
@@ -40,6 +49,8 @@ public class Beranda extends javax.swing.JPanel {
         tampilStatusServis();
         
         initNavigation();
+        
+        
     }
     
     private void initNavigation() {
@@ -221,6 +232,27 @@ public class Beranda extends javax.swing.JPanel {
         }
     }
     
+    private void buatPanelMelengkung(javax.swing.JPanel panel, java.awt.Color warnaBack) {
+    panel.setOpaque(false); // Penting agar sudut kotak asli tidak terlihat
+    panel.setBorder(new javax.swing.border.AbstractBorder() {
+        @Override
+        public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+            java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+            g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            // 1. Mewarnai isi panel dengan abu-abu
+            g2.setColor(warnaBack);
+            g2.fillRoundRect(x, y, width - 1, height - 1, 30, 30);
+            
+            // 2. Menggambar garis pinggir (stroke) abu-abu yang lebih tegas
+            g2.setColor(new java.awt.Color(180, 180, 180)); 
+            g2.drawRoundRect(x, y, width - 1, height - 1, 30, 30);
+            
+            g2.dispose();
+        }
+    });
+}
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -231,7 +263,6 @@ public class Beranda extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        
 
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -273,152 +304,241 @@ public class Beranda extends javax.swing.JPanel {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group.png"))); // NOI18N
         jLabel1.setText("Jumlah User");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 127;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel1.add(jLabel1, gridBagConstraints);
 
         lblTotalUser.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblTotalUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalUser.setText("0");
         lblTotalUser.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel1.add(lblTotalUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 142;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 15, 10);
+        jPanel1.add(lblTotalUser, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(jPanel1, gridBagConstraints);
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/package-box.png"))); // NOI18N
         jLabel3.setText("Jumlah Barang");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 110;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel4.add(jLabel3, gridBagConstraints);
 
         lblTotalBarang.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblTotalBarang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalBarang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalBarang.setText("0");
-        jPanel4.add(lblTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 142;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 15, 10);
+        jPanel4.add(lblTotalBarang, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(jPanel4, gridBagConstraints);
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/service.png"))); // NOI18N
         jLabel4.setText("Jumlah Service");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 106;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel5.add(jLabel4, gridBagConstraints);
 
         lblTotalService.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblTotalService.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalService.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalService.setText("0");
-        jPanel5.add(lblTotalService, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 170, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 162;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 15, 10);
+        jPanel5.add(lblTotalService, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(jPanel5, gridBagConstraints);
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel6.setOpaque(false);
+        jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
         jLabel5.setText("Total Stock Barang");
-        jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 83;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel6.add(jLabel5, gridBagConstraints);
 
         lblTotalStock.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblTotalStock.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalStock.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalStock.setText("0");
         lblTotalStock.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel6.add(lblTotalStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 112;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 15, 10);
+        jPanel6.add(lblTotalStock, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(jPanel6, gridBagConstraints);
 
         jPanel7.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel7.setMaximumSize(new java.awt.Dimension(396, 196));
-        jPanel7.setMinimumSize(new java.awt.Dimension(396, 196));
-        jPanel7.setPreferredSize(new java.awt.Dimension(396, 196));
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel7.setOpaque(false);
+        jPanel7.setLayout(new java.awt.GridBagLayout());
 
         jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
         jLabel6.setText("Pendapatan Harian");
-        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        jLabel6.setMinimumSize(new java.awt.Dimension(0, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 82;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel7.add(jLabel6, gridBagConstraints);
 
         lblPenHarian.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblPenHarian.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPenHarian.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPenHarian.setText("0");
-        jPanel7.add(lblPenHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 250, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 242;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 15, 10);
+        jPanel7.add(lblPenHarian, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = -126;
-        gridBagConstraints.ipady = -36;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(jPanel7, gridBagConstraints);
 
         jPanel8.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel8.setMaximumSize(new java.awt.Dimension(396, 196));
-        jPanel8.setMinimumSize(new java.awt.Dimension(396, 196));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel8.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel8.setOpaque(false);
+        jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/money.png"))); // NOI18N
         jLabel7.setText("Pendapatan Bulanan");
-        jPanel8.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 70;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel8.add(jLabel7, gridBagConstraints);
 
         lblPenBulanan.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblPenBulanan.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPenBulanan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPenBulanan.setText("0");
-        jPanel8.add(lblPenBulanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 230, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 222;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 15);
+        jPanel8.add(lblPenBulanan, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -430,22 +550,38 @@ public class Beranda extends javax.swing.JPanel {
         jPanel3.add(jPanel8, gridBagConstraints);
 
         jPanel9.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel9.setMaximumSize(new java.awt.Dimension(396, 196));
-        jPanel9.setMinimumSize(new java.awt.Dimension(396, 196));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel9.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/result.png"))); // NOI18N
         jLabel8.setText("Service Selesai");
-        jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 105;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel9.add(jLabel8, gridBagConstraints);
 
         lblSerSelesai.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblSerSelesai.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSerSelesai.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSerSelesai.setText("0");
         lblSerSelesai.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel9.add(lblSerSelesai, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 142;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 15);
+        jPanel9.add(lblSerSelesai, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -457,22 +593,37 @@ public class Beranda extends javax.swing.JPanel {
         jPanel3.add(jPanel9, gridBagConstraints);
 
         jPanel11.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel11.setMaximumSize(new java.awt.Dimension(396, 196));
-        jPanel11.setMinimumSize(new java.awt.Dimension(396, 196));
-        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel11.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel11.setOpaque(false);
+        jPanel11.setLayout(new java.awt.GridBagLayout());
 
         pppp.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
         pppp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pppp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/time-management.png"))); // NOI18N
         pppp.setText("Service Pending");
-        jPanel11.add(pppp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
+        jPanel11.add(pppp, gridBagConstraints);
 
         lblSerProses.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
-        lblSerProses.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSerProses.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSerProses.setText("0");
         lblSerProses.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel11.add(lblSerProses, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 142;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 15);
+        jPanel11.add(lblSerProses, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -485,7 +636,9 @@ public class Beranda extends javax.swing.JPanel {
 
         jPanel2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
