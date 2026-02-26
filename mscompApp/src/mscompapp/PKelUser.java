@@ -7,23 +7,16 @@ import config.Koneksi;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;        // Untuk koneksi ke database
-import java.sql.PreparedStatement; // Untuk menjalankan query SQL yang aman
-import java.sql.ResultSet;         // Untuk menampung hasil data dari database
-import java.sql.Statement;         // Untuk mengirim perintah SQL dasar
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;    // Untuk memunculkan pesan dialog (Pop-up)
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableModel; // Untuk mengatur data pada JTable
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 
 /**
  *
@@ -31,14 +24,17 @@ import javax.swing.KeyStroke;
  */
 public class PKelUser extends javax.swing.JPanel {
     private boolean isEditMode = false;
+    private String idTerpilih = "";
     /**
      * Creates new form pDashboard
      */
     public PKelUser() {
         initComponents();
         load_table();
-        auto_number();
+        reset_form();
         initKeyShortcuts();
+        isiLevel();
+        updateLevelState();
     }
     
     private void initKeyShortcuts() {
@@ -94,24 +90,56 @@ public class PKelUser extends javax.swing.JPanel {
         });
     }
     
-    private void load_table() {
-    DefaultTableModel model = new DefaultTableModel(){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-        return false; // SEMUA KOLOM TIDAK BISA DIEDIT
-    }};
-    model.addColumn("ID"); model.addColumn("Username"); 
-    model.addColumn("Password"); model.addColumn("Nama"); model.addColumn("Role");
-    try {
-        String sql = "SELECT * FROM tbl_user";
-        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-        java.sql.ResultSet res = conn.createStatement().executeQuery(sql);
-        while(res.next()){
-            model.addRow(new Object[]{res.getString(1), res.getString(2), 
-                res.getString(3), res.getString(4), res.getString(5)});
+    private void updateLevelState() {
+        if (cbRole.getSelectedItem() != null) {
+            if (cbRole.getSelectedItem().toString().equalsIgnoreCase("Admin")) {
+                cbLevel.setSelectedItem("Semua");
+                cbLevel.setEnabled(false);
+            } else {
+                cbLevel.setEnabled(true);
+            }
         }
-        tblUser.setModel(model);
-    } catch (Exception e) { System.out.println(e.getMessage()); }
+    }
+    
+    private void isiLevel() {
+        cbLevel.removeAllItems(); // Bersihkan dulu agar tidak duplikat
+        cbLevel.addItem("Semua");
+        cbLevel.addItem("PC/Mini PC");
+        cbLevel.addItem("Laptop");
+        cbLevel.addItem("Printer");
+    }
+    
+    
+    private void load_table() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID User");
+        model.addColumn("Nama");
+        model.addColumn("Username");
+        model.addColumn("Role");
+        model.addColumn("Level");
+
+        try {
+            // Kita gunakan IFNULL untuk menangani data level yang masih kosong di database
+            String sql = "SELECT id_user, nama, username, role, IFNULL(level, 'Semua') as level_user " +
+                         "FROM tbl_user WHERE nama LIKE ? OR username LIKE ?";
+            Connection conn = Koneksi.configDB();
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "%" + tfCari.getText() + "%");
+            pst.setString(2, "%" + tfCari.getText() + "%");
+            ResultSet res = pst.executeQuery();
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    res.getString("id_user"),
+                    res.getString("nama"),
+                    res.getString("username"),
+                    res.getString("role"),
+                    res.getString("level_user") // Menggunakan alias 'level_user'
+                });
+            }
+            tblUser.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat tabel: " + e.getMessage());
+        }
 }
 
 // Mengambil calon nomor ID selanjutnya secara otomatis
@@ -127,16 +155,21 @@ private void auto_number() {
     } catch (Exception e) { tfNo.setText("1"); }
 }
 
+
+
+
 // Membersihkan form dan meriset ke mode "Tambah"
-private void bersihkanForm() {
-    tfUsn.setText("");
-    tfPass.setText("");
-    tfNama.setText("");
-    cbRole.setSelectedIndex(0);
-    tfCari.setText(""); // Bersihkan kolom cari juga
-    isEditMode = false;   // Kembali ke mode Tambah
-    auto_number();        // Beri nomor ID baru otomatis
-}
+private void reset_form() {
+        tfNama.setText("");
+        tfUser.setText("");
+        tfPass.setText("");
+        cbRole.setSelectedIndex(0);
+        cbLevel.setSelectedIndex(0); // Kembali ke 'Semua'
+        isEditMode = false;
+        idTerpilih = "";
+        btnSimpan.setText("Simpan");
+        updateLevelState();
+    }
     
 
     /**
@@ -152,7 +185,7 @@ private void bersihkanForm() {
         jRadioButton1 = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        tfUsn = new javax.swing.JTextField();
+        tfUser = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         tfPass = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
@@ -163,6 +196,8 @@ private void bersihkanForm() {
         tfNo = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cbLevel = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblUser = new javax.swing.JTable();
@@ -190,9 +225,9 @@ private void bersihkanForm() {
         jLabel2.setText("Username :");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 300, 30));
 
-        tfUsn.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
-        tfUsn.addActionListener(this::tfUsnActionPerformed);
-        jPanel1.add(tfUsn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 300, 30));
+        tfUser.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        tfUser.addActionListener(this::tfUserActionPerformed);
+        jPanel1.add(tfUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 300, 30));
 
         jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel3.setText("Password :");
@@ -216,6 +251,7 @@ private void bersihkanForm() {
 
         cbRole.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
         cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
+        cbRole.addActionListener(this::cbRoleActionPerformed);
         jPanel1.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 300, 30));
 
         jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
@@ -230,7 +266,7 @@ private void bersihkanForm() {
         btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 300, 40));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 300, 40));
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
@@ -240,6 +276,15 @@ private void bersihkanForm() {
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 40));
+
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel8.setText("level :");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 300, 30));
+
+        cbLevel.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        cbLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
+        cbLevel.addActionListener(this::cbLevelActionPerformed);
+        jPanel1.add(cbLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 300, 30));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 340, 600));
 
@@ -268,6 +313,12 @@ private void bersihkanForm() {
         jScrollPane2.setViewportView(tblUser);
 
         jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 770, 460));
+
+        tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCariKeyReleased(evt);
+            }
+        });
         jPanel2.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 190, 30));
 
         btnEdit.setBackground(new java.awt.Color(255, 255, 102));
@@ -306,9 +357,9 @@ private void bersihkanForm() {
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 790, 600));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfUsnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUsnActionPerformed
+    private void tfUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUserActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfUsnActionPerformed
+    }//GEN-LAST:event_tfUserActionPerformed
 
     private void tfNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaActionPerformed
         // TODO add your handling code here:
@@ -320,41 +371,53 @@ private void bersihkanForm() {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
+        String nama = tfNama.getText();
+        String user = tfUser.getText();
+        String pass = tfPass.getText();
+        String role = cbRole.getSelectedItem().toString();
+        String level = cbLevel.getSelectedItem().toString();
+
+        if (nama.isEmpty() || user.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama dan Username wajib diisi!");
+            return;
+        }
+
         try {
-        java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-        String sql;
-
-        if (isEditMode == false) {
-            // JALANKAN TAMBAH USER (ID diabaikan karena Auto Increment)
-            sql = "INSERT INTO tbl_user (username, password, nama, role) VALUES (?,?,?,?)";
-        } else {
-            // JALANKAN UBAH USER
-            sql = "UPDATE tbl_user SET username=?, password=?, nama=?, role=? WHERE id_user=?";
+            Connection conn = Koneksi.configDB();
+            if (isEditMode) {
+                // UPDATE: menyertakan kolom level
+                String sql = "UPDATE tbl_user SET nama=?, username=?, password=?, role=?, level=? WHERE id_user=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, nama);
+                pst.setString(2, user);
+                pst.setString(3, pass);
+                pst.setString(4, role);
+                pst.setString(5, level);
+                pst.setString(6, idTerpilih);
+                pst.executeUpdate();
+            } else {
+                // INSERT: menyertakan kolom level
+                String sql = "INSERT INTO tbl_user (nama, username, password, role, level) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, nama);
+                pst.setString(2, user);
+                pst.setString(3, pass);
+                pst.setString(4, role);
+                pst.setString(5, level);
+                pst.executeUpdate();
+            }
+            JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
+            load_table();
+            reset_form();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error Simpan: " + e.getMessage());
         }
-
-        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setString(1, tfUsn.getText());
-        pst.setString(2, tfPass.getText());
-        pst.setString(3, tfNama.getText());
-        pst.setString(4, cbRole.getSelectedItem().toString());
-        
-        if (isEditMode) {
-            pst.setString(5, tfNo.getText());
-        }
-
-        pst.execute();
-        javax.swing.JOptionPane.showMessageDialog(null, "Berhasil!");
-        load_table();
-        bersihkanForm(); // Otomatis balik ke mode tambah & No baru
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
-    }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
         load_table();
-    bersihkanForm();
+        reset_form();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
@@ -384,78 +447,63 @@ private void bersihkanForm() {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
-        int barisTerpilih = tblUser.getSelectedRow();
-
-    // 2. Cek apakah ada baris yang diklik/dipilih
-    if (barisTerpilih == -1) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Pilih dulu baris di tabel yang ingin diedit!");
-    } else {
-        // 3. Ambil ID dan Nama untuk konfirmasi
-        String id = tblUser.getValueAt(barisTerpilih, 0).toString();
-        String nama = tblUser.getValueAt(barisTerpilih, 3).toString();
-
-        // 4. Munculkan Pop-up Konfirmasi
-        int konfirm = javax.swing.JOptionPane.showConfirmDialog(this, 
-                "Apakah Anda ingin mengedit data " + nama + " (ID: " + id + ")?", 
-                "Konfirmasi Edit", javax.swing.JOptionPane.YES_NO_OPTION);
-
-        if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
-            // 5. Pindahkan data dari tabel ke form sebelah kiri
-            tfNo.setText(id);
-            tfUsn.setText(tblUser.getValueAt(barisTerpilih, 1).toString());
-            tfPass.setText(tblUser.getValueAt(barisTerpilih, 2).toString());
-            tfNama.setText(nama);
-            cbRole.setSelectedItem(tblUser.getValueAt(barisTerpilih, 4).toString());
-
-            // 6. Ubah saklar isEditMode menjadi true
+        int baris = tblUser.getSelectedRow();
+        if (baris != -1) {
             isEditMode = true;
+            idTerpilih = tblUser.getValueAt(baris, 0).toString();
+            tfNama.setText(tblUser.getValueAt(baris, 1).toString());
+            tfUser.setText(tblUser.getValueAt(baris, 2).toString());
+            cbRole.setSelectedItem(tblUser.getValueAt(baris, 3).toString());
             
-            // Beri notifikasi kecil agar admin tahu form sudah siap diubah
-            javax.swing.JOptionPane.showMessageDialog(this, "Data sudah dipindahkan ke form. Silakan ubah lalu klik Simpan.");
+            // Set level dari tabel ke combobox
+            String levelVal = tblUser.getValueAt(baris, 4).toString();
+            cbLevel.setSelectedItem(levelVal);
+            
+            updateLevelState();
+            btnSimpan.setText("Update");
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih baris di tabel dulu!");
         }
-    }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here :
-        int barisTerpilih = tblUser.getSelectedRow();
-
-    // 2. Cek apakah ada baris yang dipilih
-    if (barisTerpilih == -1) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Klik dulu baris pada tabel yang ingin dihapus!");
-    } else {
-        // 3. Ambil ID dari kolom pertama (index 0) pada baris yang dipilih
-        String idHapus = tblUser.getValueAt(barisTerpilih, 0).toString();
-        String namaHapus = tblUser.getValueAt(barisTerpilih, 3).toString(); // Ambil kolom Nama untuk konfirmasi
-
-        // 4. Konfirmasi penghapusan
-        int konfirm = javax.swing.JOptionPane.showConfirmDialog(this, 
-                "Yakin ingin menghapus User: " + namaHapus + " (ID: " + idHapus + ")?", 
-                "Konfirmasi Hapus", javax.swing.JOptionPane.YES_NO_OPTION);
-
-        if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
-            try {
-                java.sql.Connection conn = (java.sql.Connection)Koneksi.configDB();
-                String sql = "DELETE FROM tbl_user WHERE id_user = '" + idHapus + "'";
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.execute();
-
-                javax.swing.JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus!");
-                
-                // 5. Refresh data
-                load_table();
-                bersihkanForm(); // Agar Auto Number di form kiri juga terupdate
-                
-            } catch (Exception e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Gagal Menghapus: " + e.getMessage());
+        int baris = tblUser.getSelectedRow();
+        if (baris != -1) {
+            int confirm = JOptionPane.showConfirmDialog(this, "Hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    String id = tblUser.getValueAt(baris, 0).toString();
+                    Connection conn = Koneksi.configDB();
+                    PreparedStatement pst = conn.prepareStatement("DELETE FROM tbl_user WHERE id_user=?");
+                    pst.setString(1, id);
+                    pst.executeUpdate();
+                    load_table();
+                    reset_form();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage());
+                }
             }
         }
-    }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void tfPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfPassActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfPassActionPerformed
+
+    private void cbRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoleActionPerformed
+        // TODO add your handling code here:
+        updateLevelState();
+    }//GEN-LAST:event_cbRoleActionPerformed
+
+    private void cbLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLevelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbLevelActionPerformed
+
+    private void tfCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCariKeyReleased
+        // TODO add your handling code here
+        load_table();
+    }//GEN-LAST:event_tfCariKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -464,6 +512,7 @@ private void bersihkanForm() {
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSimpan;
+    private javax.swing.JComboBox<String> cbLevel;
     private javax.swing.JComboBox<String> cbRole;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -473,6 +522,7 @@ private void bersihkanForm() {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
@@ -482,6 +532,6 @@ private void bersihkanForm() {
     private javax.swing.JTextField tfNama;
     private javax.swing.JTextField tfNo;
     private javax.swing.JPasswordField tfPass;
-    private javax.swing.JTextField tfUsn;
+    private javax.swing.JTextField tfUser;
     // End of variables declaration//GEN-END:variables
 }

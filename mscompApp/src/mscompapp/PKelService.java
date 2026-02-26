@@ -5,22 +5,22 @@
  */
 package mscompapp;
 
-import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.sql.*;
-import config.Koneksi;
 import javax.swing.JOptionPane;
+import config.Koneksi;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import java.util.Vector;
-import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Acer Aspire Lite 15
@@ -33,18 +33,9 @@ public class PKelService extends javax.swing.JPanel {
 
     // Inner class untuk menampung data teknisi di ComboBox
     private class UserItem {
-        String id;
-        String nama;
-
-        public UserItem(String id, String nama) {
-            this.id = id;
-            this.nama = nama;
-        }
-
-        @Override
-        public String toString() {
-            return nama;
-        }
+        String id, nama;
+        public UserItem(String id, String nama) { this.id = id; this.nama = nama; }
+        @Override public String toString() { return nama; }
     }
 
     public PKelService() {
@@ -180,33 +171,21 @@ public class PKelService extends javax.swing.JPanel {
     // --- LOAD DATA & HELPER METHODS ---
     
     private String pilihTeknisiPopUp() {
-        Vector<UserItem> listTeknisi = new Vector<>();
+        Vector<UserItem> model = new Vector<>();
         try {
             Connection conn = Koneksi.configDB();
-            // Mengambil user dengan role teknisi (atau admin juga jika bisa memperbaiki)
-            String sql = "SELECT id_user, nama FROM tbl_user WHERE role = 'teknisi' OR role = 'admin' ORDER BY nama ASC";
-            ResultSet rs = conn.createStatement().executeQuery(sql);
-            while(rs.next()) {
-                listTeknisi.add(new UserItem(rs.getString("id_user"), rs.getString("nama")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT id_user, nama FROM tbl_user WHERE role='teknisi'");
+            while(rs.next()) model.add(new UserItem(rs.getString("id_user"), rs.getString("nama")));
+        } catch (Exception e) { e.printStackTrace(); }
+
+        if(model.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Data teknisi tidak ditemukan!");
             return null;
         }
 
-        if (listTeknisi.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tidak ada data teknisi di database!");
-            return null;
-        }
-
-        JComboBox<UserItem> cbTeknisi = new JComboBox<>(listTeknisi);
-        int result = JOptionPane.showConfirmDialog(this, cbTeknisi, 
-                "Pilih Teknisi Penanggung Jawab", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-        if (result == JOptionPane.OK_OPTION) {
-            return ((UserItem) cbTeknisi.getSelectedItem()).id;
-        }
-        return null;
+        JComboBox<UserItem> cb = new JComboBox<>(model);
+        int res = JOptionPane.showConfirmDialog(this, cb, "Pilih Teknisi Penanggung Jawab", JOptionPane.OK_CANCEL_OPTION);
+        return (res == JOptionPane.OK_OPTION) ? ((UserItem) cb.getSelectedItem()).id : null;
     }
     
     private void tampilKategori() {
@@ -358,7 +337,6 @@ public class PKelService extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jSeparator1 = new javax.swing.JSeparator();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -417,11 +395,11 @@ public class PKelService extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1720, 960));
         setMinimumSize(new java.awt.Dimension(1160, 640));
         setPreferredSize(new java.awt.Dimension(1160, 640));
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(3, 83, 164));
         jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
@@ -430,228 +408,80 @@ public class PKelService extends javax.swing.JPanel {
         jLabel1.setText("INPUT DATA SERVIS");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel1.setOpaque(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 438;
-        gridBagConstraints.ipady = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new java.awt.Insets(-5, 0, 0, 0);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 40));
 
         jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel2.setText("Nomor Service :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        jPanel1.add(jLabel2, gridBagConstraints);
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 90, 30));
 
         tNomorServ.addActionListener(this::tNomorServActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 136;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 15);
-        jPanel1.add(tNomorServ, gridBagConstraints);
+        jPanel1.add(tNomorServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 200, 30));
 
         tNamaAdmin.addActionListener(this::tNamaAdminActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 136;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel1.add(tNamaAdmin, gridBagConstraints);
+        jPanel1.add(tNamaAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 200, 30));
 
         jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel3.setText("Admin :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 48;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        jPanel1.add(jLabel3, gridBagConstraints);
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 90, 30));
 
         jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel6.setText("Tanggal :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 28;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        jPanel1.add(jLabel6, gridBagConstraints);
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, 80, 30));
 
         tTgl.setFont(new java.awt.Font("Segoe UI Historic", 1, 12)); // NOI18N
         tTgl.setText("000");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 101;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 15);
-        jPanel1.add(tTgl, gridBagConstraints);
+        jPanel1.add(tTgl, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 120, 30));
 
         jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel7.setText("Status [F7] :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 14;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        jPanel1.add(jLabel7, gridBagConstraints);
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 80, 30));
 
         cbStatusServ.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Proses", "Menunggu", "Selesai", "Dibatalkan" }));
         cbStatusServ.addActionListener(this::cbStatusServActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 27;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 15);
-        jPanel1.add(cbStatusServ, gridBagConstraints);
+        jPanel1.add(cbStatusServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 120, 30));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jPanel1, gridBagConstraints);
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 550, 150));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel3.setMinimumSize(new java.awt.Dimension(572, 457));
-        jPanel3.setPreferredSize(new java.awt.Dimension(472, 457));
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         buttonGroup1.add(rbBaru);
         rbBaru.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         rbBaru.setText("Pelanggan Baru");
         rbBaru.addActionListener(this::rbBaruActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 88;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
-        jPanel3.add(rbBaru, gridBagConstraints);
+        jPanel3.add(rbBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
 
         buttonGroup1.add(rbLama);
         rbLama.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         rbLama.setText("Pelangggan Lama");
         rbLama.addActionListener(this::rbLamaActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 77;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-        jPanel3.add(rbLama, gridBagConstraints);
+        jPanel3.add(rbLama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
 
         jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel4.setText("Cari No Hp / Nama :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 89;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel3.add(jLabel4, gridBagConstraints);
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 200, 30));
 
         jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel9.setText("Nama :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel3.add(jLabel9, gridBagConstraints);
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 50, 30));
 
         jLabel13.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel13.setText("No Hp :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipadx = 8;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel3.add(jLabel13, gridBagConstraints);
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 50, 30));
 
         jLabel14.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel14.setText("Alamat :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel3.add(jLabel14, gridBagConstraints);
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 50, 30));
 
         tNamaPelanggan.addActionListener(this::tNamaPelangganActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, -450, 0, 0);
-        jPanel3.add(tNamaPelanggan, gridBagConstraints);
+        jPanel3.add(tNamaPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 160, 30));
 
         tNoPelanggan.addActionListener(this::tNoPelangganActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, -450, 0, 0);
-        jPanel3.add(tNoPelanggan, gridBagConstraints);
+        jPanel3.add(tNoPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 160, 30));
 
         tAlamatPelanggan.addActionListener(this::tAlamatPelangganActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, -450, 0, 0);
-        jPanel3.add(tAlamatPelanggan, gridBagConstraints);
+        jPanel3.add(tAlamatPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 160, 30));
 
         jLabel12.setBackground(new java.awt.Color(3, 83, 164));
         jLabel12.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
@@ -659,74 +489,31 @@ public class PKelService extends javax.swing.JPanel {
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("DATA PELANGGAN");
         jLabel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel12.setMaximumSize(new java.awt.Dimension(122, 19));
-        jLabel12.setMinimumSize(new java.awt.Dimension(122, 19));
         jLabel12.setOpaque(true);
-        jLabel12.setPreferredSize(new java.awt.Dimension(122, 19));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 438;
-        gridBagConstraints.ipady = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        jPanel3.add(jLabel12, gridBagConstraints);
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 40));
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
         btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btBatal.setText("BATAL [DEL]");
         btBatal.addActionListener(this::btBatalActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 85;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 30, 60, 0);
-        jPanel3.add(btBatal, gridBagConstraints);
+        jPanel3.add(btBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 190, 30));
 
         btSimpan.setBackground(new java.awt.Color(102, 255, 102));
         btSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btSimpan.setText("SIMPAN [SHIFT+ENTER]");
         btSimpan.addActionListener(this::btSimpanActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 14;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 0);
-        jPanel3.add(btSimpan, gridBagConstraints);
+        jPanel3.add(btSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 190, 30));
 
         btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
         btnCari.setText("Cari... [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 0);
-        jPanel3.add(btnCari, gridBagConstraints);
+        jPanel3.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 190, 30));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = -10;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
-        add(jPanel3, gridBagConstraints);
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 250, 460));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setBackground(new java.awt.Color(3, 83, 164));
         jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
@@ -735,128 +522,44 @@ public class PKelService extends javax.swing.JPanel {
         jLabel5.setText("DATA PERANGKAT/SERVIS");
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel5.setOpaque(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 130;
-        gridBagConstraints.ipady = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        jPanel4.add(jLabel5, gridBagConstraints);
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 40));
 
         cbJenisBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbJenisBrg.addActionListener(this::cbJenisBrgActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 68;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
-        jPanel4.add(cbJenisBrg, gridBagConstraints);
+        jPanel4.add(cbJenisBrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 140, 30));
 
         tMerek.addActionListener(this::tMerekActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 76;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel4.add(tMerek, gridBagConstraints);
+        jPanel4.add(tMerek, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 140, 30));
 
         tModel.addActionListener(this::tModelActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.ipadx = 76;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel4.add(tModel, gridBagConstraints);
+        jPanel4.add(tModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 140, 30));
 
         jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel8.setText("Merek :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 49;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel4.add(jLabel8, gridBagConstraints);
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, 30));
 
         jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel10.setText("Kelengkapan :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel4.add(jLabel10, gridBagConstraints);
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 90, 30));
 
         jLabel15.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel15.setText("Jenis Barang [F8] :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
-        jPanel4.add(jLabel15, gridBagConstraints);
+        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 110, 30));
 
         jLabel16.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel16.setText("Model / Tipe :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 15;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel4.add(jLabel16, gridBagConstraints);
+        jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 90, 30));
 
         jLabel17.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel17.setText("No Seri :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 42;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel4.add(jLabel17, gridBagConstraints);
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 90, 30));
 
         tSeri.addActionListener(this::tSeriActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 76;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel4.add(tSeri, gridBagConstraints);
+        jPanel4.add(tSeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 140, 30));
 
         jLabel18.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
         jLabel18.setText("Keluhan :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 37;
-        gridBagConstraints.ipady = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
-        jPanel4.add(jLabel18, gridBagConstraints);
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, 30));
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -865,52 +568,20 @@ public class PKelService extends javax.swing.JPanel {
         tKeluhan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tKeluhan);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 134;
-        gridBagConstraints.ipady = 34;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel4.add(jScrollPane1, gridBagConstraints);
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 140, 50));
 
         tKelengkapan.addActionListener(this::tKelengkapanActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 76;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel4.add(tKelengkapan, gridBagConstraints);
+        jPanel4.add(tKelengkapan, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 140, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        jPanel4.add(jLabel11, gridBagConstraints);
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 454, -1, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
-        add(jPanel4, gridBagConstraints);
+        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 290, 460));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.setPreferredSize(new java.awt.Dimension(815, 960));
-        jPanel7.setLayout(new java.awt.GridBagLayout());
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel19.setBackground(new java.awt.Color(3, 83, 164));
         jLabel19.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
@@ -919,15 +590,7 @@ public class PKelService extends javax.swing.JPanel {
         jLabel19.setText("DAFTAR SERVIS");
         jLabel19.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel19.setOpaque(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 482;
-        gridBagConstraints.ipady = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        jPanel7.add(jLabel19, gridBagConstraints);
+        jPanel7.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 40));
 
         tblServis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -954,91 +617,36 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.getColumnModel().getColumn(8).setResizable(false);
         }
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 544;
-        gridBagConstraints.ipady = 380;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        jPanel7.add(jScrollPane2, gridBagConstraints);
+        jPanel7.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 560, 400));
 
         jLabel20.setText("Cari [F6] :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
-        jPanel7.add(jLabel20, gridBagConstraints);
+        jPanel7.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 80, 30));
 
         tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tfCariKeyReleased(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 96;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
-        jPanel7.add(tfCari, gridBagConstraints);
+        jPanel7.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 160, 30));
 
         btRefresh.setText("Refresh [F3]");
         btRefresh.addActionListener(this::btRefreshActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 28;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
-        jPanel7.add(btRefresh, gridBagConstraints);
+        jPanel7.add(btRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 120, 30));
 
         btEdit.setText("Edit [F1]");
         btEdit.addActionListener(this::btEditActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 47;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        jPanel7.add(btEdit, gridBagConstraints);
+        jPanel7.add(btEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 120, 30));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.ipadx = 810;
-        gridBagConstraints.ipady = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(258, 10, 0, 0);
-        jPanel7.add(jPanel9, gridBagConstraints);
+        jPanel7.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 820, 810, 80));
 
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
         btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 90, 0, 0);
-        jPanel7.add(btnNextKiri, gridBagConstraints);
+        jPanel7.add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 530, 100, -1));
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -1046,27 +654,9 @@ public class PKelService extends javax.swing.JPanel {
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.ipadx = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        jPanel7.add(btnNextKanan, gridBagConstraints);
+        jPanel7.add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 530, 100, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = -235;
-        gridBagConstraints.ipady = -340;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jPanel7, gridBagConstraints);
+        add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 580, 620));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbBaruActionPerformed
@@ -1118,19 +708,20 @@ public class PKelService extends javax.swing.JPanel {
 
         try {
             if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nama, Jenis Barang, dan Keluhan wajib diisi!");
+                JOptionPane.showMessageDialog(this, "Data Pelanggan dan Keluhan tidak boleh kosong!"); 
                 return;
             }
 
             String idTeknisiTerpilih = pilihTeknisiPopUp();
-            if (idTeknisiTerpilih == null) return; 
+            if (idTeknisiTerpilih == null) return;
 
             Connection conn = Koneksi.configDB();
-            conn.setAutoCommit(false); 
+            conn.setAutoCommit(false);
 
-            int finalIdPelanggan = idPelanggan;
             String idServisSaatIni = tNomorServ.getText();
+            int finalIdPelanggan = idPelanggan;
 
+            // 1. Data Pelanggan
             if (rbBaru.isSelected()) {
                 PreparedStatement pstPel = conn.prepareStatement("INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 pstPel.setString(1, tNamaPelanggan.getText());
@@ -1139,25 +730,13 @@ public class PKelService extends javax.swing.JPanel {
                 pstPel.executeUpdate();
                 ResultSet rsId = pstPel.getGeneratedKeys();
                 if (rsId.next()) finalIdPelanggan = rsId.getInt(1);
-            } else {
-                if (finalIdPelanggan == 0) { JOptionPane.showMessageDialog(this, "Pilih pelanggan lama!"); return; }
-                PreparedStatement pstUpPel = conn.prepareStatement("UPDATE tbl_pelanggan SET nama_pelanggan=?, no_hp=?, alamat=? WHERE id_pelanggan=?");
-                pstUpPel.setString(1, tNamaPelanggan.getText());
-                pstUpPel.setString(2, tNoPelanggan.getText());
-                pstUpPel.setString(3, tAlamatPelanggan.getText());
-                pstUpPel.setInt(4, finalIdPelanggan);
-                pstUpPel.executeUpdate();
             }
 
-            PreparedStatement pstCheck = conn.prepareStatement("SELECT COUNT(*) FROM servis WHERE id_servis = ?");
-            pstCheck.setString(1, idServisSaatIni);
-            ResultSet rsCheck = pstCheck.executeQuery(); rsCheck.next();
-            boolean isUpdate = rsCheck.getInt(1) > 0;
-
-            String sqlService = isUpdate 
-                ? "UPDATE servis SET id_pelanggan=?, jenis_barang=?, merek=?, model=?, no_seri=?, kelengkapan=?, keluhan_awal=?, status=? WHERE id_servis=?"
-                : "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
+            // 2. Data Servis
+            String sqlService = "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) " +
+                                "VALUES (?,?,?,?,?,?,?,?,?,?,?) " +
+                                "ON DUPLICATE KEY UPDATE id_pelanggan=VALUES(id_pelanggan), keluhan_awal=VALUES(keluhan_awal)";
+            
             PreparedStatement pstServ = conn.prepareStatement(sqlService);
             pstServ.setInt(1, finalIdPelanggan);
             pstServ.setString(2, cbJenisBrg.getSelectedItem().toString());
@@ -1167,57 +746,28 @@ public class PKelService extends javax.swing.JPanel {
             pstServ.setString(6, tKelengkapan.getText());
             pstServ.setString(7, tKeluhan.getText());
             pstServ.setString(8, cbStatusServ.getSelectedItem().toString());
-
-            if (isUpdate) {
-                pstServ.setString(9, idServisSaatIni);
-            } else {
-                pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                pstServ.setString(10, Session.idUser);
-                pstServ.setString(11, idServisSaatIni);
-            }
+            pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            pstServ.setString(10, Session.idUser);
+            pstServ.setString(11, idServisSaatIni);
             pstServ.executeUpdate();
 
-            if (!isUpdate) {
-                String sqlFix = "INSERT INTO perbaikan (id_servis, id_teknisi, kerusakan, tindakan, biaya_jasa, diskon) VALUES (?, ?, ?, ?, ?, ?)";
-                PreparedStatement pstFix = conn.prepareStatement(sqlFix);
-                pstFix.setString(1, idServisSaatIni);
-                pstFix.setString(2, idTeknisiTerpilih);
-                pstFix.setString(3, ""); 
-                pstFix.setString(4, "");
-                pstFix.setInt(5, 0);
-                pstFix.setInt(6, 0);
-                pstFix.executeUpdate();
-            } else {
-                PreparedStatement pstFixUp = conn.prepareStatement("UPDATE perbaikan SET id_teknisi = ? WHERE id_servis = ?");
-                pstFixUp.setString(1, idTeknisiTerpilih);
-                pstFixUp.setString(2, idServisSaatIni);
-                pstFixUp.executeUpdate();
-            }
+            // 3. Data Perbaikan
+            PreparedStatement pstFix = conn.prepareStatement("INSERT IGNORE INTO perbaikan (id_servis, id_teknisi, biaya_jasa, diskon) VALUES (?, ?, 0, 0)");
+            pstFix.setString(1, idServisSaatIni);
+            pstFix.setString(2, idTeknisiTerpilih);
+            pstFix.executeUpdate();
 
-            conn.commit(); 
+            conn.commit();
             
-            // --- FITUR AUTO CETAK ---
-            Object[] options = {"Struk Kecil (Thermal)", "Nota Besar (A4)", "Tidak Cetak"};
-            int choice = JOptionPane.showOptionDialog(this, 
-                    "Data servis berhasil disimpan.\nApakah Anda ingin mencetak nota sekarang?", 
-                    "Opsi Cetak Nota", 
-                    JOptionPane.YES_NO_CANCEL_OPTION, 
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, options, options[0]);
-
-            if (choice == JOptionPane.YES_OPTION) {
-                CetakStruk.cetakStruk(idServisSaatIni, Session.idUser);
-            } else if (choice == JOptionPane.NO_OPTION) {
-                CetakNotaBesar.cetakNotaA4(idServisSaatIni, Session.idUser);
-            }
-            // --- END FITUR AUTO CETAK ---
+            // Panggil Dialog Pilihan Cetak (Printer/PDF)
+            CetakTandaTerima.cetakTandaTerima(idServisSaatIni);
 
             load_table_service();
             btBatalActionPerformed(null);
-            
+
         } catch (Exception e) {
-            try { Koneksi.configDB().rollback(); } catch (Exception ex) {}
-            JOptionPane.showMessageDialog(this, "Gagal: " + e.getMessage());
+            try { Koneksi.configDB().rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(this, "Simpan Gagal: " + e.getMessage());
         }
     }//GEN-LAST:event_btSimpanActionPerformed
 

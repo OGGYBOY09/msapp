@@ -22,12 +22,12 @@ import javax.swing.SwingUtilities;
  *
  * @author Acer Aspire Lite 15
  */
-public class beranda extends javax.swing.JPanel {
+public class Beranda extends javax.swing.JPanel {
 
     /**
      * Creates new form beranda
      */
-    public beranda() {
+    public Beranda() {
         initComponents();
         
         // PANGGIL SEMUA FUNGSI DATA DISINI
