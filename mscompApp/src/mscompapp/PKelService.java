@@ -490,7 +490,7 @@ public class PKelService extends javax.swing.JPanel {
         jLabel12.setText("DATA PELANGGAN");
         jLabel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel12.setOpaque(true);
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 40));
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 40));
 
         btBatal.setBackground(new java.awt.Color(255, 51, 51));
         btBatal.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N

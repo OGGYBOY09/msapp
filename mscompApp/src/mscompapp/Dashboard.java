@@ -4,17 +4,21 @@
  */
 package mscompapp;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 /**
  *
@@ -26,14 +30,17 @@ public class Dashboard extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
     private String userRole;
     private int currentPanelIndex = 0;
+    private static final double BASE_WIDTH = 1366.0;
+    private static final double BASE_HEIGHT = 768.0;
+    private double currentScale = 1.0;
 
     public Dashboard(String username, String role) {
         this.userRole = role;
         Login.namaUser = username;        
         initComponents();
-        adjustResponsiveLayout();
         lblWelcome.setText("Selamat Datang, " + username);
-        
+        calculateScale();
+        applyScaling();
         pSide.setLayout(new java.awt.BorderLayout());
         
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -62,7 +69,60 @@ public class Dashboard extends javax.swing.JFrame {
         timer.start();
     }
     
+    private void calculateScale() {
+    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+    double scaleX = screen.getWidth() / BASE_WIDTH;
+    double scaleY = screen.getHeight() / BASE_HEIGHT;
+
+    currentScale = Math.min(scaleX, scaleY);
+    currentScale = Math.max(1.0, Math.min(currentScale, 1.6));
+}
     
+    
+    private void applyScaling() {
+    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+    double scaleX = screen.getWidth() / BASE_WIDTH;
+    double scaleY = screen.getHeight() / BASE_HEIGHT;
+    double scale = Math.min(scaleX, scaleY);
+
+    scale = Math.max(1.0, Math.min(scale, 1.6));
+
+    scaleFont(getContentPane(), scale);
+    scaleTables(getContentPane(), scale);
+}
+    
+    private void scaleTables(Component comp, double scale) {
+    if (comp instanceof JTable table) {
+        table.setRowHeight((int)(table.getRowHeight() * scale));
+        table.getTableHeader().setFont(
+            table.getTableHeader().getFont().deriveFont(
+                (float)(table.getTableHeader().getFont().getSize() * scale)
+            )
+        );
+    }
+
+    if (comp instanceof Container container) {
+        for (Component child : container.getComponents()) {
+            scaleTables(child, scale);
+        }
+    }
+}
+    
+    private void scaleFont(Component comp, double scale) {
+    if (comp.getFont() != null) {
+        Font oldFont = comp.getFont();
+        float newSize = (float) (oldFont.getSize() * scale);
+        comp.setFont(oldFont.deriveFont(newSize));
+    }
+
+    if (comp instanceof Container) {
+        for (Component child : ((Container) comp).getComponents()) {
+            scaleFont(child, scale);
+        }
+    }
+}
     
     private void adjustResponsiveLayout() {
     this.getContentPane().setLayout(new java.awt.BorderLayout());
@@ -158,6 +218,12 @@ public class Dashboard extends javax.swing.JFrame {
     pMain.add(panel, java.awt.BorderLayout.CENTER);
     pMain.repaint();
     pMain.revalidate();
+
+// 🔥 Terapkan scaling ke panel baru
+    scaleFont(panel, currentScale);
+    scaleTables(panel, currentScale);
+    
+    
     }
     
     public void logout() {
@@ -244,7 +310,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
-        pSide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pSide.setLayout(new java.awt.GridLayout());
         getContentPane().add(pSide, java.awt.BorderLayout.WEST);
 
         pMain.setLayout(new java.awt.GridBagLayout());

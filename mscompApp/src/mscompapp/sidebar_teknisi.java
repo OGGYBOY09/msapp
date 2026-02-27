@@ -77,10 +77,13 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         jLabel1.setBackground(new java.awt.Color(0, 18, 51));
         jLabel1.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png"))); // NOI18N
         jLabel1.setText("Daftar Service");
+        jLabel1.setMaximumSize(new java.awt.Dimension(114, 32));
+        jLabel1.setMinimumSize(new java.awt.Dimension(114, 32));
         jLabel1.setOpaque(true);
+        jLabel1.setPreferredSize(new java.awt.Dimension(114, 32));
         jLabel1.setVerifyInputWhenFocusTarget(false);
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -92,17 +95,17 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 36;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.ipady = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 15, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         add(jLabel1, gridBagConstraints);
 
         jLabel2.setBackground(new java.awt.Color(0, 18, 51));
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png"))); // NOI18N
         jLabel2.setText("Daftar Anda");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -130,7 +133,7 @@ public class sidebar_teknisi extends javax.swing.JPanel {
         jLabel6.setBackground(new java.awt.Color(0, 18, 51));
         jLabel6.setFont(new java.awt.Font("Segoe UI Historic", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/setting (1).png"))); // NOI18N
         jLabel6.setText("Pengaturan");
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
