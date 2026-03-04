@@ -43,6 +43,14 @@ public class LapBulanan extends javax.swing.JPanel {
         loadComboStatus();
         loadComboKategori();
         initKeyShortcuts();
+        hitungDanKirimPendapatan();
+        
+        javax.swing.Timer timer = new javax.swing.Timer(500, (java.awt.event.ActionEvent e) -> {
+        tampilData();
+        // Hentikan timer setelah sekali jalan
+        ((javax.swing.Timer)e.getSource()).stop();
+    });
+    timer.start();
         
         // Custom Table Renderer (Warna baris berdasarkan status)
         tblLapBulanan = new javax.swing.JTable() {
@@ -116,6 +124,23 @@ public class LapBulanan extends javax.swing.JPanel {
 
 
     }
+    
+    
+    private void aturKolomTabel() {
+    if (tblLapBulanan.getColumnCount() > 0) {
+        tblLapBulanan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        // Sesuaikan dengan jumlah kolom Laporan Bulanan (13 kolom)
+        int[] lebarKunci = {40, 100, 130, 110, 150, 100, 100, 100, 100, 180, 150, 100, 180};
+
+        for (int i = 0; i < tblLapBulanan.getColumnCount(); i++) {
+            javax.swing.table.TableColumn col = tblLapBulanan.getColumnModel().getColumn(i);
+            int lebar = (i < lebarKunci.length) ? lebarKunci[i] : 100;
+            col.setPreferredWidth(lebar);
+            col.setMinWidth(lebar); // Kunci agar tidak mengecil saat data baru masuk
+        }
+    }
+}
     
     private void loadComboKategori() {
         cbKategori.removeAllItems();
@@ -215,6 +240,8 @@ public class LapBulanan extends javax.swing.JPanel {
                 });
             }
             tblLapBulanan.setModel(model);
+            hitungDanKirimPendapatan();
+            aturKolomTabel();
 
             // 4. Atur Button State (Biar tidak error kalau data habis)
             btnNextKiri.setEnabled(currentPage > 0);
@@ -223,7 +250,6 @@ public class LapBulanan extends javax.swing.JPanel {
         } catch (Exception e) {
             System.err.println("Error tampil data: " + e.getMessage());
         }
-        hitungDanKirimPendapatan();
     }
     
     private void bukaHalamanDetail(String idServis) {
@@ -256,27 +282,54 @@ public class LapBulanan extends javax.swing.JPanel {
     }
     
     private void hitungDanKirimPendapatan() {
-        if (parent == null) return;
-        try {
-            int bulan = mcBulan.getMonth() + 1;
-            int tahun = thTahun.getYear();
-            String sql = "SELECT SUM(harga) AS total FROM servis WHERE status='Selesai' "
-                       + "AND MONTH(tanggal_masuk) = " + bulan + " AND YEAR(tanggal_masuk) = " + tahun;
-            
-            if (cbKategori.getSelectedIndex() > 0) {
-                sql += " AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "'";
-            }
-
-            Connection conn = Koneksi.configDB();
-            ResultSet rs = conn.createStatement().executeQuery(sql);
-            int total = 0;
-            if (rs.next()) total = rs.getInt("total");
-            
-            String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-                                  "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
-            parent.setInfoPendapatan("Pendapatan Bulan " + namaBulan[mcBulan.getMonth()] + " " + tahun + " :", total);
-        } catch (Exception e) { System.out.println("Err Bulanan: " + e.getMessage()); }
+    // 1. Cek apakah parent (PKelLaporan) tersedia
+    if (parent == null) {
+        return;
     }
+
+    try {
+        // JMonthChooser dimulai dari 0 (Januari), MySQL dimulai dari 1
+        int bulan = mcBulan.getMonth() + 1; 
+        int tahun = thTahun.getYear();
+        
+        // Query yang sama dengan Beranda (menggunakan LOWER dan pengecekan NULL)
+        String sql = "SELECT SUM(harga) AS total FROM servis "
+                   + "WHERE LOWER(status) = 'selesai' "
+                   + "AND MONTH(tanggal_masuk) = ? "
+                   + "AND YEAR(tanggal_masuk) = ?";
+
+        // Jika ada filter kategori
+        if (cbKategori != null && cbKategori.getSelectedIndex() > 0) {
+            sql += " AND jenis_barang = '" + cbKategori.getSelectedItem().toString() + "'";
+        }
+
+        Connection conn = config.Koneksi.configDB();
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, bulan);
+        pst.setInt(2, tahun);
+        ResultSet rs = pst.executeQuery();
+        
+        int total = 0;
+        if (rs.next()) {
+            total = rs.getInt("total");
+        }
+        
+        // Nama bulan untuk label
+        String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                              "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+        
+        final String judul = "Pendapatan Bulan " + namaBulan[bulan-1] + " " + tahun + " :";
+        final int hasilTotal = total;
+
+        // Kirim ke PKelLaporan menggunakan EventQueue agar UI tidak lag
+        java.awt.EventQueue.invokeLater(() -> {
+            parent.setInfoPendapatan(judul, hasilTotal);
+        });
+        
+    } catch (Exception e) {
+        System.out.println("Err Bulanan (Hitung): " + e.getMessage());
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -286,284 +339,213 @@ public class LapBulanan extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+    // Gunakan GridBagLayout agar responsif memenuhi panel
+    java.awt.GridBagConstraints gbc;
 
-        tfCari = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
-        btnDetail = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblLapBulanan = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        cbStatus = new javax.swing.JComboBox<>();
-        mcBulan = new com.toedter.calendar.JMonthChooser();
-        jLabel3 = new javax.swing.JLabel();
-        thTahun = new com.toedter.calendar.JYearChooser();
-        btCetakE = new javax.swing.JButton();
-        btnPdf = new javax.swing.JButton();
-        btnNota = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        cbKategori = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
-        btnNextKiri = new javax.swing.JButton();
-        btnNextKanan = new javax.swing.JButton();
+    tfCari = new javax.swing.JTextField();
+    btnCari = new javax.swing.JButton();
+    btnDetail = new javax.swing.JButton();
+    btnRefresh = new javax.swing.JButton();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    tblLapBulanan = new javax.swing.JTable();
+    jLabel1 = new javax.swing.JLabel();
+    jLabel2 = new javax.swing.JLabel();
+    cbStatus = new javax.swing.JComboBox<>();
+    mcBulan = new com.toedter.calendar.JMonthChooser();
+    jLabel3 = new javax.swing.JLabel();
+    thTahun = new com.toedter.calendar.JYearChooser();
+    btCetakE = new javax.swing.JButton();
+    btnPdf = new javax.swing.JButton();
+    btnNota = new javax.swing.JButton();
+    jLabel4 = new javax.swing.JLabel();
+    cbKategori = new javax.swing.JComboBox<>();
+    jPanel1 = new javax.swing.JPanel();
+    btnNextKiri = new javax.swing.JButton();
+    btnNextKanan = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setMaximumSize(new java.awt.Dimension(1680, 760));
-        setMinimumSize(new java.awt.Dimension(1140, 510));
-        setPreferredSize(new java.awt.Dimension(1140, 510));
-        setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 46;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 18, 0, 0);
-        add(tfCari, gridBagConstraints);
+    setBackground(new java.awt.Color(255, 255, 255));
+    setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    // Menggunakan GridBagLayout untuk fleksibilitas resolusi
+    setLayout(new java.awt.GridBagLayout());
 
-        btnCari.setBackground(new java.awt.Color(102, 255, 102));
-        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnCari.setText("CARI [F2]");
-        btnCari.addActionListener(this::btnCariActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 2, 0, 0);
-        add(btnCari, gridBagConstraints);
+    // --- BARIS 1: TOMBOL AKSI & FILTER ATAS ---
+    gbc = new java.awt.GridBagConstraints();
+    gbc.insets = new java.awt.Insets(10, 10, 5, 5);
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 
-        btnDetail.setBackground(new java.awt.Color(204, 204, 204));
-        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnDetail.setText("DETAIL");
-        btnDetail.addActionListener(this::btnDetailActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        add(btnDetail, gridBagConstraints);
+    // Search area
+    gbc.gridx = 0; gbc.gridy = 0; gbc.ipadx = 100;
+    add(tfCari, gbc);
 
-        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnRefresh.setText("REFRESH [F3]");
-        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        add(btnRefresh, gridBagConstraints);
+    btnCari.setBackground(new java.awt.Color(102, 255, 102));
+    btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+    btnCari.setText("CARI [F2]");
+    btnCari.addActionListener(this::btnCariActionPerformed);
+    gbc.gridx = 1; gbc.ipadx = 0;
+    add(btnCari, gbc);
 
-        tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status", "Status Barang"
+    btnDetail.setBackground(new java.awt.Color(204, 204, 204));
+    btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btnDetail.setText("DETAIL");
+    btnDetail.addActionListener(this::btnDetailActionPerformed);
+    gbc.gridx = 2; add(btnDetail, gbc);
+
+    btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+    btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btnRefresh.setText("REFRESH [F3]");
+    btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+    gbc.gridx = 3; add(btnRefresh, gbc);
+
+    btCetakE.setBackground(new java.awt.Color(204, 204, 204));
+    btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btCetakE.setText("Cetak Excel");
+    btCetakE.addActionListener(this::btCetakEActionPerformed);
+    gbc.gridx = 4; add(btCetakE, gbc);
+
+    btnPdf.setBackground(new java.awt.Color(204, 204, 204));
+    btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btnPdf.setText("PDF");
+    btnPdf.addActionListener(this::btnPdfActionPerformed);
+    gbc.gridx = 5; add(btnPdf, gbc);
+
+    btnNota.setBackground(new java.awt.Color(102, 255, 102));
+    btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btnNota.setText("Nota");
+    btnNota.addActionListener(this::btnNotaActionPerformed);
+    gbc.gridx = 6; add(btnNota, gbc);
+
+    // --- BARIS 1: BULAN & TAHUN ---
+gbc = new java.awt.GridBagConstraints();
+gbc.gridy = 0;
+
+// Label "Bulan :"
+jLabel1.setText("Bulan :");
+gbc.gridx = 7; 
+gbc.weightx = 1.0; // Mendorong grup filter ke pojok kanan
+gbc.anchor = java.awt.GridBagConstraints.EAST;
+gbc.fill = java.awt.GridBagConstraints.NONE;
+gbc.insets = new java.awt.Insets(10, 10, 5, 5);
+add(jLabel1, gbc);
+
+// Month Chooser (mcBulan)
+gbc.gridx = 8;
+gbc.weightx = 0;
+gbc.ipadx = 30; // Memberi ruang agar teks bulan aman
+gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+gbc.insets = new java.awt.Insets(10, 5, 5, 5);
+add(mcBulan, gbc);
+
+// Label "Tahun :"
+jLabel3.setText("Tahun :");
+gbc.gridx = 9; 
+gbc.ipadx = 0;
+gbc.insets = new java.awt.Insets(10, 15, 5, 5);
+add(jLabel3, gbc);
+
+// Year Chooser (thTahun) - INI YANG DIPERLEBAR
+gbc.gridx = 10; 
+gbc.ipadx = 60; // Menambah lebar kolom tahun agar sejajar cbStatus
+gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+gbc.insets = new java.awt.Insets(10, 5, 5, 15);
+add(thTahun, gbc);
+
+    // --- BARIS 2: FILTER BAWAH ---
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridy = 1;
+    gbc.insets = new java.awt.Insets(5, 5, 10, 5);
+    gbc.anchor = java.awt.GridBagConstraints.EAST;
+
+    jLabel4.setText("Kategori :");
+    gbc.gridx = 7; add(jLabel4, gbc);
+
+    gbc.gridx = 8; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    cbKategori.addActionListener(this::cbKategoriActionPerformed);
+    add(cbKategori, gbc);
+
+    gbc.gridx = 9; gbc.fill = java.awt.GridBagConstraints.NONE;
+    jLabel2.setText("Status :");
+    add(jLabel2, gbc);
+
+    gbc.gridx = 10; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.insets = new java.awt.Insets(5, 5, 10, 15);
+    cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    cbStatus.addActionListener(this::cbStatusActionPerformed);
+    add(cbStatus, gbc);
+
+    // --- AREA TABEL LAPORAN BULANAN ---
+tblLapBulanan.setRowHeight(30);
+jScrollPane1.setViewportView(tblLapBulanan);
+
+javax.swing.SwingUtilities.invokeLater(new Runnable() {
+    @Override
+    public void run() {
+        if (tblLapBulanan.getColumnCount() > 0) {
+            // 1. Matikan resize otomatis agar kolom bisa melebar bebas
+            tblLapBulanan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+            // 2. Gunakan lebar yang pas (sesuaikan dengan 13 kolom kamu)
+            // No, Tgl, Nama, HP, Alamat, Jns, Merk, Tipe, Seri, Keluhan, Lengkap, Status, StatusBrg
+            int[] lebarKunci = {40, 100, 130, 110, 150, 100, 100, 100, 100, 180, 150, 100, 180};
+
+            for (int i = 0; i < tblLapBulanan.getColumnCount(); i++) {
+                javax.swing.table.TableColumn col = tblLapBulanan.getColumnModel().getColumn(i);
+                int lebar = (i < lebarKunci.length) ? lebarKunci[i] : 100;
+                
+                col.setPreferredWidth(lebar);
+                // JANGAN gunakan setMinWidth jika ingin tabel fleksibel, 
+                // cukup setPreferredWidth agar scrollbar muncul saat dibutuhkan.
             }
-        ));
-        tblLapBulanan.setRowHeight(30);
-        jScrollPane1.setViewportView(tblLapBulanan);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 19;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1104;
-        gridBagConstraints.ipady = 300;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        add(jScrollPane1, gridBagConstraints);
+            // 3. Render Header Tengah
+            javax.swing.table.DefaultTableCellRenderer headerRenderer = 
+                (javax.swing.table.DefaultTableCellRenderer) tblLapBulanan.getTableHeader().getDefaultRenderer();
+            headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+            
+            // 4. PAKSA tabel untuk menghitung ulang ukurannya agar memenuhi ScrollPane
+            tblLapBulanan.revalidate();
+        }
+    }
+});
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Bulan :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 70, 0, 0);
-        add(jLabel1, gridBagConstraints);
+// Pastikan kebijakan scroll benar
+jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+jScrollPane1.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Status :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        add(jLabel2, gridBagConstraints);
+// Saat menambahkan ke GridBagLayout, pastikan fill adalah BOTH
+gbc = new java.awt.GridBagConstraints();
+gbc.gridx = 0; 
+gbc.gridy = 2;
+gbc.gridwidth = 11;
+gbc.fill = java.awt.GridBagConstraints.BOTH; // Menjamin tabel mengisi ruang kiri-kanan & atas-bawah
+gbc.weightx = 1.0;
+gbc.weighty = 1.0; 
+gbc.insets = new java.awt.Insets(0, 10, 10, 10);
+add(jScrollPane1, gbc);
 
-        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbStatus.addActionListener(this::cbStatusActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        add(cbStatus, gridBagConstraints);
+    // --- BARIS 4: NAVIGASI (NEXT/PREV) ---
+    javax.swing.JPanel pnlNav = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+    pnlNav.setOpaque(false);
+    
+    btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); 
+    btnNextKiri.setText("NEXT");
+    btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+    
+    btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); 
+    btnNextKanan.setText("NEXT");
+    btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+    btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
 
-        mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = -45;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        add(mcBulan, gridBagConstraints);
+    pnlNav.add(btnNextKiri);
+    pnlNav.add(btnNextKanan);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("Tahun :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        add(jLabel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 26;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        add(thTahun, gridBagConstraints);
-
-        btCetakE.setBackground(new java.awt.Color(204, 204, 204));
-        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btCetakE.setText("Cetak Excel");
-        btCetakE.addActionListener(this::btCetakEActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = -4;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 16, 0, 0);
-        add(btCetakE, gridBagConstraints);
-
-        btnPdf.setBackground(new java.awt.Color(204, 204, 204));
-        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnPdf.setText("PDF");
-        btnPdf.addActionListener(this::btnPdfActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
-        add(btnPdf, gridBagConstraints);
-
-        btnNota.setBackground(new java.awt.Color(102, 255, 102));
-        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnNota.setText("Nota");
-        btnNota.addActionListener(this::btnNotaActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
-        add(btnNota, gridBagConstraints);
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel4.setText("Kategori :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 70, 0, 0);
-        add(jLabel4, gridBagConstraints);
-
-        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
-        cbKategori.addActionListener(this::cbKategoriActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        add(cbKategori, gridBagConstraints);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 20;
-        gridBagConstraints.ipadx = 1680;
-        gridBagConstraints.ipady = 120;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(180, 0, 0, 0);
-        add(jPanel1, gridBagConstraints);
-
-        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
-        btnNextKiri.setText("NEXT");
-        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipady = -2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
-        add(btnNextKiri, gridBagConstraints);
-
-        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
-        btnNextKanan.setText("NEXT");
-        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipady = -2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        add(btnNextKanan, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 3;
+    gbc.gridwidth = 11;
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.insets = new java.awt.Insets(0, 0, 10, 10);
+    add(pnlNav, gbc);
+}// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:

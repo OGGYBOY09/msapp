@@ -270,7 +270,7 @@ public class PKelService extends javax.swing.JPanel {
             tblServis.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
             // Angka lebar yang sudah kita sepakati agar tidak terpotong
-            int[] lebarKunci = {120, 280, 170, 180, 150, 150, 400, 150};
+            int[] lebarKunci = {120, 200, 170, 180, 150, 150, 300, 150};
 
             for (int i = 0; i < tblServis.getColumnCount(); i++) {
                 if (i < lebarKunci.length) {
@@ -654,7 +654,7 @@ public class PKelService extends javax.swing.JPanel {
                 tblServis.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
                 // Angka lebar yang sangat aman (Anti-Terpotong)
-                int[] lebarKunci = {120, 280, 170, 180, 150, 150, 400, 150};
+                int[] lebarKunci = {120, 200, 170, 180, 150, 150, 300, 150};
 
                 for (int i = 0; i < tblServis.getColumnCount(); i++) {
                     if (i < lebarKunci.length) {

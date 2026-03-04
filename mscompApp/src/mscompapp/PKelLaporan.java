@@ -35,13 +35,24 @@ public class PKelLaporan extends javax.swing.JPanel {
     
     
     public void setInfoPendapatan(String labelJudul, int totalUang) {
-        // 1. Update Label Judul (jLabel3)
-        jLabel3.setText(labelJudul);
-        
-        // 2. Update Label Total Uang (txtTotalPendapatan)
-        DecimalFormat df = new DecimalFormat("#,###");
-        txtTotalPendapatan.setText("Rp " + df.format(totalUang));
-    }
+    // Gunakan invokeLater agar berjalan di urutan terakhir antrean UI
+    java.awt.EventQueue.invokeLater(() -> {
+        if (jLabel3 != null && txtTotalPendapatan != null) {
+            jLabel3.setText(labelJudul);
+            
+            DecimalFormat df = new DecimalFormat("#,###");
+            txtTotalPendapatan.setText("Rp " + df.format(totalUang));
+            
+            txtTotalPendapatan.revalidate();
+            txtTotalPendapatan.repaint();
+        } else {
+            // Jika masih belum siap, coba lagi dalam 500ms (Opsional)
+            System.out.println("Sistem menunggu label siap...");
+        }
+    });
+}
+    
+    
     
     // Method Public untuk menghitung pendapatan (Dipanggil oleh Panel Anak)
     private void gantiHalamanLaporan() {
@@ -125,7 +136,8 @@ public class PKelLaporan extends javax.swing.JPanel {
     // Total Pendapatan (Kanan)
     gbc.weightx = 0;
     gbc.gridx = 3;
-    pnlFilter.add(new javax.swing.JLabel("Total Pendapatan :"), gbc);
+    jLabel3 = new javax.swing.JLabel("Total Pendapatan :");
+pnlFilter.add(jLabel3, gbc);
 
     txtTotalPendapatan = new javax.swing.JLabel();
     txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 13));

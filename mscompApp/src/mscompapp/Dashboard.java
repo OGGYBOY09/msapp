@@ -52,7 +52,7 @@ public class Dashboard extends javax.swing.JFrame {
         
         // Load Halaman Awal Berdasarkan Role
         if ("admin".equalsIgnoreCase(userRole)) {
-            switchPanel(new Beranda());
+            switchPanel(new beranda());
         } else {
             switchPanel(new Teknisi()); // Halaman awal teknisi
         }
@@ -183,7 +183,7 @@ public class Dashboard extends javax.swing.JFrame {
             
             setPanelIndex(index);
             switch (index) {
-                case 0: switchPanel(new Beranda()); break;      // Alt + 1
+                case 0: switchPanel(new beranda()); break;      // Alt + 1
                 case 1: switchPanel(new PKelService()); break;  // Alt + 2
                 case 2: switchPanel(new PKelLaporan()); break;  // Alt + 3
                 case 3: switchPanel(new PKelUser()); break;   // Alt + 4
