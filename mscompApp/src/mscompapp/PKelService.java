@@ -772,69 +772,88 @@ private void initEventHandlers() {
     private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
 
         try {
-            if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Data Pelanggan dan Keluhan tidak boleh kosong!"); 
-                return;
-            }
-
-            String idTeknisiTerpilih = pilihTeknisiPopUp();
-            if (idTeknisiTerpilih == null) return;
-
-            Connection conn = Koneksi.configDB();
-            conn.setAutoCommit(false);
-
-            String idServisSaatIni = tNomorServ.getText();
-            int finalIdPelanggan = idPelanggan;
-
-            // 1. Data Pelanggan
-            if (rbBaru.isSelected()) {
-                PreparedStatement pstPel = conn.prepareStatement("INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                pstPel.setString(1, tNamaPelanggan.getText());
-                pstPel.setString(2, tNoPelanggan.getText());
-                pstPel.setString(3, tAlamatPelanggan.getText());
-                pstPel.executeUpdate();
-                ResultSet rsId = pstPel.getGeneratedKeys();
-                if (rsId.next()) finalIdPelanggan = rsId.getInt(1);
-            }
-
-            // 2. Data Servis
-            String sqlService = "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) " +
-                                "VALUES (?,?,?,?,?,?,?,?,?,?,?) " +
-                                "ON DUPLICATE KEY UPDATE id_pelanggan=VALUES(id_pelanggan), keluhan_awal=VALUES(keluhan_awal)";
-            
-            PreparedStatement pstServ = conn.prepareStatement(sqlService);
-            pstServ.setInt(1, finalIdPelanggan);
-            pstServ.setString(2, cbJenisBrg.getSelectedItem().toString());
-            pstServ.setString(3, tMerek.getText());
-            pstServ.setString(4, tModel.getText());
-            pstServ.setString(5, tSeri.getText());
-            pstServ.setString(6, tKelengkapan.getText());
-            pstServ.setString(7, tKeluhan.getText());
-            pstServ.setString(8, cbStatusServ.getSelectedItem().toString());
-            pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            pstServ.setString(10, Session.idUser);
-            pstServ.setString(11, idServisSaatIni);
-            pstServ.executeUpdate();
-
-            // 3. Data Perbaikan
-            PreparedStatement pstFix = conn.prepareStatement("INSERT IGNORE INTO perbaikan (id_servis, id_teknisi, biaya_jasa, diskon) VALUES (?, ?, 0, 0)");
-            pstFix.setString(1, idServisSaatIni);
-            pstFix.setString(2, idTeknisiTerpilih);
-            pstFix.executeUpdate();
-
-            conn.commit();
-            
-            // Panggil Dialog Pilihan Cetak (Printer/PDF)
-            CetakTandaTerima.cetakTandaTerima(idServisSaatIni);
-
-            load_table_service();
-            btBatalActionPerformed(null);
-
-        } catch (Exception e) {
-            try { Koneksi.configDB().rollback(); } catch (SQLException ex) {}
-            JOptionPane.showMessageDialog(this, "Simpan Gagal: " + e.getMessage());
+        if (tNamaPelanggan.getText().isEmpty() || cbJenisBrg.getSelectedIndex() == 0 || tKeluhan.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Data Pelanggan dan Keluhan tidak boleh kosong!"); 
+            return;
         }
-        aturLebarKolom();
+
+        String idTeknisiTerpilih = pilihTeknisiPopUp();
+        if (idTeknisiTerpilih == null) return;
+
+        Connection conn = Koneksi.configDB();
+        conn.setAutoCommit(false);
+
+        String idServisSaatIni = tNomorServ.getText();
+        int finalIdPelanggan = idPelanggan;
+
+        // 1. Logika Data Pelanggan (Tetap sama)
+        if (rbBaru.isSelected()) {
+            PreparedStatement pstPel = conn.prepareStatement("INSERT INTO tbl_pelanggan (nama_pelanggan, no_hp, alamat) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            pstPel.setString(1, tNamaPelanggan.getText());
+            pstPel.setString(2, tNoPelanggan.getText());
+            pstPel.setString(3, tAlamatPelanggan.getText());
+            pstPel.executeUpdate();
+            ResultSet rsId = pstPel.getGeneratedKeys();
+            if (rsId.next()) finalIdPelanggan = rsId.getInt(1);
+        }
+
+        // 2. Perbaikan Query: Tambahkan semua kolom agar data terupdate saat edit
+        String sqlService = "INSERT INTO servis (id_pelanggan, jenis_barang, merek, model, no_seri, kelengkapan, keluhan_awal, status, tanggal_masuk, id_admin, id_servis) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?,?) " +
+                            "ON DUPLICATE KEY UPDATE " +
+                            "id_pelanggan=VALUES(id_pelanggan), " +
+                            "jenis_barang=VALUES(jenis_barang), " +
+                            "merek=VALUES(merek), " +
+                            "model=VALUES(model), " +
+                            "no_seri=VALUES(no_seri), " +
+                            "kelengkapan=VALUES(kelengkapan), " +
+                            "keluhan_awal=VALUES(keluhan_awal), " +
+                            "status=VALUES(status), " +
+                            "id_admin=VALUES(id_admin)";
+        
+        PreparedStatement pstServ = conn.prepareStatement(sqlService);
+        pstServ.setInt(1, finalIdPelanggan);
+        pstServ.setString(2, cbJenisBrg.getSelectedItem().toString());
+        pstServ.setString(3, tMerek.getText());
+        pstServ.setString(4, tModel.getText());
+        pstServ.setString(5, tSeri.getText());
+        pstServ.setString(6, tKelengkapan.getText());
+        pstServ.setString(7, tKeluhan.getText());
+        pstServ.setString(8, cbStatusServ.getSelectedItem().toString());
+        pstServ.setString(9, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        pstServ.setString(10, Session.idUser);
+        pstServ.setString(11, idServisSaatIni);
+        pstServ.executeUpdate();
+
+        // 3. Perbaikan Query Perbaikan: Gunakan UPDATE agar teknisi bisa diubah saat edit
+        String sqlFix = "INSERT INTO perbaikan (id_servis, id_teknisi, biaya_jasa, diskon) VALUES (?, ?, 0, 0) " +
+                        "ON DUPLICATE KEY UPDATE id_teknisi=VALUES(id_teknisi)";
+        PreparedStatement pstFix = conn.prepareStatement(sqlFix);
+        pstFix.setString(1, idServisSaatIni);
+        pstFix.setString(2, idTeknisiTerpilih);
+        pstFix.executeUpdate();
+
+        conn.commit();
+        
+        JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan/Diperbarui!");
+        
+        // Panggil Dialog Pilihan Cetak
+        CetakTandaTerima.cetakTandaTerima(idServisSaatIni);
+
+        load_table_service();
+        btBatalActionPerformed(null);
+
+    } catch (Exception e) {
+        try { 
+            Connection conn = Koneksi.configDB();
+            if (conn != null) conn.rollback(); 
+        } catch (SQLException ex) {
+            System.err.println("Rollback gagal: " + ex.getMessage());
+        }
+        JOptionPane.showMessageDialog(this, "Simpan/Update Gagal: " + e.getMessage());
+        e.printStackTrace();
+    }
+    aturLebarKolom();
     }//GEN-LAST:event_btSimpanActionPerformed
 
     private void tMerekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tMerekActionPerformed
