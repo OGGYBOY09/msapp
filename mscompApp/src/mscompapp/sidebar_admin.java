@@ -81,308 +81,244 @@ public class sidebar_admin extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+    java.awt.GridBagConstraints gridBagConstraints;
 
-        menu = new javax.swing.JLabel();
-        kelolaservice = new javax.swing.JLabel();
-        lapservice = new javax.swing.JLabel();
-        keluser = new javax.swing.JLabel();
-        lblKelolaBarang = new javax.swing.JLabel();
-        kelkatperangkat = new javax.swing.JLabel();
-        lblKelkatbarang = new javax.swing.JLabel();
-        lblKelStock = new javax.swing.JLabel();
-        lblKelPlgn = new javax.swing.JLabel();
-        pengaturan = new javax.swing.JLabel();
-        spacer = new javax.swing.JPanel();
-        btnLogout = new javax.swing.JButton();
-        spacer1 = new javax.swing.JPanel();
+    menu = new javax.swing.JLabel();
+    kelolaservice = new javax.swing.JLabel();
+    lapservice = new javax.swing.JLabel();
+    keluser = new javax.swing.JLabel();
+    lblKelolaBarang = new javax.swing.JLabel();
+    kelkatperangkat = new javax.swing.JLabel();
+    lblKelkatbarang = new javax.swing.JLabel();
+    lblKelStock = new javax.swing.JLabel();
+    lblKelPlgn = new javax.swing.JLabel();
+    pengaturan = new javax.swing.JLabel();
+    btnLogout = new javax.swing.JButton();
+    javax.swing.JPanel spacer = new javax.swing.JPanel(); // Komponen tambahan untuk pendorong
 
-        setBackground(new java.awt.Color(0, 18, 51));
-        setForeground(new java.awt.Color(51, 65, 92));
-        setMaximumSize(new java.awt.Dimension(0, 0));
-        setMinimumSize(new java.awt.Dimension(0, 0));
-        setPreferredSize(new java.awt.Dimension(150, 640));
-        setLayout(new java.awt.GridBagLayout());
+    setBackground(new java.awt.Color(0, 18, 51));
+    setForeground(new java.awt.Color(51, 65, 92));
+    setLayout(new java.awt.GridBagLayout());
 
-        menu.setBackground(new java.awt.Color(0, 18, 51));
-        menu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        menu.setForeground(new java.awt.Color(255, 255, 255));
-        menu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu (1).png"))); // NOI18N
-        menu.setText("Menu");
-        menu.setOpaque(true);
-        menu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 88;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(menu, gridBagConstraints);
+    // --- SETTING UMUM UNTUK SEMUA LABEL MENU ---
+    java.awt.Font menuFont = new java.awt.Font("Segoe UI", 1, 12);
+    java.awt.Color menuFore = new java.awt.Color(255, 255, 255);
+    java.awt.Dimension menuSize = new java.awt.Dimension(140, 40); // Ukuran standar agar rapi
 
-        kelolaservice.setBackground(new java.awt.Color(0, 18, 51));
-        kelolaservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        kelolaservice.setForeground(new java.awt.Color(255, 255, 255));
-        kelolaservice.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        kelolaservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png"))); // NOI18N
-        kelolaservice.setText("Kelola Service");
-        kelolaservice.setOpaque(true);
-        kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                kelolaserviceMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 41;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(kelolaservice, gridBagConstraints);
+    // --- MENU ---
+    menu.setBackground(new java.awt.Color(0, 18, 51));
+    menu.setFont(menuFont);
+    menu.setForeground(menuFore);
+    menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu (1).png")));
+    menu.setText("Menu");
+    menu.setOpaque(true);
+    menu.setPreferredSize(menuSize);
+    menu.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { menuMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(10, 10, 2, 10);
+    add(menu, gridBagConstraints);
 
-        lapservice.setBackground(new java.awt.Color(0, 18, 51));
-        lapservice.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lapservice.setForeground(new java.awt.Color(255, 255, 255));
-        lapservice.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lapservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png"))); // NOI18N
-        lapservice.setText("Laporan Service");
-        lapservice.setOpaque(true);
-        lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lapserviceMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 31;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lapservice, gridBagConstraints);
+    // --- KELOLA SERVICE ---
+    kelolaservice.setBackground(new java.awt.Color(0, 18, 51));
+    kelolaservice.setFont(menuFont);
+    kelolaservice.setForeground(menuFore);
+    kelolaservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelservice.png")));
+    kelolaservice.setText("Kelola Service");
+    kelolaservice.setOpaque(true);
+    kelolaservice.setPreferredSize(menuSize);
+    kelolaservice.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { kelolaserviceMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(kelolaservice, gridBagConstraints);
 
-        keluser.setBackground(new java.awt.Color(0, 18, 51));
-        keluser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        keluser.setForeground(new java.awt.Color(255, 255, 255));
-        keluser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        keluser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/keluser.png"))); // NOI18N
-        keluser.setText("Kelola User");
-        keluser.setMaximumSize(new java.awt.Dimension(125, 32));
-        keluser.setMinimumSize(new java.awt.Dimension(125, 32));
-        keluser.setOpaque(true);
-        keluser.setPreferredSize(new java.awt.Dimension(125, 32));
-        keluser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                keluserMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 31;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(keluser, gridBagConstraints);
+    // --- LAPORAN SERVICE ---
+    lapservice.setBackground(new java.awt.Color(0, 18, 51));
+    lapservice.setFont(menuFont);
+    lapservice.setForeground(menuFore);
+    lapservice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/laporan.png")));
+    lapservice.setText("Laporan Service");
+    lapservice.setOpaque(true);
+    lapservice.setPreferredSize(menuSize);
+    lapservice.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { lapserviceMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(lapservice, gridBagConstraints);
 
-        lblKelolaBarang.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelolaBarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblKelolaBarang.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelolaBarang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelbarang.png"))); // NOI18N
-        lblKelolaBarang.setText("Kelola Barang");
-        lblKelolaBarang.setOpaque(true);
-        lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelolaBarangMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 44;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lblKelolaBarang, gridBagConstraints);
+    // --- KELOLA USER ---
+    keluser.setBackground(new java.awt.Color(0, 18, 51));
+    keluser.setFont(menuFont);
+    keluser.setForeground(menuFore);
+    keluser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/keluser.png")));
+    keluser.setText("Kelola User");
+    keluser.setOpaque(true);
+    keluser.setPreferredSize(menuSize);
+    keluser.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { keluserMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(keluser, gridBagConstraints);
 
-        kelkatperangkat.setBackground(new java.awt.Color(0, 18, 51));
-        kelkatperangkat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        kelkatperangkat.setForeground(new java.awt.Color(255, 255, 255));
-        kelkatperangkat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        kelkatperangkat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/jenisperangkat.png"))); // NOI18N
-        kelkatperangkat.setText("Jenis perangkat");
-        kelkatperangkat.setOpaque(true);
-        kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                kelkatperangkatMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 33;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(kelkatperangkat, gridBagConstraints);
+    // --- KELOLA BARANG ---
+    lblKelolaBarang.setBackground(new java.awt.Color(0, 18, 51));
+    lblKelolaBarang.setFont(menuFont);
+    lblKelolaBarang.setForeground(menuFore);
+    lblKelolaBarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kelbarang.png")));
+    lblKelolaBarang.setText("Kelola Barang");
+    lblKelolaBarang.setOpaque(true);
+    lblKelolaBarang.setPreferredSize(menuSize);
+    lblKelolaBarang.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { lblKelolaBarangMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(lblKelolaBarang, gridBagConstraints);
 
-        lblKelkatbarang.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelkatbarang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblKelkatbarang.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelkatbarang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblKelkatbarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategoribarang.png"))); // NOI18N
-        lblKelkatbarang.setText("Kategori barang");
-        lblKelkatbarang.setOpaque(true);
-        lblKelkatbarang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelkatbarangMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 31;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lblKelkatbarang, gridBagConstraints);
+    // --- JENIS PERANGKAT ---
+    kelkatperangkat.setBackground(new java.awt.Color(0, 18, 51));
+    kelkatperangkat.setFont(menuFont);
+    kelkatperangkat.setForeground(menuFore);
+    kelkatperangkat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/jenisperangkat.png")));
+    kelkatperangkat.setText("Jenis perangkat");
+    kelkatperangkat.setOpaque(true);
+    kelkatperangkat.setPreferredSize(menuSize);
+    kelkatperangkat.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { kelkatperangkatMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 5;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(kelkatperangkat, gridBagConstraints);
 
-        lblKelStock.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelStock.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblKelStock.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelStock.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png"))); // NOI18N
-        lblKelStock.setText("Kelola Stock");
-        lblKelStock.setOpaque(true);
-        lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelStockMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 51;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lblKelStock, gridBagConstraints);
+    // --- KELOLA STOCK ---
+    lblKelStock.setBackground(new java.awt.Color(0, 18, 51));
+    lblKelStock.setFont(menuFont);
+    lblKelStock.setForeground(menuFore);
+    lblKelStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stok.png")));
+    lblKelStock.setText("Kelola Stock");
+    lblKelStock.setOpaque(true);
+    lblKelStock.setPreferredSize(menuSize);
+    lblKelStock.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { lblKelStockMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 6;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(lblKelStock, gridBagConstraints);
 
-        lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
-        lblKelPlgn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblKelPlgn.setForeground(new java.awt.Color(255, 255, 255));
-        lblKelPlgn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-32.png"))); // NOI18N
-        lblKelPlgn.setText("Kelola Pelanggan");
-        lblKelPlgn.setOpaque(true);
-        lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblKelPlgnMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 26;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(lblKelPlgn, gridBagConstraints);
+    // --- KATEGORI BARANG ---
+    lblKelkatbarang.setBackground(new java.awt.Color(0, 18, 51));
+    lblKelkatbarang.setFont(menuFont);
+    lblKelkatbarang.setForeground(menuFore);
+    lblKelkatbarang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/kategoribarang.png")));
+    lblKelkatbarang.setText("Kategori barang");
+    lblKelkatbarang.setOpaque(true);
+    lblKelkatbarang.setPreferredSize(menuSize);
+    lblKelkatbarang.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { lblKelkatbarangMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 7;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(lblKelkatbarang, gridBagConstraints);
 
-        pengaturan.setBackground(new java.awt.Color(0, 18, 51));
-        pengaturan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        pengaturan.setForeground(new java.awt.Color(255, 255, 255));
-        pengaturan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        pengaturan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/setting (1).png"))); // NOI18N
-        pengaturan.setText("Pengaturan");
-        pengaturan.setOpaque(true);
-        pengaturan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pengaturanMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 56;
-        gridBagConstraints.ipady = 19;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(pengaturan, gridBagConstraints);
+    // --- KELOLA PELANGGAN ---
+    lblKelPlgn.setBackground(new java.awt.Color(0, 18, 51));
+    lblKelPlgn.setFont(menuFont);
+    lblKelPlgn.setForeground(menuFore);
+    lblKelPlgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-32.png")));
+    lblKelPlgn.setText("Kelola Pelanggan");
+    lblKelPlgn.setOpaque(true);
+    lblKelPlgn.setPreferredSize(menuSize);
+    lblKelPlgn.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { lblKelPlgnMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 8;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(lblKelPlgn, gridBagConstraints);
 
-        spacer.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(spacer, gridBagConstraints);
+    // --- PENGATURAN ---
+    pengaturan.setBackground(new java.awt.Color(0, 18, 51));
+    pengaturan.setFont(menuFont);
+    pengaturan.setForeground(menuFore);
+    pengaturan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/setting (1).png")));
+    pengaturan.setText("Pengaturan");
+    pengaturan.setOpaque(true);
+    pengaturan.setPreferredSize(menuSize);
+    pengaturan.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) { pengaturanMouseClicked(evt); }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 9;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    add(pengaturan, gridBagConstraints);
 
-        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout.setText("LOG OUT");
-        btnLogout.addActionListener(this::btnLogoutActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.ipady = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        add(btnLogout, gridBagConstraints);
+    // --- SPACER (KUNCI AGAR MENU DI ATAS) ---
+    spacer.setOpaque(false);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 10;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0; // Memberikan berat vertikal di sini menarik menu ke atas
+    add(spacer, gridBagConstraints);
 
-        spacer1.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(spacer1, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    // --- LOG OUT ---
+    btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+    btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12));
+    btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+    btnLogout.setText("LOG OUT");
+    btnLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    btnLogout.addActionListener(this::btnLogoutActionPerformed);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 11;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10); // Jarak bawah lebih besar
+    add(btnLogout, gridBagConstraints);
+}
 
     private void kelkatperangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kelkatperangkatMouseClicked
         // TODO add your handling code here:
@@ -464,7 +400,5 @@ public class sidebar_admin extends javax.swing.JPanel {
     private javax.swing.JLabel lblKelolaBarang;
     private javax.swing.JLabel menu;
     private javax.swing.JLabel pengaturan;
-    private javax.swing.JPanel spacer;
-    private javax.swing.JPanel spacer1;
     // End of variables declaration//GEN-END:variables
 }

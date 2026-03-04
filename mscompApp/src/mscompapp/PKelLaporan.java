@@ -4,12 +4,8 @@
  */
 package mscompapp;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.awt.BorderLayout;
-import javax.swing.JOptionPane;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -23,10 +19,18 @@ public class PKelLaporan extends javax.swing.JPanel {
     public PKelLaporan() {
         initComponents();
         
-        jPanel4.setLayout(new BorderLayout());
-        jComboBox1.addActionListener(e -> gantiHalamanLaporan());
-        
-        gantiHalamanLaporan(); 
+        jPanel4.setLayout(new java.awt.BorderLayout());
+    
+    // Listener untuk perpindahan combo box
+    jComboBox1.addActionListener(e -> gantiHalamanLaporan());
+    
+    // KUNCI PERBAIKAN: Gunakan invokeLater agar laporan muncul 
+    // SETELAH sistem tahu ukuran pasti dari jPanel4
+    java.awt.EventQueue.invokeLater(() -> {
+        // Pastikan combobox terpilih ke Laporan Bulanan
+        jComboBox1.setSelectedItem("Laporan bulanan");
+        gantiHalamanLaporan();
+    });
     }
     
     
@@ -65,6 +69,8 @@ public class PKelLaporan extends javax.swing.JPanel {
     }
     
     
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,70 +79,86 @@ public class PKelLaporan extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+    // Gunakan BorderLayout pada panel utama agar bisa memenuhi layar secara dinamis
+    this.setLayout(new java.awt.BorderLayout(10, 10));
+    this.setBackground(new java.awt.Color(230, 233, 237)); // Warna background abu-abu soft khas dashboard
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        txtTotalPendapatan = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+    // =========================================================================
+    // HEADER & FILTER (ATAS)
+    // =========================================================================
+    jPanel1 = new javax.swing.JPanel();
+    jPanel1.setBackground(java.awt.Color.WHITE);
+    jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
+    jPanel1.setLayout(new java.awt.BorderLayout());
 
-        setMaximumSize(new java.awt.Dimension(1720, 960));
-        setMinimumSize(new java.awt.Dimension(1720, 960));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // JUDUL LAPORAN
+    jLabel1 = new javax.swing.JLabel();
+    jLabel1.setBackground(new java.awt.Color(4, 102, 200));
+    jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14));
+    jLabel1.setForeground(java.awt.Color.WHITE);
+    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel1.setText("LAPORAN DATA SERVICE");
+    jLabel1.setOpaque(true);
+    jLabel1.setPreferredSize(new java.awt.Dimension(0, 40));
+    jPanel1.add(jLabel1, java.awt.BorderLayout.NORTH);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // PANEL FILTER (Cari & Total Pendapatan)
+    javax.swing.JPanel pnlFilter = new javax.swing.JPanel(new java.awt.GridBagLayout());
+    pnlFilter.setOpaque(false);
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    
+    // Elemen Filter (Kiri)
+    gbc.insets = new java.awt.Insets(10, 15, 10, 5);
+    gbc.gridx = 0; gbc.gridy = 0;
+    pnlFilter.add(new javax.swing.JLabel("Filter :"), gbc);
 
-        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("LAPORAN DATA SERVICE");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1140, 40));
+    jComboBox1 = new javax.swing.JComboBox<>();
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan Bulanan", "Laporan Mingguan", "Laporan Harian" }));
+    jComboBox1.setPreferredSize(new java.awt.Dimension(200, 30));
+    gbc.gridx = 1;
+    pnlFilter.add(jComboBox1, gbc);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Filter :");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 50, 30));
+    // Spacer Tengah (Agar Total Pendapatan terdorong ke kanan)
+    gbc.gridx = 2; gbc.weightx = 1.0;
+    pnlFilter.add(new javax.swing.Box.Filler(new java.awt.Dimension(0,0), new java.awt.Dimension(0,0), new java.awt.Dimension(32767,0)), gbc);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laporan Bulanan", "Laporan Mingguan", "Laporan Harian" }));
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 226, 30));
+    // Total Pendapatan (Kanan)
+    gbc.weightx = 0;
+    gbc.gridx = 3;
+    pnlFilter.add(new javax.swing.JLabel("Total Pendapatan :"), gbc);
 
-        txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 12)); // NOI18N
-        txtTotalPendapatan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); // NOI18N
-        txtTotalPendapatan.setText("OOOOOOOOO\\");
-            jPanel1.add(txtTotalPendapatan, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 50, 240, 30));
+    txtTotalPendapatan = new javax.swing.JLabel();
+    txtTotalPendapatan.setFont(new java.awt.Font("Perpetua Titling MT", 1, 13));
+    txtTotalPendapatan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wallet.png"))); 
+    txtTotalPendapatan.setText("Rp 0,00");
+    gbc.gridx = 4;
+    gbc.insets = new java.awt.Insets(10, 5, 10, 15);
+    pnlFilter.add(txtTotalPendapatan, gbc);
 
-            jLabel3.setFont(new java.awt.Font("Segoe UI Historic", 1, 12)); // NOI18N
-            jLabel3.setText("Total Pendapatan :");
-            jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 50, -1, 30));
+    jPanel1.add(pnlFilter, java.awt.BorderLayout.CENTER);
+    
+    // Tambahkan Panel Atas ke posisi NORTH
+    this.add(jPanel1, java.awt.BorderLayout.NORTH);
 
-            add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1140, 100));
+    // =========================================================================
+    // AREA TABEL LAPORAN (TENGAH)
+    // =========================================================================
+    jPanel4 = new javax.swing.JPanel();
+    jPanel4.setBackground(java.awt.Color.WHITE);
+    jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
+    jPanel4.setLayout(new java.awt.BorderLayout());
 
-            jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-            jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            jPanel4.setMinimumSize(new java.awt.Dimension(1720, 760));
-            jPanel4.setPreferredSize(new java.awt.Dimension(1720, 760));
-            jPanel4.setRequestFocusEnabled(false);
+    // NOTE: Tambahkan JScrollPane dan JTable Anda ke sini nanti
+    // Contoh penggunaan:
+    // jScrollPaneLaporan.setViewportView(tblLaporan);
+    // jPanel4.add(jScrollPaneLaporan, java.awt.BorderLayout.CENTER);
 
-            javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-            jPanel4.setLayout(jPanel4Layout);
-            jPanel4Layout.setHorizontalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 1718, Short.MAX_VALUE)
-            );
-            jPanel4Layout.setVerticalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 758, Short.MAX_VALUE)
-            );
-
-            add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 1140, 510));
-        }// </editor-fold>//GEN-END:initComponents
+    // Tambahkan Panel Tabel ke posisi CENTER (Auto Expand)
+    this.add(jPanel4, java.awt.BorderLayout.CENTER);
+    
+    // Margin padding luar agar tidak nempel ke pinggir layar monitor
+    this.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+}// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:

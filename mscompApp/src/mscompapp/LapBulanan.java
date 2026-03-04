@@ -286,6 +286,7 @@ public class LapBulanan extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         tfCari = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
@@ -313,26 +314,57 @@ public class LapBulanan extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1680, 760));
         setMinimumSize(new java.awt.Dimension(1140, 510));
         setPreferredSize(new java.awt.Dimension(1140, 510));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 20, 110, 30));
+        setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 46;
+        gridBagConstraints.ipady = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 18, 0, 0);
+        add(tfCari, gridBagConstraints);
 
         btnCari.setBackground(new java.awt.Color(102, 255, 102));
         btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnCari.setText("CARI [F2]");
         btnCari.addActionListener(this::btnCariActionPerformed);
-        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 9;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 2, 0, 0);
+        add(btnCari, gridBagConstraints);
 
         btnDetail.setBackground(new java.awt.Color(204, 204, 204));
         btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDetail.setText("DETAIL");
         btnDetail.addActionListener(this::btnDetailActionPerformed);
-        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
+        add(btnDetail, gridBagConstraints);
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRefresh.setText("REFRESH [F3]");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
+        add(btnRefresh, gridBagConstraints);
 
         tblLapBulanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -348,65 +380,175 @@ public class LapBulanan extends javax.swing.JPanel {
         tblLapBulanan.setRowHeight(30);
         jScrollPane1.setViewportView(tblLapBulanan);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1120, 320));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 19;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1104;
+        gridBagConstraints.ipady = 300;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        add(jScrollPane1, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Bulan :");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 40, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 70, 0, 0);
+        add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Status :");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 50, 50, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 9;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        add(jLabel2, gridBagConstraints);
 
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbStatus.addActionListener(this::cbStatusActionPerformed);
-        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 50, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        add(cbStatus, gridBagConstraints);
 
         mcBulan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        add(mcBulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, 80, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -45;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(mcBulan, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Tahun :");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 50, 30));
-        add(thTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 10, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 26;
+        gridBagConstraints.ipady = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(thTahun, gridBagConstraints);
 
         btCetakE.setBackground(new java.awt.Color(204, 204, 204));
         btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btCetakE.setText("Cetak Excel");
         btCetakE.addActionListener(this::btCetakEActionPerformed);
-        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = -4;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 16, 0, 0);
+        add(btCetakE, gridBagConstraints);
 
         btnPdf.setBackground(new java.awt.Color(204, 204, 204));
         btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPdf.setText("PDF");
         btnPdf.addActionListener(this::btnPdfActionPerformed);
-        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
+        add(btnPdf, gridBagConstraints);
 
         btnNota.setBackground(new java.awt.Color(102, 255, 102));
         btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNota.setText("Nota");
         btnNota.addActionListener(this::btnNotaActionPerformed);
-        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 0, 0);
+        add(btnNota, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Kategori :");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 50, 60, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 70, 0, 0);
+        add(jLabel4, gridBagConstraints);
 
         cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbKategori.addItemListener(this::cbKategoriItemStateChanged);
         cbKategori.addActionListener(this::cbKategoriActionPerformed);
-        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, 90, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.ipady = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        add(cbKategori, gridBagConstraints);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 1680, 120));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 20;
+        gridBagConstraints.ipadx = 1680;
+        gridBagConstraints.ipady = 120;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(180, 0, 0, 0);
+        add(jPanel1, gridBagConstraints);
 
         btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
         btnNextKiri.setText("NEXT");
         btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
-        add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 420, -1, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipady = -2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
+        add(btnNextKiri, gridBagConstraints);
 
         btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
         btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -414,7 +556,13 @@ public class LapBulanan extends javax.swing.JPanel {
         btnNextKanan.setText("NEXT");
         btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-        add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 420, -1, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipady = -2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(btnNextKanan, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed

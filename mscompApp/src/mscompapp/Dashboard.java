@@ -310,7 +310,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         pSide.setBackground(new java.awt.Color(204, 204, 204));
         pSide.setForeground(new java.awt.Color(204, 204, 204));
-        pSide.setLayout(new java.awt.GridLayout());
+        pSide.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(pSide, java.awt.BorderLayout.WEST);
 
         pMain.setLayout(new java.awt.GridBagLayout());
