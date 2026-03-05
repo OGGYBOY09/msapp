@@ -58,8 +58,7 @@ public class PKelLaporan extends javax.swing.JPanel {
     private void gantiHalamanLaporan() {
         try {
             jPanel4.removeAll();
-            jPanel4.setLayout(new BorderLayout()); 
-            
+jPanel4.setLayout(new java.awt.BorderLayout()); // Pastikan ini BorderLayout            
             Object selectedItem = jComboBox1.getSelectedItem();
             String pilihan = (selectedItem != null) ? selectedItem.toString() : "";
             

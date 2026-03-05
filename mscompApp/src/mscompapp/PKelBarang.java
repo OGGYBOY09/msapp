@@ -189,193 +189,189 @@ public class PKelBarang extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+    java.awt.GridBagConstraints gbc;
 
-        jPanel3 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        tfKodeBarang = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        tfNamaBarang = new javax.swing.JTextField();
-        cbKategori = new javax.swing.JComboBox<>();
-        tfHarga = new javax.swing.JTextField();
-        tfKeterangan = new javax.swing.JTextField();
-        btnSimpan = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblBarang = new javax.swing.JTable();
-        tfCari = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
-        btnHapus = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        btnNextKiri = new javax.swing.JButton();
-        btnNextKanan = new javax.swing.JButton();
+    jPanel3 = new javax.swing.JPanel();
+    jLabel3 = new javax.swing.JLabel();
+    tfKodeBarang = new javax.swing.JTextField();
+    jLabel4 = new javax.swing.JLabel();
+    jLabel5 = new javax.swing.JLabel();
+    jLabel7 = new javax.swing.JLabel();
+    jLabel8 = new javax.swing.JLabel();
+    tfNamaBarang = new javax.swing.JTextField();
+    cbKategori = new javax.swing.JComboBox<>();
+    tfHarga = new javax.swing.JTextField();
+    tfKeterangan = new javax.swing.JTextField();
+    btnSimpan = new javax.swing.JButton();
+    jLabel1 = new javax.swing.JLabel();
+    jPanel4 = new javax.swing.JPanel();
+    jLabel2 = new javax.swing.JLabel();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    tblBarang = new javax.swing.JTable();
+    tfCari = new javax.swing.JTextField();
+    btnCari = new javax.swing.JButton();
+    btnRefresh = new javax.swing.JButton();
+    btnEdit = new javax.swing.JButton();
+    btnHapus = new javax.swing.JButton();
+    jPanel5 = new javax.swing.JPanel();
+    btnNextKiri = new javax.swing.JButton();
+    btnNextKanan = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(1160, 640));
-        setMinimumSize(new java.awt.Dimension(1160, 640));
-        setPreferredSize(new java.awt.Dimension(1160, 640));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // SETUP UTAMA: Memenuhi pMain dan Responsif
+    this.setLayout(new java.awt.GridBagLayout());
+    this.setBackground(new java.awt.Color(245, 245, 245));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel3.setPreferredSize(new java.awt.Dimension(312, 960));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // ==========================================
+    // PANEL 3 (TAMBAH BARANG - KIRI)
+    // ==========================================
+    jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jPanel3.setPreferredSize(new java.awt.Dimension(300, 620));
+    jPanel3.setMinimumSize(new java.awt.Dimension(300, 620));
+    jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel3.setText("KODE BARANG :");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 120, 40));
+    jLabel1.setBackground(new java.awt.Color(4, 102, 200));
+    jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18));
+    jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel1.setText("TAMBAH BARANG");
+    jLabel1.setOpaque(true);
+    jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 40));
 
-        tfKodeBarang.addActionListener(this::tfKodeBarangActionPerformed);
-        jPanel3.add(tfKodeBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 260, 40));
+    jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
+    jLabel3.setText("KODE BARANG :");
+    jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 55, 120, -1));
+    jPanel3.add(tfKodeBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 270, 35));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel4.setText("NAMA BARANG :");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 120, 40));
+    jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
+    jLabel4.setText("NAMA BARANG :");
+    jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 120, -1));
+    jPanel3.add(tfNamaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 155, 270, 35));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel5.setText("HARGA :");
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 120, 40));
+    jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
+    jLabel7.setText("KATEGORI :");
+    jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 205, 120, -1));
+    cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Pilih-", "SSD", "RAM", "Harddisk", "VGA" }));
+    jPanel3.add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 270, 35));
 
-        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel7.setText("KATEGORI :");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 120, 40));
+    jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
+    jLabel5.setText("HARGA :");
+    jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 120, -1));
+    jPanel3.add(tfHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 305, 270, 35));
 
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel8.setText("KETERANGAN :");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 120, 40));
+    jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
+    jLabel8.setText("KETERANGAN :");
+    jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 355, 120, -1));
+    jPanel3.add(tfKeterangan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 270, 35));
 
-        tfNamaBarang.addActionListener(this::tfNamaBarangActionPerformed);
-        jPanel3.add(tfNamaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 260, 40));
+    btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
+    btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24));
+    btnSimpan.setText("SIMPAN");
+    btnSimpan.addActionListener(this::btnSimpanActionPerformed);
+    jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 270, 60));
 
-        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel3.add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 260, 40));
-        jPanel3.add(tfHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 260, 40));
-        jPanel3.add(tfKeterangan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 260, 40));
+    // Add Panel Kiri
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 0;
+    gbc.insets = new java.awt.Insets(10, 10, 10, 5);
+    gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    add(jPanel3, gbc);
 
-        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 24)); // NOI18N
-        btnSimpan.setText("SIMPAN [Enter]");
-        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 260, 60));
+    // ==========================================
+    // PANEL 4 (DAFTAR BARANG - KANAN)
+    // ==========================================
+    jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TAMBAH BARANG");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel1.setOpaque(true);
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 40));
+    jLabel2.setBackground(new java.awt.Color(4, 102, 200));
+    jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18));
+    jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+    jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel2.setText("DAFTAR BARANG");
+    jLabel2.setOpaque(true);
+    jLabel2.setPreferredSize(new java.awt.Dimension(100, 40));
+    jPanel4.add(jLabel2, java.awt.BorderLayout.NORTH);
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 290, 620));
+    // Panel Toolbar (Search & Buttons)
+    javax.swing.JPanel pnlToolbar = new javax.swing.JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    pnlToolbar.setBackground(new java.awt.Color(255, 255, 255));
+    pnlToolbar.setPreferredSize(new java.awt.Dimension(840, 60));
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    tfCari.setText("Cari....");
+    tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusGained(java.awt.event.FocusEvent evt) { tfCariFocusGained(evt); }
+    });
+    pnlToolbar.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 15, 250, 30));
 
-        jLabel2.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("DAFTAR BARANG");
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel2.setOpaque(true);
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 40));
+    btnCari.setBackground(new java.awt.Color(204, 204, 204));
+    btnCari.setText("CARI [F2]");
+    btnCari.addActionListener(this::btnCariActionPerformed);
+    pnlToolbar.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 15, 110, 30));
 
-        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tblBarang.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "KODE BARANG", "NAMA BARANG", "KATEGORI", "HARGA", "STOK", "KETERANGAN"
-            }
-        ));
-        tblBarang.setRowHeight(35);
-        jScrollPane1.setViewportView(tblBarang);
+    btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+    btnRefresh.setText("REFRESH [F3]");
+    btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+    pnlToolbar.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 15, 150, 30));
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 820, 470));
+    btnEdit.setBackground(new java.awt.Color(255, 255, 102));
+    btnEdit.setText("EDIT [F1]");
+    btnEdit.addActionListener(this::btnEditActionPerformed);
+    pnlToolbar.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 15, 110, 30));
 
-        tfCari.setText("Cari....");
-        tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tfCariFocusGained(evt);
-            }
-        });
-        tfCari.addActionListener(this::tfCariActionPerformed);
-        jPanel4.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 190, 30));
+    btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+    btnHapus.setForeground(new java.awt.Color(255, 255, 255));
+    btnHapus.setText("HAPUS [Del]");
+    btnHapus.addActionListener(this::btnHapusActionPerformed);
+    pnlToolbar.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 15, 150, 30));
 
-        btnCari.setBackground(new java.awt.Color(204, 204, 204));
-        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnCari.setText("CARI [F2]");
-        btnCari.addActionListener(this::btnCariActionPerformed);
-        jPanel4.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 140, 30));
+    // Bagian Tabel
+    tblBarang.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {},
+        new String [] { "No", "Kode", "Nama Barang", "Kategori", "Harga", "Stok", "KETERANGAN" }
+    ));
+    tblBarang.setRowHeight(35);
+    // Setting Lebar Kolom agar Keterangan tidak jadi "Ket"
+    tblBarang.getColumnModel().getColumn(6).setPreferredWidth(150); 
+    
+    jScrollPane1.setViewportView(tblBarang);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnRefresh.setText("REFRESH [F3]");
-        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        jPanel4.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, 170, 30));
+    // Panel Bawah (Tabel + Pagination)
+    javax.swing.JPanel pnlMainKanan = new javax.swing.JPanel(new java.awt.BorderLayout());
+    pnlMainKanan.setOpaque(false);
+    pnlMainKanan.add(pnlToolbar, java.awt.BorderLayout.NORTH);
+    pnlMainKanan.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnEdit.setText("EDIT [F1]");
-        btnEdit.addActionListener(this::btnEditActionPerformed);
-        jPanel4.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 140, 30));
+    // Pagination
+    jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel5.setPreferredSize(new java.awt.Dimension(100, 60));
+    jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
 
-        btnHapus.setBackground(new java.awt.Color(255, 51, 51));
-        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnHapus.setText("HAPUS [Del]");
-        btnHapus.addActionListener(this::btnHapusActionPerformed);
-        jPanel4.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 50, 140, 30));
+    btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+    btnNextKiri.setText("PREV");
+    btnNextKiri.setPreferredSize(new java.awt.Dimension(100, 35));
+    btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+    
+    btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
+    btnNextKanan.setText("NEXT");
+    btnNextKanan.setPreferredSize(new java.awt.Dimension(100, 35));
+    btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel5.add(btnNextKiri);
+    jPanel5.add(btnNextKanan);
+    pnlMainKanan.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
-        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
-        btnNextKiri.setText("NEXT");
-        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+    jPanel4.add(pnlMainKanan, java.awt.BorderLayout.CENTER);
 
-        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
-        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
-        btnNextKanan.setText("NEXT");
-        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(387, 387, 387)
-                .addComponent(btnNextKiri)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNextKanan))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNextKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNextKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
-        );
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 570, 690, 40));
-
-        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 840, 620));
-    }// </editor-fold>//GEN-END:initComponents
+    // Add Panel Kanan (MELAR)
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 1; gbc.gridy = 0;
+    gbc.weightx = 1.0; gbc.weighty = 1.0;
+    gbc.fill = java.awt.GridBagConstraints.BOTH;
+    gbc.insets = new java.awt.Insets(10, 5, 10, 10);
+    add(jPanel4, gbc);
+}// </editor-fold>//GEN-END:initComponents
 
     private void tfKodeBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeBarangActionPerformed
         // TODO add your handling code here:
