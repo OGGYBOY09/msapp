@@ -30,6 +30,12 @@ public class PKelUser extends javax.swing.JPanel {
     /**
      * Creates new form pDashboard
      */
+    
+    private class KategoriItem {
+    String id, nama;
+    public KategoriItem(String id, String nama) { this.id = id; this.nama = nama; }
+    @Override public String toString() { return nama; }
+}
     public PKelUser() {
         initComponents();
         load_table();
@@ -106,22 +112,32 @@ am.put("cmdRefresh", new AbstractAction() {
     }
     
     private void updateLevelState() {
-        if (cbRole.getSelectedItem() != null) {
-            if (cbRole.getSelectedItem().toString().equalsIgnoreCase("Admin")) {
-                cbLevel.setSelectedItem("Semua");
-                cbLevel.setEnabled(false);
-            } else {
-                cbLevel.setEnabled(true);
-            }
+        if (cbRole.getSelectedItem().toString().equalsIgnoreCase("Admin")) {
+            cbLevel.setSelectedIndex(0); // Set ke "Semua"
+            cbLevel.setEnabled(false);    // Matikan pilihan level
+        } else {
+            cbLevel.setEnabled(true);     // Aktifkan untuk Teknisi
         }
     }
-    
+
     private void isiLevel() {
-        cbLevel.removeAllItems(); // Bersihkan dulu agar tidak duplikat
-        cbLevel.addItem("Semua");
-        cbLevel.addItem("PC/Mini PC");
-        cbLevel.addItem("Laptop");
-        cbLevel.addItem("Printer");
+        cbLevel.removeAllItems();
+        cbLevel.addItem("Semua"); // Pilihan default String
+        
+        try {
+            Connection conn = Koneksi.configDB();
+            Statement st = conn.createStatement();
+            // Ambil data dari tabel jenis perangkat
+            ResultSet rs = st.executeQuery("SELECT * FROM tbl_jenis_perangkat");
+            while (rs.next()) {
+                cbLevel.addItem(new KategoriItem(
+                    rs.getString("id_kategori"), 
+                    rs.getString("jenis_perangkat")
+                ));
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal isi level: " + e.getMessage());
+        }
     }
     
     
@@ -231,225 +247,196 @@ private void reset_form() {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-    // Objek GridBagConstraints untuk mengatur responsifitas
-    java.awt.GridBagConstraints gbc;
 
-    jButton1 = new javax.swing.JButton();
-    jRadioButton1 = new javax.swing.JRadioButton();
-    jPanel1 = new javax.swing.JPanel();
-    jLabel2 = new javax.swing.JLabel();
-    tfUser = new javax.swing.JTextField();
-    jLabel3 = new javax.swing.JLabel();
-    tfPass = new javax.swing.JPasswordField();
-    jLabel4 = new javax.swing.JLabel();
-    tfNama = new javax.swing.JTextField();
-    jLabel5 = new javax.swing.JLabel();
-    cbRole = new javax.swing.JComboBox<>();
-    jLabel6 = new javax.swing.JLabel();
-    tfNo = new javax.swing.JTextField();
-    btnSimpan = new javax.swing.JButton();
-    jLabel1 = new javax.swing.JLabel();
-    jLabel8 = new javax.swing.JLabel();
-    cbLevel = new javax.swing.JComboBox<>();
-    jPanel2 = new javax.swing.JPanel();
-    jScrollPane2 = new javax.swing.JScrollPane();
-    tblUser = new javax.swing.JTable();
-    tfCari = new javax.swing.JTextField();
-    btnEdit = new javax.swing.JButton();
-    btnRefresh = new javax.swing.JButton();
-    btnCari = new javax.swing.JButton();
-    btnHapus = new javax.swing.JButton();
-    jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        tfUser = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tfPass = new javax.swing.JPasswordField();
+        jLabel4 = new javax.swing.JLabel();
+        tfNama = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        cbRole = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        tfNo = new javax.swing.JTextField();
+        btnSimpan = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cbLevel = new javax.swing.JComboBox();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblUser = new javax.swing.JTable();
+        tfCari = new javax.swing.JTextField();
+        btnEdit = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
-    jButton1.setText("jButton1");
-    jRadioButton1.setText("jRadioButton1");
+        jButton1.setText("jButton1");
 
-    // SETINGAN UTAMA AGAR MEMENUHI pMain & RESPONSIF
-    this.setLayout(new java.awt.GridBagLayout());
+        jRadioButton1.setText("jRadioButton1");
 
-    // ==========================================
-    // PANEL 1 (FORM TAMBAH USER - KIRI)
-    // ==========================================
-    jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-    jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    jPanel1.setMinimumSize(new java.awt.Dimension(340, 600));
-    jPanel1.setPreferredSize(new java.awt.Dimension(340, 600));
-    jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setMaximumSize(new java.awt.Dimension(1720, 960));
+        setMinimumSize(new java.awt.Dimension(1160, 640));
+        setPreferredSize(new java.awt.Dimension(1160, 640));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-    // ... (Komponen jPanel1 tetap AbsoluteLayout sesuai desain aslimu)
-    jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel2.setText("Username :");
-    jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 300, 30));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-    tfUser.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    tfUser.addActionListener(this::tfUserActionPerformed);
-    jPanel1.add(tfUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 300, 30));
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel2.setText("Username :");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 300, 30));
 
-    jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel3.setText("Password :");
-    jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 300, 30));
+        tfUser.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        tfUser.addActionListener(this::tfUserActionPerformed);
+        jPanel1.add(tfUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 300, 30));
 
-    tfPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    tfPass.addActionListener(this::tfPassActionPerformed);
-    jPanel1.add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 300, 30));
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel3.setText("Password :");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 300, 30));
 
-    jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel4.setText("Nama :");
-    jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 300, 30));
+        tfPass.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        tfPass.addActionListener(this::tfPassActionPerformed);
+        jPanel1.add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 300, 30));
 
-    tfNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    tfNama.addActionListener(this::tfNamaActionPerformed);
-    jPanel1.add(tfNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 300, 30));
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel4.setText("Nama :");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 300, 30));
 
-    jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel5.setText("Role :");
-    jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 300, 30));
+        tfNama.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        tfNama.addActionListener(this::tfNamaActionPerformed);
+        jPanel1.add(tfNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 300, 30));
 
-    cbRole.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
-    cbRole.addActionListener(this::cbRoleActionPerformed);
-    jPanel1.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 300, 30));
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel5.setText("Role :");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 300, 30));
 
-    jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel6.setText("No :");
-    jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
+        cbRole.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
+        cbRole.addActionListener(this::cbRoleActionPerformed);
+        jPanel1.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 300, 30));
 
-    tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    tfNo.addActionListener(this::tfNoActionPerformed);
-    jPanel1.add(tfNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 300, 30));
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel6.setText("No :");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
 
-    btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-    btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
-    btnSimpan.setText("SIMPAN [Enter]");
-    btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-    jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 300, 40));
+        tfNo.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        tfNo.addActionListener(this::tfNoActionPerformed);
+        jPanel1.add(tfNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 300, 30));
 
-    jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-    jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18));
-    jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    jLabel1.setText("TAMBAH USER");
-    jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    jLabel1.setOpaque(true);
-    jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 40));
+        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        btnSimpan.setText("SIMPAN [Enter]");
+        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 300, 40));
 
-    jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12));
-    jLabel8.setText("level :");
-    jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 300, 30));
+        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("TAMBAH USER");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel1.setOpaque(true);
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 40));
 
-    cbLevel.setFont(new java.awt.Font("Segoe UI Historic", 0, 12));
-    cbLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "teknisi" }));
-    cbLevel.addActionListener(this::cbLevelActionPerformed);
-    jPanel1.add(cbLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 300, 30));
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel8.setText("level :");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 300, 30));
 
-    // Tambah Panel 1 ke Layout Utama
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.insets = new java.awt.Insets(10, 10, 10, 5);
-    gbc.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    add(jPanel1, gbc);
+        cbLevel.setFont(new java.awt.Font("Segoe UI Historic", 0, 12)); // NOI18N
+        cbLevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "admin", "teknisi" }));
+        cbLevel.addActionListener(this::cbLevelActionPerformed);
+        jPanel1.add(cbLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 300, 30));
 
-    // ==========================================
-    // ==========================================
-    // PANEL 2 (DAFTAR USER - KANAN)
-    // ==========================================
-    jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-    jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    // Menggunakan BorderLayout agar komponen di dalamnya bisa melar
-    jPanel2.setLayout(new java.awt.BorderLayout());
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 340, 600));
 
-    // --- PERBAIKAN JUDUL ---
-    // Jangan masukkan jLabel7 ke dalam pnlHeaderKanan yang Absolute, 
-    // tapi letakkan langsung di NORTH dari jPanel2
-    jLabel7.setBackground(new java.awt.Color(4, 102, 200));
-    jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18));
-    jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-    jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    jLabel7.setText("DAFTAR USER");
-    jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    jLabel7.setOpaque(true);
-    jLabel7.setPreferredSize(new java.awt.Dimension(100, 40)); // Lebar 100 hanya formalitas, akan melar karena BorderLayout
-    jPanel2.add(jLabel7, java.awt.BorderLayout.NORTH);
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-    // Sub-Panel untuk menampung Tombol-tombol saja
-    javax.swing.JPanel pnlTombol = new javax.swing.JPanel();
-    pnlTombol.setBackground(new java.awt.Color(255, 255, 255));
-    pnlTombol.setPreferredSize(new java.awt.Dimension(860, 60)); 
-    pnlTombol.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        tblUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tblUser.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Username", "Password", "Nama", "Role", "Level"
+            }
+        ));
+        tblUser.setRowHeight(35);
+        tblUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUserMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblUser);
 
-    // tfCari - Lebar 250
-    tfCari.addActionListener(this::tfCariActionPerformed);
-    tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyPressed(java.awt.event.KeyEvent evt) { tfCariKeyPressed(evt); }
-        public void keyReleased(java.awt.event.KeyEvent evt) { tfCariKeyReleased(evt); }
-    });
-    pnlTombol.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 15, 250, 30));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 840, 460));
 
-    // Button Cari - Lebar 110
-    btnCari.setBackground(new java.awt.Color(204, 204, 204));
-    btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
-    btnCari.setText("CARI [F2]");
-    btnCari.addActionListener(this::btnCariActionPerformed);
-    pnlTombol.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 15, 110, 30));
+        tfCari.addActionListener(this::tfCariActionPerformed);
+        tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfCariKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCariKeyReleased(evt);
+            }
+        });
+        jPanel2.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 190, 30));
 
-    // Button Refresh - Lebar 150
-    btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-    btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
-    btnRefresh.setText("REFRESH [F3]");
-    btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-    pnlTombol.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 15, 150, 30));
+        btnEdit.setBackground(new java.awt.Color(255, 255, 102));
+        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        btnEdit.setText("EDIT [F1]");
+        btnEdit.addActionListener(this::btnEditActionPerformed);
+        jPanel2.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 120, 30));
 
-    // Button Edit - Lebar 110
-    btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-    btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
-    btnEdit.setText("EDIT [F1]");
-    btnEdit.addActionListener(this::btnEditActionPerformed);
-    pnlTombol.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 15, 110, 30));
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        btnRefresh.setText("REFRESH [F3]");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        btnRefresh.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                btnRefreshKeyReleased(evt);
+            }
+        });
+        jPanel2.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 120, 30));
 
-    // --- PERBAIKAN: BUTTON HAPUS DIPERPANJANG KE 160 ---
-    btnHapus.setBackground(new java.awt.Color(255, 0, 0));
-    btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12));
-    btnHapus.setText("HAPUS [Del]");
-    btnHapus.addActionListener(this::btnHapusActionPerformed);
-    // Lebar diatur ke 160 agar teks "[Del]" tidak terpotong
-    pnlTombol.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 15, 160, 30));
+        btnCari.setBackground(new java.awt.Color(204, 204, 204));
+        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        btnCari.setText("CARI [F2]");
+        btnCari.addActionListener(this::btnCariActionPerformed);
+        btnCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                btnCariKeyReleased(evt);
+            }
+        });
+        jPanel2.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 120, 30));
 
-    // Panel Tengah untuk menampung pnlTombol dan Tabel
-    javax.swing.JPanel pnlContent = new javax.swing.JPanel(new java.awt.BorderLayout());
-    pnlContent.setOpaque(false);
-    pnlContent.add(pnlTombol, java.awt.BorderLayout.NORTH);
+        btnHapus.setBackground(new java.awt.Color(255, 0, 0));
+        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
+        btnHapus.setText("HAPUS [Del]");
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
+        jPanel2.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 120, 30));
 
-    // Bagian Tabel
-    tblUser.setFont(new java.awt.Font("Segoe UI", 0, 14));
-    tblUser.setModel(new javax.swing.table.DefaultTableModel(
-        new Object [][] {
-            {null, null, null, null, null, null},
-            {null, null, null, null, null, null},
-            {null, null, null, null, null, null},
-            {null, null, null, null, null, null}
-        },
-        new String [] { "No", "Username", "Password", "Nama", "Role", "Level" }
-    ));
-    tblUser.setRowHeight(35);
-    jScrollPane2.setViewportView(tblUser);
-    jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 10, 10));
-    
-    pnlContent.add(jScrollPane2, java.awt.BorderLayout.CENTER);
-    
-    // Masukkan semua konten ke CENTER jPanel2
-    jPanel2.add(pnlContent, java.awt.BorderLayout.CENTER);
+        jLabel7.setBackground(new java.awt.Color(4, 102, 200));
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("DAFTAR USER");
+        jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel7.setOpaque(true);
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 40));
 
-    // Tambah Panel 2 ke Layout Utama (MELEBAR/RESPONSIF)
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 1;
-    gbc.gridy = 0;
-    gbc.weightx = 1.0; 
-    gbc.weighty = 1.0; 
-    gbc.fill = java.awt.GridBagConstraints.BOTH;
-    gbc.insets = new java.awt.Insets(10, 5, 10, 10);
-    add(jPanel2, gbc);
-}// </editor-fold>//GEN-END:initComponents
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 860, 600));
+    }// </editor-fold>//GEN-END:initComponents
 
     private void tfUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUserActionPerformed
         // TODO add your handling code here:
@@ -466,55 +453,42 @@ private void reset_form() {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         // 1. Validasi: Cek apakah ada field yang kosong
-    if (tfNama.getText().isEmpty() || tfUser.getText().isEmpty() || tfPass.getText().isEmpty()) {
-        // Tampilkan peringatan
-        JOptionPane.showMessageDialog(this, "Semua field (Nama, Username, Password) harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+    String valLevel = "Semua";
+        Object selectedLevel = cbLevel.getSelectedItem();
         
-        // Arahkan fokus ke field yang biasanya sering kosong
-        if (tfNama.getText().isEmpty()) {
-            tfNama.requestFocus();
-        } else if (tfUser.getText().isEmpty()) {
-            tfUser.requestFocus();
-        } else {
-            tfPass.requestFocus();
+        // Logika: Ambil ID jika yang dipilih adalah objek KategoriItem
+        if (selectedLevel instanceof KategoriItem) {
+            valLevel = ((KategoriItem) selectedLevel).id;
         }
-        return; // Berhenti di sini, jangan lanjut ke proses database
-    }
 
-    // 2. Jika lolos validasi, baru jalankan kode database yang sudah ada
-    try {
-        String sql;
-        Connection conn = Koneksi.configDB();
-        
-        if (isEditMode) {
-            sql = "UPDATE tbl_user SET username=?, password=?, nama=?, role=?, level=? WHERE id_user=?";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, tfUser.getText());
-            pst.setString(2, tfPass.getText());
-            pst.setString(3, tfNama.getText());
-            pst.setString(4, cbRole.getSelectedItem().toString());
-            pst.setString(5, cbLevel.getSelectedItem().toString());
-            pst.setString(6, idTerpilih); 
-            pst.execute();
-        } else {
-            sql = "INSERT INTO tbl_user (id_user, username, password, nama, role, level) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, tfNo.getText()); 
-            pst.setString(2, tfUser.getText());
-            pst.setString(3, tfPass.getText());
-            pst.setString(4, tfNama.getText());
-            pst.setString(5, cbRole.getSelectedItem().toString());
-            pst.setString(6, cbLevel.getSelectedItem().toString());
-            pst.execute();
+        try {
+            Connection conn = Koneksi.configDB();
+            if (isEditMode) {
+                String sql = "UPDATE user SET username=?, password=?, role=?, level=? WHERE id_user=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, tfNama.getText());
+                pst.setString(2, tfPass.getText());
+                pst.setString(3, cbRole.getSelectedItem().toString());
+                pst.setString(4, valLevel);
+                pst.setString(5, idTerpilih);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate");
+            } else {
+                String sql = "INSERT INTO user (id_user, username, password, role, level) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, tfNo.getText());
+                pst.setString(2, tfNama.getText());
+                pst.setString(3, tfPass.getText());
+                pst.setString(4, cbRole.getSelectedItem().toString());
+                pst.setString(5, valLevel);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
+            }
+            load_table();
+            reset_form();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        
-        JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
-        load_table();
-        reset_form();
-        conn.close();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -533,6 +507,29 @@ private void reset_form() {
 
     private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
         // TODO add your handling code here:
+        int row = tblUser.getSelectedRow();
+        idTerpilih = tblUser.getValueAt(row, 0).toString();
+        tfNo.setText(idTerpilih);
+        tfNama.setText(tblUser.getValueAt(row, 1).toString());
+        tfPass.setText(tblUser.getValueAt(row, 2).toString());
+        cbRole.setSelectedItem(tblUser.getValueAt(row, 3).toString());
+        
+        // Logika Sinkronisasi ComboBox Level saat klik tabel
+        String levelDb = tblUser.getValueAt(row, 4).toString();
+        if (levelDb.equals("Semua")) {
+            cbLevel.setSelectedIndex(0);
+        } else {
+            for (int i = 0; i < cbLevel.getItemCount(); i++) {
+                Object item = cbLevel.getItemAt(i);
+                if (item instanceof KategoriItem && ((KategoriItem) item).id.equals(levelDb)) {
+                    cbLevel.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        
+        isEditMode = true;
+        updateLevelState();
     }//GEN-LAST:event_tblUserMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -562,31 +559,24 @@ private void reset_form() {
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here :
-        int baris = tblUser.getSelectedRow();
-    if (baris != -1) {
-        // Ambil ID dari kolom indeks 1 (ID User), bukan indeks 0 (No urut)
-        String id = tblUser.getValueAt(baris, 1).toString(); 
-        
-        int confirm = JOptionPane.showConfirmDialog(this, "Hapus data dengan ID " + id + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (idTerpilih.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus!");
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Yakin hapus user ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 Connection conn = Koneksi.configDB();
-                // Query hapus berdasarkan id_user
-                PreparedStatement pst = conn.prepareStatement("DELETE FROM tbl_user WHERE id_user=?");
-                pst.setString(1, id);
-                pst.executeUpdate();
-                
-                JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
+                String sql = "DELETE FROM user WHERE id_user='" + idTerpilih + "'";
+                Statement st = conn.createStatement();
+                st.executeUpdate(sql);
+                JOptionPane.showMessageDialog(this, "User dihapus");
                 load_table();
                 reset_form();
-                conn.close();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Gagal hapus: " + e.getMessage());
             }
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Pilih data di tabel yang ingin dihapus!");
-    }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void tfPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfPassActionPerformed
@@ -630,7 +620,7 @@ private void reset_form() {
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JComboBox<String> cbLevel;
+    private javax.swing.JComboBox cbLevel;
     private javax.swing.JComboBox<String> cbRole;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

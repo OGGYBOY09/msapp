@@ -28,6 +28,7 @@ public class Login extends javax.swing.JFrame {
     public static String namaUser;
     public static String role;
     public static String idUser;
+    public static String levelUser;
     
     private final String CONFIG_FILE = "db_config.properties"; // File target konfigurasi
     
@@ -290,10 +291,12 @@ public class Login extends javax.swing.JFrame {
                 String id = res.getString("id_user");
                 String nama = res.getString("nama");
                 String hakAkses = res.getString("role");
+                
 
                 Session.idUser = id;
                 Session.namaUser = nama;
                 Session.level = hakAkses;
+                levelUser = res.getString("level");
 
                 java.awt.EventQueue.invokeLater(() -> {
                     Dashboard dash = new Dashboard(nama, hakAkses);

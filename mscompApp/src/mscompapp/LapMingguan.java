@@ -272,159 +272,126 @@ public class LapMingguan extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-    java.awt.GridBagConstraints gbc;
 
-    tfCari = new javax.swing.JTextField();
-    btnCari = new javax.swing.JButton();
-    btnDetail = new javax.swing.JButton();
-    btnRefresh = new javax.swing.JButton();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    tblLapMingguan = new javax.swing.JTable();
-    jLabel1 = new javax.swing.JLabel();
-    tglAwal = new com.toedter.calendar.JDateChooser();
-    tglAkhir = new com.toedter.calendar.JDateChooser();
-    jLabel2 = new javax.swing.JLabel();
-    cbStatus = new javax.swing.JComboBox<>();
-    btnNota = new javax.swing.JButton();
-    btnPdf = new javax.swing.JButton();
-    btCetakE = new javax.swing.JButton();
-    jLabel4 = new javax.swing.JLabel();
-    cbKategori = new javax.swing.JComboBox<>();
-    btnNextKanan = new javax.swing.JButton();
-    btnNextKiri = new javax.swing.JButton();
+        tfCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnDetail = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblLapMingguan = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        tglAwal = new com.toedter.calendar.JDateChooser();
+        tglAkhir = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        cbStatus = new javax.swing.JComboBox<>();
+        btnNota = new javax.swing.JButton();
+        btnPdf = new javax.swing.JButton();
+        btCetakE = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        cbKategori = new javax.swing.JComboBox<>();
+        btnNextKanan = new javax.swing.JButton();
+        btnNextKiri = new javax.swing.JButton();
 
-    setBackground(new java.awt.Color(255, 255, 255));
-    setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    // GANTI KE GRIDBAGLAYOUT
-    setLayout(new java.awt.GridBagLayout());
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setMaximumSize(new java.awt.Dimension(1680, 760));
+        setMinimumSize(new java.awt.Dimension(1140, 510));
+        setPreferredSize(new java.awt.Dimension(1140, 510));
+        setLayout(new java.awt.BorderLayout());
+        add(tfCari, java.awt.BorderLayout.CENTER);
 
-    // --- BARIS 1: TOMBOL AKSI & TANGGAL ---
-    gbc = new java.awt.GridBagConstraints();
-gbc.insets = new java.awt.Insets(10, 10, 5, 5);
-gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        btnCari.setBackground(new java.awt.Color(102, 255, 102));
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCari.setText("CARI [F2]");
+        btnCari.addActionListener(this::btnCariActionPerformed);
+        add(btnCari, java.awt.BorderLayout.PAGE_START);
 
-// --- MEMPERPANJANG TF CARI ---
-gbc.gridx = 0; 
-gbc.gridy = 0; 
-gbc.ipadx = 180; // Ubah dari 100 ke 180 atau lebih sesuai keinginan Anda
-gbc.weightx = 0.5; // Memberikan bobot agar tfCari lebih fleksibel mengambil ruang kosong
-add(tfCari, gbc);
+        btnDetail.setBackground(new java.awt.Color(204, 204, 204));
+        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDetail.setText("DETAIL");
+        btnDetail.addActionListener(this::btnDetailActionPerformed);
+        add(btnDetail, java.awt.BorderLayout.PAGE_END);
 
-// --- TOMBOL CARI ---
-btnCari.setBackground(new java.awt.Color(102, 255, 102));
-btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12));
-btnCari.setText("CARI [F2]");
-btnCari.addActionListener(this::btnCariActionPerformed);
-gbc.gridx = 1; 
-gbc.ipadx = 0; 
-gbc.weightx = 0; // Kembalikan ke 0 agar tombol tidak ikut memanjang secara berlebihan
-add(btnCari, gbc);
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRefresh.setText("REFRESH [F3]");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        add(btnRefresh, java.awt.BorderLayout.LINE_END);
 
-    btnDetail.setBackground(new java.awt.Color(204, 204, 204));
-    btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12));
-    btnDetail.setText("DETAIL");
-    btnDetail.addActionListener(this::btnDetailActionPerformed);
-    gbc.gridx = 2; add(btnDetail, gbc);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(1140, 510));
 
-    btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-    btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12));
-    btnRefresh.setText("REFRESH [F3]");
-    btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-    gbc.gridx = 3; add(btnRefresh, gbc);
+        tblLapMingguan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
+            }
+        ));
+        tblLapMingguan.setRowHeight(35);
+        jScrollPane1.setViewportView(tblLapMingguan);
 
-    btCetakE.setBackground(new java.awt.Color(204, 204, 204));
-    btCetakE.setText("Cetak Excel");
-    btCetakE.addActionListener(this::btCetakEActionPerformed);
-    gbc.gridx = 4; add(btCetakE, gbc);
+        add(jScrollPane1, java.awt.BorderLayout.LINE_START);
 
-    btnPdf.setBackground(new java.awt.Color(204, 204, 204));
-    btnPdf.setText("PDF");
-    btnPdf.addActionListener(this::btnPdfActionPerformed);
-    gbc.gridx = 5; add(btnPdf, gbc);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Tanggal S/D :");
+        add(jLabel1, java.awt.BorderLayout.CENTER);
+        add(tglAwal, java.awt.BorderLayout.CENTER);
+        add(tglAkhir, java.awt.BorderLayout.CENTER);
 
-    btnNota.setBackground(new java.awt.Color(102, 255, 102));
-    btnNota.setText("Nota");
-    btnNota.addActionListener(this::btnNotaActionPerformed);
-    gbc.gridx = 6; add(btnNota, gbc);
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setText("Status :");
+        add(jLabel2, java.awt.BorderLayout.CENTER);
 
-    // --- BARIS 1: FILTER TANGGAL (SEJAJAR DENGAN COMBOBOX) ---
-gbc = new java.awt.GridBagConstraints();
-gbc.gridy = 0; // Baris pertama
-gbc.insets = new java.awt.Insets(10, 5, 5, 5);
-gbc.anchor = java.awt.GridBagConstraints.EAST;
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbStatus.addActionListener(this::cbStatusActionPerformed);
+        add(cbStatus, java.awt.BorderLayout.CENTER);
 
-// Label "Tanggal S/D :"
-jLabel1.setText("Tanggal S/D :");
-gbc.gridx = 7; 
-gbc.weightx = 1.0; // Mendorong filter ke ujung kanan panel
-add(jLabel1, gbc);
+        btnNota.setBackground(new java.awt.Color(102, 255, 102));
+        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNota.setText("Nota");
+        btnNota.addActionListener(this::btnNotaActionPerformed);
+        add(btnNota, java.awt.BorderLayout.CENTER);
 
-// Date Chooser Awal (Diperpanjang)
-gbc.gridx = 8;
-gbc.weightx = 0;
-gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Agar mau memanjang
-gbc.ipadx = 60; // Menambah lebar internal agar kolom lebih panjang
-add(tglAwal, gbc);
+        btnPdf.setBackground(new java.awt.Color(204, 204, 204));
+        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnPdf.setText("PDF");
+        btnPdf.addActionListener(this::btnPdfActionPerformed);
+        add(btnPdf, java.awt.BorderLayout.CENTER);
 
-// Label pemisah (Opsional, jika ingin ada strip/tanda di tengah)
-// Jika tidak ada jLabel baru, kita langsung ke tglAkhir
+        btCetakE.setBackground(new java.awt.Color(204, 204, 204));
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btCetakE.setText("Cetak Excel");
+        btCetakE.addActionListener(this::btCetakEActionPerformed);
+        add(btCetakE, java.awt.BorderLayout.CENTER);
 
-// Date Chooser Akhir (Diperpanjang & Sejajar Ujung)
-gbc.gridx = 9;
-gbc.gridwidth = 2; // Mengambil dua slot agar sejajar dengan posisi ComboBox Status
-gbc.ipadx = 60; 
-gbc.insets = new java.awt.Insets(10, 5, 5, 15); // Margin kanan 15 agar sejajar dengan ComboBox
-add(tglAkhir, gbc);
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("Kategori :");
+        add(jLabel4, java.awt.BorderLayout.CENTER);
 
-    // --- BARIS 2: KATEGORI & STATUS ---
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridy = 1;
-    gbc.insets = new java.awt.Insets(5, 5, 10, 5);
-    gbc.anchor = java.awt.GridBagConstraints.EAST;
+        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
+        cbKategori.addActionListener(this::cbKategoriActionPerformed);
+        add(cbKategori, java.awt.BorderLayout.CENTER);
 
-    jLabel4.setText("Kategori :");
-    gbc.gridx = 7; add(jLabel4, gbc);
+        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        btnNextKanan.setText("NEXT");
+        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+        add(btnNextKanan, java.awt.BorderLayout.CENTER);
 
-    gbc.gridx = 8; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    add(cbKategori, gbc);
-
-    gbc.gridx = 9; gbc.fill = java.awt.GridBagConstraints.NONE;
-    jLabel2.setText("Status :");
-    add(jLabel2, gbc);
-
-    gbc.gridx = 10; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gbc.insets = new java.awt.Insets(5, 5, 10, 15);
-    add(cbStatus, gbc);
-
-    // --- BARIS 3: TABEL (UTAMA) ---
-    tblLapMingguan.setRowHeight(30);
-    jScrollPane1.setViewportView(tblLapMingguan);
-    jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 0; gbc.gridy = 2;
-    gbc.gridwidth = 11;
-    gbc.fill = java.awt.GridBagConstraints.BOTH;
-    gbc.weightx = 1.0; gbc.weighty = 1.0; 
-    gbc.insets = new java.awt.Insets(0, 10, 10, 10);
-    add(jScrollPane1, gbc);
-
-    // --- BARIS 4: NAVIGASI ---
-    javax.swing.JPanel pnlNav = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-    pnlNav.setOpaque(false);
-    pnlNav.add(btnNextKiri);
-    pnlNav.add(btnNextKanan);
-
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 0; gbc.gridy = 3;
-    gbc.gridwidth = 11;
-    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gbc.insets = new java.awt.Insets(0, 0, 10, 10);
-    add(pnlNav, gbc);
-
-    // Panggil pengaturan kolom awal
-    javax.swing.SwingUtilities.invokeLater(() -> aturKolomTabel());
-}// </editor-fold>//GEN-END:initComponents
+        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
+        btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        add(btnNextKiri, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:

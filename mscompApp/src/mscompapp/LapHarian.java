@@ -302,155 +302,121 @@ public class LapHarian extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-    java.awt.GridBagConstraints gbc;
 
-    tfCari = new javax.swing.JTextField();
-    btnCari = new javax.swing.JButton();
-    btnDetail = new javax.swing.JButton();
-    btnRefresh = new javax.swing.JButton();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    tblLapHarian = new javax.swing.JTable();
-    jLabel1 = new javax.swing.JLabel();
-    tglHarian = new com.toedter.calendar.JDateChooser();
-    jLabel2 = new javax.swing.JLabel();
-    cbStatus = new javax.swing.JComboBox<>();
-    btnNota = new javax.swing.JButton();
-    btnPdf = new javax.swing.JButton();
-    btCetakE = new javax.swing.JButton();
-    jLabel4 = new javax.swing.JLabel();
-    cbKategori = new javax.swing.JComboBox<>();
-    btnNextKanan = new javax.swing.JButton();
-    btnNextKiri = new javax.swing.JButton();
+        tfCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnDetail = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblLapHarian = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        tglHarian = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        cbStatus = new javax.swing.JComboBox<>();
+        btnNota = new javax.swing.JButton();
+        btnPdf = new javax.swing.JButton();
+        btCetakE = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        cbKategori = new javax.swing.JComboBox<>();
+        btnNextKanan = new javax.swing.JButton();
+        btnNextKiri = new javax.swing.JButton();
 
-    setBackground(new java.awt.Color(255, 255, 255));
-    setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-    setLayout(new java.awt.GridBagLayout());
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setMaximumSize(new java.awt.Dimension(1140, 510));
+        setMinimumSize(new java.awt.Dimension(1140, 510));
+        setPreferredSize(new java.awt.Dimension(1140, 510));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 30));
 
-    // --- BARIS 1: PENCARIAN & ACTION BUTTONS ---
-    gbc = new java.awt.GridBagConstraints();
-    gbc.insets = new java.awt.Insets(10, 10, 5, 5);
-    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        btnCari.setBackground(new java.awt.Color(102, 255, 102));
+        btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCari.setText("CARI [F2]");
+        btnCari.addActionListener(this::btnCariActionPerformed);
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 90, 30));
 
-    // tfCari diperpanjang
-    gbc.gridx = 0; gbc.gridy = 0; gbc.ipadx = 180; gbc.weightx = 0.5;
-    add(tfCari, gbc);
+        btnDetail.setBackground(new java.awt.Color(204, 204, 204));
+        btnDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDetail.setText("DETAIL");
+        btnDetail.addActionListener(this::btnDetailActionPerformed);
+        add(btnDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 90, 30));
 
-    gbc.weightx = 0; gbc.ipadx = 0;
-    btnCari.setBackground(new java.awt.Color(102, 255, 102));
-    btnCari.setFont(new java.awt.Font("Segoe UI", 1, 12));
-    btnCari.setText("CARI [F2]");
-    btnCari.addActionListener(this::btnCariActionPerformed);
-    gbc.gridx = 1; add(btnCari, gbc);
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRefresh.setText("REFRESH [F3]");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 110, 30));
 
-    btnDetail.setBackground(new java.awt.Color(204, 204, 204));
-    btnDetail.setText("DETAIL");
-    btnDetail.addActionListener(this::btnDetailActionPerformed);
-    gbc.gridx = 2; add(btnDetail, gbc);
+        tblLapHarian.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Tanggal", "Nama", "Nomor HP", "Alamat", "Jenis Barang", "Merek", "Model/Tipe", "Nomor Seri", "Keluhan", "Kelengkapan", "Status"
+            }
+        ));
+        tblLapHarian.setRowHeight(35);
+        jScrollPane1.setViewportView(tblLapHarian);
 
-    btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-    btnRefresh.setText("REFRESH [F3]");
-    btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-    gbc.gridx = 3; add(btnRefresh, gbc);
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1120, 320));
 
-    btCetakE.setBackground(new java.awt.Color(204, 204, 204));
-    btCetakE.setText("Cetak Excel");
-    btCetakE.addActionListener(this::btCetakEActionPerformed);
-    gbc.gridx = 4; add(btCetakE, gbc);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Tanggal :");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, 60, 30));
+        add(tglHarian, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 10, 150, 30));
 
-    btnPdf.setBackground(new java.awt.Color(204, 204, 204));
-    btnPdf.setText("PDF");
-    btnPdf.addActionListener(this::btnPdfActionPerformed);
-    gbc.gridx = 5; add(btnPdf, gbc);
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setText("Status :");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 50, 50, 30));
 
-    btnNota.setBackground(new java.awt.Color(102, 255, 102));
-    btnNota.setText("Nota");
-    btnNota.addActionListener(this::btnNotaActionPerformed);
-    gbc.gridx = 6; add(btnNota, gbc);
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 50, 90, 30));
 
-    // --- BARIS 1: FILTER TANGGAL ---
-gbc = new java.awt.GridBagConstraints();
-gbc.gridy = 0;
+        btnNota.setBackground(new java.awt.Color(102, 255, 102));
+        btnNota.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNota.setText("Nota");
+        btnNota.addActionListener(this::btnNotaActionPerformed);
+        add(btnNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, 60, 30));
 
-// Label "Tanggal :"
-jLabel1.setText("Tanggal :");
-gbc.gridx = 7; 
-gbc.weightx = 1.0; // Memberikan bobot penuh agar kolom label tidak terhimpit
-gbc.anchor = java.awt.GridBagConstraints.EAST;
-gbc.fill = java.awt.GridBagConstraints.NONE;
-gbc.insets = new java.awt.Insets(10, 10, 5, 5);
-add(jLabel1, gbc);
+        btnPdf.setBackground(new java.awt.Color(204, 204, 204));
+        btnPdf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnPdf.setText("PDF");
+        btnPdf.addActionListener(this::btnPdfActionPerformed);
+        add(btnPdf, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 60, 30));
 
-// Date Chooser (tglHarian) - Dikecilkan tapi tidak kekecilan
-gbc.gridx = 8;
-gbc.weightx = 0; // Mengunci agar tidak melebar otomatis
-gbc.ipadx = 70;  // Ukuran sedang (setengah dari sebelumnya yang 150)
-gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-gbc.insets = new java.awt.Insets(10, 5, 5, 5);
-add(tglHarian, gbc);
+        btCetakE.setBackground(new java.awt.Color(204, 204, 204));
+        btCetakE.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btCetakE.setText("Cetak Excel");
+        btCetakE.addActionListener(this::btCetakEActionPerformed);
+        add(btCetakE, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 100, 30));
 
-// --- BARIS 2: KATEGORI & STATUS ---
-gbc = new java.awt.GridBagConstraints();
-gbc.gridy = 1;
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("Kategori :");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 50, 60, 30));
 
-// Label "Kategori :"
-jLabel4.setText("Kategori :");
-gbc.gridx = 7; 
-gbc.weightx = 1.0; // Samakan bobot dengan label atas
-gbc.anchor = java.awt.GridBagConstraints.EAST;
-gbc.insets = new java.awt.Insets(5, 10, 10, 5);
-add(jLabel4, gbc);
+        cbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKategori.addItemListener(this::cbKategoriItemStateChanged);
+        cbKategori.addActionListener(this::cbKategoriActionPerformed);
+        add(cbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 50, 90, 30));
 
-// ComboBox Kategori (Sejajar dengan tanggal)
-gbc.gridx = 8; 
-gbc.weightx = 0;
-gbc.ipadx = 0; // Reset ipadx karena ComboBox punya ukuran default yang pas
-gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-gbc.insets = new java.awt.Insets(5, 5, 10, 5);
-add(cbKategori, gbc);
+        btnNextKanan.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNextKanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow_12143770 (4).png"))); // NOI18N
+        btnNextKanan.setText("NEXT");
+        btnNextKanan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNextKanan.addActionListener(this::btnNextKananActionPerformed);
+        add(btnNextKanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 430, 90, 30));
 
-// Label "Status :"
-gbc.gridx = 9; 
-gbc.weightx = 0;
-gbc.anchor = java.awt.GridBagConstraints.EAST;
-gbc.insets = new java.awt.Insets(5, 15, 10, 5);
-jLabel2.setText("Status :");
-add(jLabel2, gbc);
-
-// ComboBox Status
-gbc.gridx = 10; 
-gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-gbc.insets = new java.awt.Insets(5, 5, 10, 15);
-add(cbStatus, gbc);
-
-    // --- BARIS 3: TABEL ---
-    tblLapHarian.setRowHeight(30);
-    jScrollPane1.setViewportView(tblLapHarian);
-    jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 0; gbc.gridy = 2;
-    gbc.gridwidth = 11;
-    gbc.fill = java.awt.GridBagConstraints.BOTH;
-    gbc.weightx = 1.0; gbc.weighty = 1.0;
-    gbc.insets = new java.awt.Insets(0, 10, 10, 10);
-    add(jScrollPane1, gbc);
-
-    // --- BARIS 4: NAVIGASI ---
-    javax.swing.JPanel pnlNav = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-    pnlNav.setOpaque(false);
-    pnlNav.add(btnNextKiri);
-    pnlNav.add(btnNextKanan);
-
-    gbc = new java.awt.GridBagConstraints();
-    gbc.gridx = 0; gbc.gridy = 3;
-    gbc.gridwidth = 11;
-    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gbc.insets = new java.awt.Insets(0, 0, 10, 10);
-    add(pnlNav, gbc);
-
-    // Atur lebar kolom awal
-    javax.swing.SwingUtilities.invokeLater(() -> aturKolomTabel());
-}// </editor-fold>//GEN-END:initComponents
+        btnNextKiri.setBackground(new java.awt.Color(204, 204, 204));
+        btnNextKiri.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNextKiri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/image.png"))); // NOI18N
+        btnNextKiri.setText("NEXT");
+        btnNextKiri.addActionListener(this::btnNextKiriActionPerformed);
+        add(btnNextKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 430, 90, 30));
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:

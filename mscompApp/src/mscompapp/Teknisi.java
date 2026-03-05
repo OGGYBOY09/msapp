@@ -20,6 +20,12 @@ import javax.swing.table.DefaultTableModel;
 public class Teknisi extends javax.swing.JPanel {
 
     private String idTeknisi;
+    
+    private class KategoriItem {
+        String id, nama;
+        public KategoriItem(String id, String nama) { this.id = id; this.nama = nama; }
+        @Override public String toString() { return nama; }
+    }
 
     public Teknisi() {
         // 1. Inisialisasi komponen GUI dari NetBeans
@@ -38,6 +44,8 @@ public class Teknisi extends javax.swing.JPanel {
         // 4. Load Data ComboBox
         loadComboStatus();
         loadComboKategori();
+        
+        setAutoFilterLevel();
         
         // 5. AUTO-DISPLAY: Panggil tampilData() saat inisialisasi selesai
         tampilData();
@@ -95,20 +103,49 @@ public class Teknisi extends javax.swing.JPanel {
     }
 
     private void loadComboKategori() {
-        cbKategori.removeAllItems();
-        cbKategori.addItem("- Semua Kategori -");
-        try {
-            Connection conn = Koneksi.configDB();
-            Statement stm = conn.createStatement();
-            String sql = "SELECT nama_jenis FROM tbl_jenis_perangkat ORDER BY nama_jenis ASC";
-            ResultSet rs = stm.executeQuery(sql);
-            while (rs.next()) {
-                cbKategori.addItem(rs.getString("nama_jenis"));
+    cbKategori.removeAllItems();
+    cbKategori.addItem("Semua Kategori"); 
+    try {
+        Connection conn = Koneksi.configDB();
+        Statement st = conn.createStatement();
+        // PERBAIKAN: Menggunakan nama tabel tbl_jenis_perangkat
+        ResultSet rs = st.executeQuery("SELECT * FROM tbl_jenis_perangkat");
+        
+        while (rs.next()) {
+            // Pastikan nama kolom id_kategori dan jenis_perangkat sudah sesuai dengan di database
+            cbKategori.addItem(new KategoriItem(
+                rs.getString("id_kategori"), 
+                rs.getString("nama_jenis")
+            ));
+        }
+    } catch (Exception e) {
+        // Menampilkan pesan error jika query gagal (misal: tabel/kolom tidak ditemukan)
+        JOptionPane.showMessageDialog(this, "Gagal memuat kategori: " + e.getMessage());
+        System.err.println("Error Query: " + e.getMessage());
+    }
+}
+    
+    private void setAutoFilterLevel() {
+    String level = Login.levelUser; // Mengambil ID dari Login session
+
+    if (level == null || level.equalsIgnoreCase("Semua")) {
+        cbKategori.setSelectedIndex(0);
+        return;
+    }
+
+    for (int i = 0; i < cbKategori.getItemCount(); i++) {
+        Object item = cbKategori.getItemAt(i);
+        
+        if (item instanceof KategoriItem) {
+            KategoriItem ki = (KategoriItem) item;
+            // Membandingkan ID level teknisi dengan ID di ComboBox
+            if (ki.id.equals(level)) {
+                cbKategori.setSelectedIndex(i);
+                break;
             }
-        } catch (Exception e) {
-            System.err.println("Gagal load kategori: " + e.getMessage());
         }
     }
+}
 
     public void tampilData() {
         DefaultTableModel model = new DefaultTableModel() {
@@ -239,6 +276,7 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel1.setText("Tanggal :");
 
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbStatus.addActionListener(this::cbStatusActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText(" Status :");
@@ -251,7 +289,6 @@ public class Teknisi extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Daftar Service Bulanan :");
 
-        tblServ.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblServ.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -469,13 +506,17 @@ public class Teknisi extends javax.swing.JPanel {
 
     }//GEN-LAST:event_txtCariKeyReleased
 
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbStatusActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLihatDetail;
     private javax.swing.JButton btnNextKanan;
     private javax.swing.JButton btnNextKiri;
     private javax.swing.JButton btnRefresh;
-    private javax.swing.JComboBox<String> cbKategori;
+    private javax.swing.JComboBox<Object> cbKategori;
     private javax.swing.JComboBox<String> cbStatus;
     private com.toedter.calendar.JDateChooser dtFilterdate;
     private javax.swing.JLabel jLabel1;
