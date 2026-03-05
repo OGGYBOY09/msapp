@@ -217,16 +217,19 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(1160, 640));
-        setMinimumSize(new java.awt.Dimension(1160, 640));
-        setPreferredSize(new java.awt.Dimension(1160, 640));
+        // Mengatur Layout Utama Frame/Panel agar Responsif
+        this.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc;
 
+        // ==========================================
+        // PANEL KIRI (TAMBAH DATA) - LEBAR TETAP
+        // ==========================================
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH KATEGORI SPAREPART");
@@ -234,132 +237,103 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 40));
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
         jLabel3.setText("ID Kategori :");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 150, 40));
         jPanel1.add(tfIdKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 260, 50));
         jPanel1.add(tfNmKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 260, 50));
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
         jLabel4.setText("Nama Kategori :");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 150, 40));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
         jLabel5.setText("Keterangan :");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 150, 40));
         jPanel1.add(tfKetKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 260, 50));
 
         btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); // NOI18N
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); 
         btnSimpan.setText("SIMPAN [Enter]");
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
         jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 260, 45));
 
+        // Letakkan Panel Kiri ke Layout Utama
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 5);
+        gbc.fill = java.awt.GridBagConstraints.VERTICAL;
+        this.add(jPanel1, gbc);
+
+        // ==========================================
+        // PANEL KANAN (DAFTAR DATA) - MELAR/RESPONSIF
+        // ==========================================
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setLayout(new java.awt.GridBagLayout()); // Ubah ke GridBag agar konten di dalam melar
 
         jLabel2.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("DAFTAR KATEGORI SPAREPART");
         jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel2.setOpaque(true);
 
-        tblKatServis.setFont(new java.awt.Font("Segoe UI Historic", 0, 14)); // NOI18N
-        tblKatServis.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "NAMA KATEGORI", "KETERANGAN"
-            }
-        ));
+        // Header Biru - Mengisi Horizontal
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 5;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.ipady = 15;
+        jPanel3.add(jLabel2, gbc);
+
+        // Baris Pencarian dan Tombol
+        gbc = new java.awt.GridBagConstraints();
+        gbc.insets = new java.awt.Insets(10, 10, 5, 5);
+        gbc.gridy = 1;
+
+        gbc.gridx = 0; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        jPanel3.add(jTextField1, gbc); // Search melar
+
+        gbc.gridx = 1; gbc.weightx = 0; gbc.ipadx = 20;
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jPanel3.add(jButton1, gbc);
+
+        gbc.gridx = 2;
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+        jPanel3.add(jButton2, gbc);
+
+        gbc.gridx = 3;
+        jButton3.addActionListener(this::jButton3ActionPerformed);
+        jPanel3.add(jButton3, gbc);
+
+        gbc.gridx = 4;
+        gbc.insets = new java.awt.Insets(10, 5, 5, 10);
+        jButton4.addActionListener(this::jButton4ActionPerformed);
+        jPanel3.add(jButton4, gbc);
+
+        // Tabel - Mengambil semua sisa ruang
         tblKatServis.setRowHeight(35);
         jScrollPane1.setViewportView(tblKatServis);
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridwidth = 5;
+        gbc.weighty = 1.0;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.insets = new java.awt.Insets(5, 10, 10, 10);
+        jPanel3.add(jScrollPane1, gbc);
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
-        jButton1.setText("CARI [F2]");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-
-        jButton2.setBackground(new java.awt.Color(204, 204, 204));
-        jButton2.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
-        jButton2.setText("REFRESH [F3]");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-
-        jButton3.setBackground(new java.awt.Color(255, 255, 102));
-        jButton3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
-        jButton3.setText("EDIT [F1]");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-
-        jButton4.setBackground(new java.awt.Color(255, 0, 51));
-        jButton4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); // NOI18N
-        jButton4.setText("HAPUS [Del]");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 818, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 804, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(8, Short.MAX_VALUE))
-        );
+        // Letakkan Panel Kanan ke Layout Utama (WeightX = 1.0 agar melar)
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.insets = new java.awt.Insets(10, 5, 10, 10);
+        this.add(jPanel3, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
