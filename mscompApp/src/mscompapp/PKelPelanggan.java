@@ -206,164 +206,199 @@ public class PKelPelanggan extends javax.swing.JPanel {
         btnEdit = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(1720, 960));
-        setMinimumSize(new java.awt.Dimension(1720, 960));
-        setPreferredSize(new java.awt.Dimension(1720, 960));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        // SETUP LAYOUT UTAMA (RESPONSIF)
+        setBackground(new java.awt.Color(255, 255, 255));
+        this.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc;
 
+        // ==========================================
+        // PANEL KIRI (TAMBAH PELANGGAN) - LEBAR TETAP
+        // ==========================================
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel3.setPreferredSize(new java.awt.Dimension(312, 960));
+        jPanel3.setPreferredSize(new java.awt.Dimension(340, 620));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel3.setText("ID Pelanggan :");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 160, 40));
-
-        tIdPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tIdPelanggan.addActionListener(this::tIdPelangganActionPerformed);
-        jPanel3.add(tIdPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 280, 40));
-
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel4.setText("Nama Pelanggan :");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, 40));
-
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel5.setText("No HP :");
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 160, 40));
-
-        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        jLabel8.setText("Alamat :");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 160, 40));
-
-        tNama.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tNama.addActionListener(this::tNamaActionPerformed);
-        jPanel3.add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 280, 40));
-
-        tNoHp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tNoHp.addActionListener(this::tNoHpActionPerformed);
-        jPanel3.add(tNoHp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 280, 40));
-
-        tAlamat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel3.add(tAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 280, 40));
-
-        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
-        btnSimpan.setText("SIMPAN [Enter]");
-        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 280, 50));
 
         jPanel1.setBackground(new java.awt.Color(4, 102, 200));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TAMBAH PELANGGAN");
-
+        
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
         );
-
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 340, 40));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 340, 620));
+        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+        jLabel3.setText("ID Pelanggan :");
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 160, 40));
+        tIdPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 18)); 
+        tIdPelanggan.addActionListener(this::tIdPelangganActionPerformed);
+        jPanel3.add(tIdPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 280, 40));
 
+        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+        jLabel4.setText("Nama Pelanggan :");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, 40));
+        tNama.setFont(new java.awt.Font("Segoe UI", 0, 18)); 
+        tNama.addActionListener(this::tNamaActionPerformed);
+        jPanel3.add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 280, 40));
+
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+        jLabel5.setText("No HP :");
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 160, 40));
+        tNoHp.setFont(new java.awt.Font("Segoe UI", 0, 18)); 
+        tNoHp.addActionListener(this::tNoHpActionPerformed);
+        jPanel3.add(tNoHp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 280, 40));
+
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+        jLabel8.setText("Alamat :");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 160, 40));
+        tAlamat.setFont(new java.awt.Font("Segoe UI", 0, 18)); 
+        jPanel3.add(tAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 280, 40));
+
+        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
+        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
+        btnSimpan.setText("SIMPAN [Enter]");
+        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
+        jPanel3.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 280, 50));
+
+        // Tambahkan Panel Kiri ke Layout Utama
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 5);
+        gbc.fill = java.awt.GridBagConstraints.VERTICAL;
+        add(jPanel3, gbc);
+
+        // ==========================================
+        // PANEL KANAN (DAFTAR PELANGGAN) - RESPONSIF
+        // ==========================================
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
+        // Header (Baris 0)
         jPanel2.setBackground(new java.awt.Color(4, 102, 200));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("DAFTAR PELANGGAN");
-
+        
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
         );
 
-        jPanel4.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 790, 40));
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 6;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        jPanel4.add(jPanel2, gbc);
 
-        tPlgn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tPlgn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "KODE BARANG", "NAMA BARANG", "KATEGORI", "HARGA", "STOK", "KETERANGAN"
-            }
-        ));
+        // Toolbar Cari & Tombol (Baris 1)
+gbc = new java.awt.GridBagConstraints();
+gbc.gridy = 1;
+gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+gbc.anchor = java.awt.GridBagConstraints.WEST; // Memastikan barisan menempel ke kiri
+
+// --- Text Field Cari (Dibatasi lebarnya agar tidak terlalu melar) ---
+tfCari.setText("Cari....");
+tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
+    public void focusGained(java.awt.event.FocusEvent evt) {
+        tfCariFocusGained(evt);
+    }
+});
+tfCari.addActionListener(this::tfCariActionPerformed);
+gbc.gridx = 0; 
+gbc.weightx = 0.2; // Nilai kecil agar tidak menghabiskan ruang
+gbc.insets = new java.awt.Insets(10, 10, 5, 5);
+tfCari.setPreferredSize(new java.awt.Dimension(180, 30)); 
+jPanel4.add(tfCari, gbc);
+
+gbc.weightx = 0; // Kembalikan ke 0 untuk tombol agar ukurannya tetap (Fixed)
+
+// --- Tombol CARI [F2] ---
+gbc.gridx = 1; 
+btnCari.setBackground(new java.awt.Color(204, 204, 204));
+btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+btnCari.setText("CARI [F2]");
+btnCari.setPreferredSize(new java.awt.Dimension(110, 30));
+btnCari.addActionListener(this::btnCariActionPerformed);
+jPanel4.add(btnCari, gbc);
+
+// --- Tombol REFRESH [F3] (DIPERLEBAR) ---
+gbc.gridx = 2;
+btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+btnRefresh.setText("REFRESH [F3]");
+btnRefresh.setPreferredSize(new java.awt.Dimension(150, 30)); // Ditambah agar teks aman
+btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+jPanel4.add(btnRefresh, gbc);
+
+// --- Tombol EDIT [F1] ---
+gbc.gridx = 3;
+btnEdit.setBackground(new java.awt.Color(255, 255, 102));
+btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+btnEdit.setText("EDIT [F1]");
+btnEdit.setPreferredSize(new java.awt.Dimension(110, 30));
+btnEdit.addActionListener(this::btnEditActionPerformed);
+jPanel4.add(btnEdit, gbc);
+
+// --- Tombol HAPUS [Del] (DIPERLEBAR) ---
+gbc.gridx = 4;
+btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); 
+btnHapus.setForeground(new java.awt.Color(255, 255, 255));
+btnHapus.setText("HAPUS [Del]");
+btnHapus.setPreferredSize(new java.awt.Dimension(200, 30)); // Ditambah agar teks aman
+btnHapus.addActionListener(this::btnHapusActionPerformed);
+gbc.insets = new java.awt.Insets(10, 5, 5, 10);
+jPanel4.add(btnHapus, gbc);
+
+// --- SPACER TRANSPARAN (PENTING) ---
+// Ini berfungsi untuk mendorong semua komponen di atas ke arah kiri
+gbc.gridx = 5;
+gbc.weightx = 1.0; 
+jPanel4.add(new javax.swing.JLabel(""), gbc);
+
+        // Tabel (Baris 2)
+        tPlgn.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
         tPlgn.setRowHeight(35);
         jScrollPane1.setViewportView(tPlgn);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 770, 520));
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridwidth = 6;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0; // Ini yang menarik tabel memenuhi sisa ruang bawah
+        gbc.insets = new java.awt.Insets(5, 10, 10, 10);
+        jPanel4.add(jScrollPane1, gbc);
 
-        tfCari.setText("Cari....");
-        tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tfCariFocusGained(evt);
-            }
-        });
-        tfCari.addActionListener(this::tfCariActionPerformed);
-        jPanel4.add(tfCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 250, 30));
-
-        btnCari.setBackground(new java.awt.Color(204, 204, 204));
-        btnCari.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnCari.setText("CARI [F2]");
-        btnCari.addActionListener(this::btnCariActionPerformed);
-        jPanel4.add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 120, 30));
-
-        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
-        btnRefresh.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnRefresh.setText("REFRESH [F3]");
-        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        jPanel4.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 120, 30));
-
-        btnEdit.setBackground(new java.awt.Color(255, 255, 102));
-        btnEdit.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnEdit.setText("EDIT [F1]");
-        btnEdit.addActionListener(this::btnEditActionPerformed);
-        jPanel4.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 50, 120, 30));
-
-        btnHapus.setBackground(new java.awt.Color(255, 51, 51));
-        btnHapus.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 12)); // NOI18N
-        btnHapus.setText("HAPUS [Del]");
-        btnHapus.addActionListener(this::btnHapusActionPerformed);
-        jPanel4.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 50, 120, 30));
-
-        add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 790, 620));
+        // Tambahkan Panel Kanan ke Layout Utama
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 1; gbc.gridy = 0;
+        gbc.weightx = 1.0; 
+        gbc.weighty = 1.0;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.insets = new java.awt.Insets(10, 5, 10, 10);
+        add(jPanel4, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tIdPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdPelangganActionPerformed
@@ -408,7 +443,7 @@ public class PKelPelanggan extends javax.swing.JPanel {
                 
             } else {
                 // INSERT: Simpan 'namaKategori' langsung
-                sql = "INSERT INTO tbl_pelanggan (id_ppelanggan, nama_pelanggan, no_hp, alamat) VALUES (?,?,?,?)";
+                sql = "INSERT INTO tbl_pelanggan (id_pelanggan, nama_pelanggan, no_hp, alamat) VALUES (?,?,?,?)";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, id);
                 ps.setString(2, nama);

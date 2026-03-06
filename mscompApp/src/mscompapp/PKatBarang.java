@@ -217,123 +217,147 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
-        // Mengatur Layout Utama Frame/Panel agar Responsif
         this.setLayout(new java.awt.GridBagLayout());
-        java.awt.GridBagConstraints gbc;
+    java.awt.GridBagConstraints gbc;
 
-        // ==========================================
-        // PANEL KIRI (TAMBAH DATA) - LEBAR TETAP
-        // ==========================================
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // ==========================================
+    // PANEL KIRI (TAMBAH DATA) - UKURAN PROPORSIONAL
+    // ==========================================
+    jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    // Menggunakan GridBagLayout agar judul (jLabel1) bisa melar otomatis mengikuti panel
+    jPanel1.setLayout(new java.awt.GridBagLayout()); 
 
-        jLabel1.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TAMBAH KATEGORI SPAREPART");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 40));
+    jLabel1.setBackground(new java.awt.Color(4, 102, 200));
+    jLabel1.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 16)); // Sedikit dikecilkan agar teks panjang aman
+    jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel1.setText("TAMBAH KATEGORI SPAREPART");
+    jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jLabel1.setOpaque(true);
 
-        jLabel3.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
-        jLabel3.setText("ID Kategori :");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 150, 40));
-        jPanel1.add(tfIdKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 260, 50));
-        jPanel1.add(tfNmKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 260, 50));
+    // Judul Panel Kiri - Melar Horizontal
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 0;
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+    gbc.ipady = 20; 
+    jPanel1.add(jLabel1, gbc);
 
-        jLabel4.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
-        jLabel4.setText("Nama Kategori :");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 150, 40));
+    // Container Internal untuk Input agar tetap rapi (mirip Absolute tapi dalam GridBag)
+    javax.swing.JPanel innerInputPanel = new javax.swing.JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    innerInputPanel.setOpaque(false);
+    innerInputPanel.setPreferredSize(new java.awt.Dimension(320, 400));
 
-        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 12)); 
-        jLabel5.setText("Keterangan :");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 150, 40));
-        jPanel1.add(tfKetKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 260, 50));
+    jLabel3.setText("ID Kategori :");
+    innerInputPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 150, 30));
+    innerInputPanel.add(tfIdKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 260, 40));
 
-        btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
-        btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); 
-        btnSimpan.setText("SIMPAN [Enter]");
-        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 260, 45));
+    jLabel4.setText("Nama Kategori :");
+    innerInputPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 150, 30));
+    innerInputPanel.add(tfNmKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 260, 40));
 
-        // Letakkan Panel Kiri ke Layout Utama
-        gbc = new java.awt.GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new java.awt.Insets(10, 10, 10, 5);
-        gbc.fill = java.awt.GridBagConstraints.VERTICAL;
-        this.add(jPanel1, gbc);
+    jLabel5.setText("Keterangan :");
+    innerInputPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 150, 30));
+    innerInputPanel.add(tfKetKatServis, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 260, 40));
 
-        // ==========================================
-        // PANEL KANAN (DAFTAR DATA) - MELAR/RESPONSIF
-        // ==========================================
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel3.setLayout(new java.awt.GridBagLayout()); // Ubah ke GridBag agar konten di dalam melar
+    btnSimpan.setBackground(new java.awt.Color(102, 255, 102));
+    btnSimpan.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 14)); 
+    btnSimpan.setText("SIMPAN [Enter]");
+    innerInputPanel.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 260, 45));
 
-        jLabel2.setBackground(new java.awt.Color(4, 102, 200));
-        jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("DAFTAR KATEGORI SPAREPART");
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel2.setOpaque(true);
+    // Masukkan container input ke dalam jPanel1
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 1;
+    gbc.weighty = 1.0;
+    gbc.anchor = java.awt.GridBagConstraints.NORTH;
+    jPanel1.add(innerInputPanel, gbc);
 
-        // Header Biru - Mengisi Horizontal
-        gbc = new java.awt.GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 0;
-        gbc.gridwidth = 5;
-        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gbc.ipady = 15;
-        jPanel3.add(jLabel2, gbc);
+    // Letakkan Panel Kiri ke Layout Utama
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 0;
+    gbc.insets = new java.awt.Insets(10, 10, 10, 5);
+    gbc.fill = java.awt.GridBagConstraints.VERTICAL;
+    gbc.weightx = 0; // Tetap 0 agar tidak melar berlebihan dibanding kanan
+    this.add(jPanel1, gbc);
 
-        // Baris Pencarian dan Tombol
-        gbc = new java.awt.GridBagConstraints();
-        gbc.insets = new java.awt.Insets(10, 10, 5, 5);
-        gbc.gridy = 1;
+    // ==========================================
+    // PANEL KANAN (DAFTAR DATA) - TETAP RESPONSIF
+    // ==========================================
+    jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+    jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        gbc.gridx = 0; gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
-        jPanel3.add(jTextField1, gbc); // Search melar
+    jLabel2.setBackground(new java.awt.Color(4, 102, 200));
+    jLabel2.setFont(new java.awt.Font("Swis721 WGL4 BT", 1, 18)); 
+    jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+    jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel2.setText("DAFTAR KATEGORI SPAREPART");
+    jLabel2.setOpaque(true);
 
-        gbc.gridx = 1; gbc.weightx = 0; gbc.ipadx = 20;
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel3.add(jButton1, gbc);
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 0;
+    gbc.gridwidth = 5;
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+    gbc.ipady = 15;
+    jPanel3.add(jLabel2, gbc);
 
-        gbc.gridx = 2;
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-        jPanel3.add(jButton2, gbc);
+    // Baris Pencarian dan Tombol
+gbc = new java.awt.GridBagConstraints();
+gbc.insets = new java.awt.Insets(10, 10, 5, 5);
+gbc.gridy = 1;
 
-        gbc.gridx = 3;
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-        jPanel3.add(jButton3, gbc);
+// Text Field Pencarian (Dibatasi lebarnya)
+gbc.gridx = 0; 
+gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; 
+gbc.weightx = 0.3; // Nilai lebih kecil agar tidak menghabiskan seluruh baris
+jTextField1.setPreferredSize(new java.awt.Dimension(200, 25)); 
+jPanel3.add(jTextField1, gbc);
 
-        gbc.gridx = 4;
-        gbc.insets = new java.awt.Insets(10, 5, 5, 10);
-        jButton4.addActionListener(this::jButton4ActionPerformed);
-        jPanel3.add(jButton4, gbc);
+// Button Cari [F2]
+gbc.gridx = 1; 
+gbc.weightx = 0; 
+gbc.ipadx = 10;
+jButton1.setText("Cari [F2]"); 
+jButton1.addActionListener(this::jButton1ActionPerformed);
+jPanel3.add(jButton1, gbc);
 
-        // Tabel - Mengambil semua sisa ruang
-        tblKatServis.setRowHeight(35);
-        jScrollPane1.setViewportView(tblKatServis);
-        gbc = new java.awt.GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 2;
-        gbc.gridwidth = 5;
-        gbc.weighty = 1.0;
-        gbc.fill = java.awt.GridBagConstraints.BOTH;
-        gbc.insets = new java.awt.Insets(5, 10, 10, 10);
-        jPanel3.add(jScrollPane1, gbc);
+// Button Refresh [F3]
+gbc.gridx = 2;
+jButton2.setText("Refresh [F3]");
+jButton2.addActionListener(this::jButton2ActionPerformed);
+jPanel3.add(jButton2, gbc);
 
-        // Letakkan Panel Kanan ke Layout Utama (WeightX = 1.0 agar melar)
-        gbc = new java.awt.GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = java.awt.GridBagConstraints.BOTH;
-        gbc.insets = new java.awt.Insets(10, 5, 10, 10);
-        this.add(jPanel3, gbc);
+// Button Edit [F1]
+gbc.gridx = 3;
+jButton3.setText("Edit [F1]");
+jButton3.addActionListener(this::jButton3ActionPerformed);
+jPanel3.add(jButton3, gbc);
+
+// Button Hapus [DEL]
+gbc.gridx = 4;
+gbc.insets = new java.awt.Insets(10, 5, 5, 10);
+jButton4.setText("Hapus [DEL]");
+jButton4.addActionListener(this::jButton4ActionPerformed);
+jPanel3.add(jButton4, gbc);
+
+    // Tabel
+    jScrollPane1.setViewportView(tblKatServis);
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0; gbc.gridy = 2;
+    gbc.gridwidth = 5;
+    gbc.weighty = 1.0; gbc.fill = java.awt.GridBagConstraints.BOTH;
+    gbc.insets = new java.awt.Insets(5, 10, 10, 10);
+    jPanel3.add(jScrollPane1, gbc);
+
+    // Masukkan Panel Kanan ke Layout Utama
+    gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 1; gbc.gridy = 0;
+    gbc.weightx = 1.0; gbc.weighty = 1.0;
+    gbc.fill = java.awt.GridBagConstraints.BOTH;
+    gbc.insets = new java.awt.Insets(10, 5, 10, 10);
+    this.add(jPanel3, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
