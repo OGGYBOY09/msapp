@@ -27,6 +27,9 @@ import java.sql.SQLException;
 public class PKelUser extends javax.swing.JPanel {
     private boolean isEditMode = false;
     private String idTerpilih = "";
+    
+    private java.util.HashMap<String, String> mapLevelToId = new java.util.HashMap<>();
+    private java.util.HashMap<String, String> mapIdToLevel = new java.util.HashMap<>();
     /**
      * Creates new form pDashboard
      */
@@ -117,12 +120,33 @@ am.put("cmdRefresh", new AbstractAction() {
     }
     
     private void isiLevel() {
-        cbLevel.removeAllItems(); // Bersihkan dulu agar tidak duplikat
-        cbLevel.addItem("Semua");
-        cbLevel.addItem("PC/Mini PC");
-        cbLevel.addItem("Laptop");
-        cbLevel.addItem("Printer");
+    cbLevel.removeAllItems();
+    mapLevelToId.clear();
+    mapIdToLevel.clear();
+
+    cbLevel.addItem("Semua");
+    
+    try {
+        // Menggunakan Koneksi.configDB() sesuai file Koneksi.java kamu
+        Connection conn = config.Koneksi.configDB();
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT id_kategori, nama_jenis FROM tbl_jenis_perangkat";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        while (rs.next()) {
+            String idKategori = rs.getString("id_kategori");
+            String namaJenis = rs.getString("nama_jenis");
+            
+            cbLevel.addItem(namaJenis);
+            
+            // Simpan mapping ke HashMap
+            mapLevelToId.put(namaJenis, idKategori);
+            mapIdToLevel.put(idKategori, namaJenis);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Gagal memuat data level: " + e.getMessage());
     }
+}
     
     
     private void load_table() {
@@ -466,54 +490,55 @@ private void reset_form() {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         // 1. Validasi: Cek apakah ada field yang kosong
-    if (tfNama.getText().isEmpty() || tfUser.getText().isEmpty() || tfPass.getText().isEmpty()) {
-        // Tampilkan peringatan
-        JOptionPane.showMessageDialog(this, "Semua field (Nama, Username, Password) harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        
-        // Arahkan fokus ke field yang biasanya sering kosong
-        if (tfNama.getText().isEmpty()) {
-            tfNama.requestFocus();
-        } else if (tfUser.getText().isEmpty()) {
-            tfUser.requestFocus();
-        } else {
-            tfPass.requestFocus();
-        }
-        return; // Berhenti di sini, jangan lanjut ke proses database
+    String id = tfUser.getText();
+    String nama = tfNama.getText();
+    String usn = tfUsn.getText();
+    String pass = new String(tfPass.getPassword());
+    String role = cbRole.getSelectedItem().toString();
+    
+    // LOGIKA BARU: Ambil ID berdasarkan pilihan di cbLevel
+    String selectedLevelText = cbLevel.getSelectedItem().toString();
+    String levelValue;
+    if (selectedLevelText.equals("Semua")) {
+        levelValue = "Semua";
+    } else {
+        levelValue = mapLevelToId.get(selectedLevelText);
     }
 
-    // 2. Jika lolos validasi, baru jalankan kode database yang sudah ada
+    if (nama.isEmpty() || usn.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Semua field harus diisi!");
+        return;
+    }
+
     try {
-        String sql;
-        Connection conn = Koneksi.configDB();
-        
+        Connection conn = config.Koneksi.configDB();
         if (isEditMode) {
-            sql = "UPDATE tbl_user SET username=?, password=?, nama=?, role=?, level=? WHERE id_user=?";
+            String sql = "UPDATE user SET nama_user=?, username=?, password=?, role=?, level=? WHERE id_user=?";
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, tfUser.getText());
-            pst.setString(2, tfPass.getText());
-            pst.setString(3, tfNama.getText());
-            pst.setString(4, cbRole.getSelectedItem().toString());
-            pst.setString(5, cbLevel.getSelectedItem().toString());
-            pst.setString(6, idTerpilih); 
-            pst.execute();
+            pst.setString(1, nama);
+            pst.setString(2, usn);
+            pst.setString(3, pass);
+            pst.setString(4, role);
+            pst.setString(5, levelValue); // Mengirim ID atau "Semua"
+            pst.setString(6, idTerpilih);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate");
         } else {
-            sql = "INSERT INTO tbl_user (id_user, username, password, nama, role, level) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO user (id_user, nama_user, username, password, role, level) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, tfNo.getText()); 
-            pst.setString(2, tfUser.getText());
-            pst.setString(3, tfPass.getText());
-            pst.setString(4, tfNama.getText());
-            pst.setString(5, cbRole.getSelectedItem().toString());
-            pst.setString(6, cbLevel.getSelectedItem().toString());
-            pst.execute();
+            pst.setString(1, id);
+            pst.setString(2, nama);
+            pst.setString(3, usn);
+            pst.setString(4, pass);
+            pst.setString(5, role);
+            pst.setString(6, levelValue); // Mengirim ID atau "Semua"
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
         }
-        
-        JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
         load_table();
         reset_form();
-        conn.close();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
     }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -533,6 +558,32 @@ private void reset_form() {
 
     private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
         // TODO add your handling code here:
+        int baris = tblUser.rowAtPoint(evt.getPoint());
+    isEditMode = true;
+    btnSimpan.setText("Update");
+    
+    idTerpilih = tblUser.getValueAt(baris, 0).toString();
+    tfUser.setText(idTerpilih);
+    tfNama.setText(tblUser.getValueAt(baris, 1).toString());
+    tfUsn.setText(tblUser.getValueAt(baris, 2).toString());
+    tfPass.setText(tblUser.getValueAt(baris, 3).toString());
+    cbRole.setSelectedItem(tblUser.getValueAt(baris, 4).toString());
+    
+    // LOGIKA BARU: Set ComboBox Level
+    String levelDariDB = tblUser.getValueAt(baris, 5).toString();
+    if (levelDariDB.equals("Semua")) {
+        cbLevel.setSelectedItem("Semua");
+    } else {
+        // Cari nama berdasarkan ID yang ada di database
+        String namaJenis = mapIdToLevel.get(levelDariDB);
+        if (namaJenis != null) {
+            cbLevel.setSelectedItem(namaJenis);
+        } else {
+            // Jika ID tidak ditemukan (mungkin data lama), default ke Semua
+            cbLevel.setSelectedItem("Semua");
+        }
+    }
+    updateLevelState();
     }//GEN-LAST:event_tblUserMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
