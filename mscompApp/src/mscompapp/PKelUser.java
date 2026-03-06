@@ -490,13 +490,13 @@ private void reset_form() {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         // 1. Validasi: Cek apakah ada field yang kosong
-    String id = tfUser.getText();
+    String idUser = tfNo.getText();
     String nama = tfNama.getText();
-    String usn = tfUsn.getText();
+    String username = tfUser.getText();
     String pass = new String(tfPass.getPassword());
     String role = cbRole.getSelectedItem().toString();
     
-    // LOGIKA BARU: Ambil ID berdasarkan pilihan di cbLevel
+    // Logika penentuan ID Kategori vs "Semua"
     String selectedLevelText = cbLevel.getSelectedItem().toString();
     String levelValue;
     if (selectedLevelText.equals("Semua")) {
@@ -505,7 +505,7 @@ private void reset_form() {
         levelValue = mapLevelToId.get(selectedLevelText);
     }
 
-    if (nama.isEmpty() || usn.isEmpty() || pass.isEmpty()) {
+    if (nama.isEmpty() || username.isEmpty() || pass.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Semua field harus diisi!");
         return;
     }
@@ -513,32 +513,33 @@ private void reset_form() {
     try {
         Connection conn = config.Koneksi.configDB();
         if (isEditMode) {
-            String sql = "UPDATE user SET nama_user=?, username=?, password=?, role=?, level=? WHERE id_user=?";
+            String sql = "UPDATE tbl_user SET nama=?, username=?, password=?, role=?, level=? WHERE id_user=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, nama);
-            pst.setString(2, usn);
+            pst.setString(2, username);
             pst.setString(3, pass);
             pst.setString(4, role);
-            pst.setString(5, levelValue); // Mengirim ID atau "Semua"
+            pst.setString(5, levelValue); 
             pst.setString(6, idTerpilih);
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate");
         } else {
-            String sql = "INSERT INTO user (id_user, nama_user, username, password, role, level) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO tbl_user (id_user, nama, username, password, role, level) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, id);
+            pst.setString(1, idUser);
             pst.setString(2, nama);
-            pst.setString(3, usn);
+            pst.setString(3, username);
             pst.setString(4, pass);
             pst.setString(5, role);
-            pst.setString(6, levelValue); // Mengirim ID atau "Semua"
+            pst.setString(6, levelValue);
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
         }
         load_table();
         reset_form();
+        auto_number(); // Memastikan ID baru ter-generate setelah simpan
     } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Error saat menyimpan: " + e.getMessage());
     }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -562,24 +563,23 @@ private void reset_form() {
     isEditMode = true;
     btnSimpan.setText("Update");
     
+    // Mengisi data ke TextField
     idTerpilih = tblUser.getValueAt(baris, 0).toString();
-    tfUser.setText(idTerpilih);
+    tfNo.setText(idTerpilih);
     tfNama.setText(tblUser.getValueAt(baris, 1).toString());
-    tfUsn.setText(tblUser.getValueAt(baris, 2).toString());
+    tfUser.setText(tblUser.getValueAt(baris, 2).toString());
     tfPass.setText(tblUser.getValueAt(baris, 3).toString());
     cbRole.setSelectedItem(tblUser.getValueAt(baris, 4).toString());
     
-    // LOGIKA BARU: Set ComboBox Level
+    // Menampilkan Nama di cbLevel berdasarkan ID yang tersimpan di database
     String levelDariDB = tblUser.getValueAt(baris, 5).toString();
     if (levelDariDB.equals("Semua")) {
         cbLevel.setSelectedItem("Semua");
     } else {
-        // Cari nama berdasarkan ID yang ada di database
         String namaJenis = mapIdToLevel.get(levelDariDB);
         if (namaJenis != null) {
             cbLevel.setSelectedItem(namaJenis);
         } else {
-            // Jika ID tidak ditemukan (mungkin data lama), default ke Semua
             cbLevel.setSelectedItem("Semua");
         }
     }
