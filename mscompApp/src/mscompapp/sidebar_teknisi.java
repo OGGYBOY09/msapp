@@ -203,7 +203,7 @@ public class sidebar_teknisi extends javax.swing.JPanel {
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         // TODO add your handling code here
         dashboard.setPanelIndex(2); // Set Index 1 agar sinkron dengan Alt+2
-        dashboard.switchPanel(new DafServisAnda());
+        dashboard.switchPanel(new Pengaturan());
     }//GEN-LAST:event_jLabel6MouseClicked
 
 
