@@ -152,6 +152,7 @@ public class PKatService extends javax.swing.JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal load data: " + e.getMessage());
         }
+        aturKolomTabel();
     }
 
     // --- 3. BERSIHKAN FORM ---
@@ -166,6 +167,35 @@ public class PKatService extends javax.swing.JPanel {
         auto_number(); // Reset ID ke auto number terbaru
         load_table(); // <--- TAMBAHKAN INI agar tabel langsung terupdate (Real-Time)
     }
+
+    private void aturKolomTabel() {
+    if (tblKatBarang.getColumnCount() > 0) {
+        // Tentukan lebar minimal agar teks tidak terpotong (...)
+        // No (50), ID Jenis (100), Nama Jenis (350), Keterangan (400)
+        int[] lebarMinimal = {50, 100, 350, 400};
+        int totalLebarMinimal = 900; 
+
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        // KUNCI UTAMA: Jika lebar layar lebih kecil dari total lebar minimal, 
+        // matikan AutoResize agar Scrollbar muncul.
+        if (lebarWadah > totalLebarMinimal) {
+            tblKatBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            tblKatBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
+
+        for (int i = 0; i < tblKatBarang.getColumnCount(); i++) {
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tblKatBarang.getColumnModel().getColumn(i);
+                col.setPreferredWidth(lebarMinimal[i]);
+                col.setMinWidth(lebarMinimal[i]); 
+            }
+        }
+        
+        tblKatBarang.setFillsViewportHeight(true);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -310,6 +340,13 @@ public class PKatService extends javax.swing.JPanel {
     tblKatBarang.setRowHeight(35);
     jScrollPane1.setViewportView(tblKatBarang);
     jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 10, 10));
+
+    jScrollPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            aturKolomTabel();
+        }
+    });
 
     // Satukan Toolbar dan Tabel ke dalam panel konten
     javax.swing.JPanel pnlContent = new javax.swing.JPanel(new java.awt.BorderLayout());

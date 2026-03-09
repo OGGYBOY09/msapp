@@ -266,6 +266,12 @@ tblKatServis.getTableHeader().setForeground(java.awt.Color.BLACK);
     btnSimpan.setText("SIMPAN [Enter]");
     innerInputPanel.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 260, 45));
 
+    btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSimpanActionPerformed(evt);
+    }
+});
+
     // Masukkan container input ke dalam jPanel1
     gbc = new java.awt.GridBagConstraints();
     gbc.gridx = 0; gbc.gridy = 1;

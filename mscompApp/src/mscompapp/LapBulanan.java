@@ -128,17 +128,35 @@ public class LapBulanan extends javax.swing.JPanel {
     
     private void aturKolomTabel() {
     if (tblLapBulanan.getColumnCount() > 0) {
-        tblLapBulanan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        // Total lebar minimal sekitar 1700px karena kolom laporan sangat banyak (13 kolom)
+        int[] lebarMinimal = {50, 100, 130, 150, 120, 180, 120, 120, 200, 180, 120, 100, 180};
+        int totalLebarMinimal = 1750; 
 
-        // Sesuaikan dengan jumlah kolom Laporan Bulanan (13 kolom)
-        int[] lebarKunci = {40, 100, 130, 110, 150, 100, 100, 100, 100, 180, 150, 100, 180};
+        // Cek lebar wadah (Viewport) saat ini
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        if (lebarWadah > totalLebarMinimal) {
+            // LAYAR LEBAR: Kolom melar memenuhi sisa ruang
+            tblLapBulanan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            // LAYAR KECIL: Muncul scrollbar horizontal
+            tblLapBulanan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
 
         for (int i = 0; i < tblLapBulanan.getColumnCount(); i++) {
-            javax.swing.table.TableColumn col = tblLapBulanan.getColumnModel().getColumn(i);
-            int lebar = (i < lebarKunci.length) ? lebarKunci[i] : 100;
-            col.setPreferredWidth(lebar);
-            col.setMinWidth(lebar); // Kunci agar tidak mengecil saat data baru masuk
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tblLapBulanan.getColumnModel().getColumn(i);
+                col.setPreferredWidth(lebarMinimal[i]);
+                col.setMinWidth(lebarMinimal[i]); // Kunci batas bawahnya
+            }
         }
+        
+        tblLapBulanan.setFillsViewportHeight(true);
+        
+        // Header rata tengah
+        javax.swing.table.DefaultTableCellRenderer headerRenderer = 
+            (javax.swing.table.DefaultTableCellRenderer) tblLapBulanan.getTableHeader().getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
     }
 }
     
@@ -522,6 +540,13 @@ gbc.weightx = 1.0;
 gbc.weighty = 1.0; 
 gbc.insets = new java.awt.Insets(0, 10, 10, 10);
 add(jScrollPane1, gbc);
+
+jScrollPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            aturKolomTabel();
+        }
+    });
 
     // --- BARIS 4: NAVIGASI (NEXT/PREV) ---
     javax.swing.JPanel pnlNav = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));

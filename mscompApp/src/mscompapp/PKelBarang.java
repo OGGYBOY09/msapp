@@ -173,6 +173,7 @@ public class PKelBarang extends javax.swing.JPanel {
                 });
             }
             tblBarang.setModel(model);
+            aturKolom();
 
             // 3. Update Tombol Pagination
             btnNextKiri.setEnabled(currentPage > 0);
@@ -180,6 +181,44 @@ public class PKelBarang extends javax.swing.JPanel {
 
         } catch (Exception e) { e.printStackTrace(); }
     }
+
+    private void aturKolom() {
+    if (tblBarang.getColumnCount() > 0) {
+        // Angka minimal agar tidak gepeng (Total sekitar 1050px)
+        int[] lebarMinimal = {50, 120, 200, 150, 150, 80, 300};
+        int totalLebarMinimal = 1050; 
+
+        // Cek lebar wadah (Viewport) tabel saat ini
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        if (lebarWadah > totalLebarMinimal) {
+            // JIKA LAYAR LEBAR (1980): Gunakan mode SUBSEQUENT agar kolom melar memenuhi ruang kosong
+            tblBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            // JIKA LAYAR KECIL (1366): Gunakan mode OFF agar scrollbar horizontal muncul
+            tblBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
+
+        for (int i = 0; i < tblBarang.getColumnCount(); i++) {
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tblBarang.getColumnModel().getColumn(i);
+                if (i == 6) { 
+                    col.setHeaderValue("Keterangan"); 
+                }
+                col.setPreferredWidth(lebarMinimal[i]);
+                col.setMinWidth(lebarMinimal[i]); // Kunci batas bawahnya
+            }
+        }
+        
+        // Memastikan background tabel menutupi seluruh area scrollpane
+        tblBarang.setFillsViewportHeight(true);
+        
+        // Header rata tengah
+        javax.swing.table.DefaultTableCellRenderer headerRenderer = 
+            (javax.swing.table.DefaultTableCellRenderer) tblBarang.getTableHeader().getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -371,6 +410,13 @@ public class PKelBarang extends javax.swing.JPanel {
     gbc.fill = java.awt.GridBagConstraints.BOTH;
     gbc.insets = new java.awt.Insets(10, 5, 10, 10);
     add(jPanel4, gbc);
+
+    jPanel4.addComponentListener(new java.awt.event.ComponentAdapter() {
+    @Override
+    public void componentResized(java.awt.event.ComponentEvent evt) {
+        aturKolom();
+    }
+});
 }// </editor-fold>//GEN-END:initComponents
 
     private void tfKodeBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeBarangActionPerformed
@@ -439,6 +485,7 @@ public class PKelBarang extends javax.swing.JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
         }
+        aturKolom();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -487,7 +534,6 @@ public class PKelBarang extends javax.swing.JPanel {
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
         resetForm();
-        
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void tfCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCariFocusGained

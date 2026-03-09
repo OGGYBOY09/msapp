@@ -195,31 +195,31 @@ public class LapMingguan extends javax.swing.JPanel {
     }
 
     private void aturKolomTabel() {
-    // Pastikan tabel tidak null dan sudah memiliki kolom
-    if (tblLapMingguan != null && tblLapMingguan.getColumnCount() > 0) {
-        
-        // 1. Matikan Auto Resize agar Scrollbar Horizontal berfungsi
-        tblLapMingguan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+    if (tblLapMingguan.getColumnCount() > 0) {
+        int[] lebarMinimal = {50, 100, 130, 150, 120, 180, 120, 120, 200, 180, 120, 100, 180};
+        int totalLebarMinimal = 1750; 
 
-        // 2. Tentukan lebar tiap kolom (sesuaikan urutannya: No, Tgl, Nama, HP, Alamat, dst)
-        int[] lebarKunci = {40, 100, 150, 120, 200, 120, 100, 120, 120, 200, 150, 120};
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        if (lebarWadah > totalLebarMinimal) {
+            tblLapMingguan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            tblLapMingguan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
 
         for (int i = 0; i < tblLapMingguan.getColumnCount(); i++) {
-            javax.swing.table.TableColumn col = tblLapMingguan.getColumnModel().getColumn(i);
-            
-            // Gunakan lebar dari array, jika index melebihi array gunakan default 100
-            int lebar = (i < lebarKunci.length) ? lebarKunci[i] : 100;
-            
-            col.setPreferredWidth(lebar);
-            col.setMinWidth(lebar); // Mengunci agar tidak mengecil di resolusi rendah
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tblLapMingguan.getColumnModel().getColumn(i);
+                col.setPreferredWidth(lebarMinimal[i]);
+                col.setMinWidth(lebarMinimal[i]);
+            }
         }
-
-        // 3. Set Header rata tengah (Opsional)
+        
+        tblLapMingguan.setFillsViewportHeight(true);
+        
         javax.swing.table.DefaultTableCellRenderer headerRenderer = 
             (javax.swing.table.DefaultTableCellRenderer) tblLapMingguan.getTableHeader().getDefaultRenderer();
-        if (headerRenderer != null) {
-            headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
-        }
+        headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
     }
 }
     
@@ -408,6 +408,13 @@ add(tglAkhir, gbc);
     gbc.weightx = 1.0; gbc.weighty = 1.0; 
     gbc.insets = new java.awt.Insets(0, 10, 10, 10);
     add(jScrollPane1, gbc);
+
+    jScrollPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            aturKolomTabel();
+        }
+    });
 
     // --- BARIS 4: NAVIGASI ---
     javax.swing.JPanel pnlNav = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));

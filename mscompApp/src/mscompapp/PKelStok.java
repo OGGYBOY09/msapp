@@ -211,12 +211,45 @@ public class PKelStok extends javax.swing.JPanel {
                 });
             }
             tblBarang.setModel(model);
+            aturKolomTabel();
 
             btnNextKiri.setEnabled(currentPage > 0);
             btnNextKanan.setEnabled((offset + PAGE_SIZE) < totalData);
 
         } catch (Exception e) { e.printStackTrace(); }
     }
+
+    private void aturKolomTabel() {
+    if (tblBarang.getColumnCount() > 0) {
+        // No(50), ID Pem(180), Tgl(120), Kode Brg(160), Nama(250), Kat(150), Harga(130), Jml(150), Total(200)
+        // Kita perlebar Jml ke 150 dan Total ke 200 agar aman di layar 1366px
+        int[] lebarMinimal = {50, 180, 120, 160, 250, 150, 130, 150, 200};
+        
+        // Kita naikkan batas pemicu ke 1450px
+        int totalLebarMinimal = 1450; 
+
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        if (lebarWadah > totalLebarMinimal) {
+            tblBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            // Memaksa scrollbar muncul di resolusi 1366x768
+            tblBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
+
+        for (int i = 0; i < tblBarang.getColumnCount(); i++) {
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tblBarang.getColumnModel().getColumn(i);
+                
+                // Kunci mati lebar minimal agar tidak bisa diganggu gugat oleh sistem resize
+                col.setMinWidth(lebarMinimal[i]); 
+                col.setPreferredWidth(lebarMinimal[i]);
+            }
+        }
+        
+        tblBarang.setFillsViewportHeight(true);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -410,6 +443,12 @@ public class PKelStok extends javax.swing.JPanel {
     ));
     tblBarang.setRowHeight(35);
     jScrollPane1.setViewportView(tblBarang);
+    jScrollPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            aturKolomTabel();
+        }
+    });
     
     // Panel Content (Center)
     javax.swing.JPanel pnlCenter = new javax.swing.JPanel(new java.awt.BorderLayout());

@@ -172,7 +172,45 @@ public class PKelPelanggan extends javax.swing.JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Load Table: " + e.getMessage());
         }
+        aturKolomTabel();
     }
+
+    private void aturKolomTabel() {
+    if (tPlgn.getColumnCount() > 0) {
+        // Estimasi Kolom: No(50), ID Pelanggan(150), Nama(250), No HP(150), Alamat(400)
+        int[] lebarMinimal = {50, 150, 250, 150, 400};
+        
+        // Pemicu scrollbar di set ke 1000px agar aman di layar laptop
+        int totalLebarMinimal = 1000; 
+
+        int lebarWadah = jScrollPane1.getViewport().getWidth();
+
+        if (lebarWadah > totalLebarMinimal) {
+            // Monitor Lebar: Kolom melar mengikuti layar
+            tPlgn.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        } else {
+            // Layar Kecil: Kunci ukuran agar teks tidak terpotong (Muncul Scrollbar)
+            tPlgn.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        }
+
+        for (int i = 0; i < tPlgn.getColumnCount(); i++) {
+            if (i < lebarMinimal.length) {
+                javax.swing.table.TableColumn col = tPlgn.getColumnModel().getColumn(i);
+                
+                // Kunci batas minimal setiap kolom
+                col.setMinWidth(lebarMinimal[i]); 
+                col.setPreferredWidth(lebarMinimal[i]);
+            }
+        }
+        
+        tPlgn.setFillsViewportHeight(true);
+        
+        // Header rata tengah agar lebih rapi
+        javax.swing.table.DefaultTableCellRenderer headerRenderer = 
+            (javax.swing.table.DefaultTableCellRenderer) tPlgn.getTableHeader().getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -317,7 +355,7 @@ gbc.gridy = 1;
 gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 gbc.anchor = java.awt.GridBagConstraints.WEST; // Memastikan barisan menempel ke kiri
 
-// --- Text Field Cari (Dibatasi lebarnya agar tidak terlalu melar) ---
+// --- Text Field Cari (DIKUNCI AGAR TETAP LEBAR) ---
 tfCari.setText("Cari....");
 tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
     public void focusGained(java.awt.event.FocusEvent evt) {
@@ -325,14 +363,24 @@ tfCari.addFocusListener(new java.awt.event.FocusAdapter() {
     }
 });
 tfCari.addActionListener(this::tfCariActionPerformed);
+
+gbc = new java.awt.GridBagConstraints();
+gbc.gridy = 1;
 gbc.gridx = 0; 
-gbc.weightx = 0.2; // Nilai kecil agar tidak menghabiskan ruang
+
+// 1. Ubah weightx menjadi 0 agar tidak ikut menciut saat ruang terbatas
+gbc.weightx = 0; 
+gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 gbc.insets = new java.awt.Insets(10, 10, 5, 5);
-tfCari.setPreferredSize(new java.awt.Dimension(180, 30)); 
+
+// 2. Gunakan setMinimumSize bersama setPreferredSize untuk mengunci dimensi
+tfCari.setPreferredSize(new java.awt.Dimension(200, 30)); 
+tfCari.setMinimumSize(new java.awt.Dimension(200, 30)); 
+
 jPanel4.add(tfCari, gbc);
 
-gbc.weightx = 0; // Kembalikan ke 0 untuk tombol agar ukurannya tetap (Fixed)
-
+// Kembalikan weight ke 0 untuk komponen tombol selanjutnya
+gbc.weightx = 0;
 // --- Tombol CARI [F2] ---
 gbc.gridx = 1; 
 btnCari.setBackground(new java.awt.Color(204, 204, 204));
@@ -390,6 +438,13 @@ jPanel4.add(new javax.swing.JLabel(""), gbc);
         gbc.weighty = 1.0; // Ini yang menarik tabel memenuhi sisa ruang bawah
         gbc.insets = new java.awt.Insets(5, 10, 10, 10);
         jPanel4.add(jScrollPane1, gbc);
+
+        jScrollPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            aturKolomTabel();
+        }
+    });
 
         // Tambahkan Panel Kanan ke Layout Utama
         gbc = new java.awt.GridBagConstraints();
